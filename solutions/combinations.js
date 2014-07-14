@@ -1,13 +1,13 @@
-var goal = '123457689',
-    initial = '123456789',
-    usedStamps = ['123456789'],
+var goal = '123456789',
+    initial = '394286157',
+    usedStamps = { initial: true },
     priorityStates = [
         {
             stamp: initial,
             shiftsNum: 0,
             shifts: []
         }
-    ]
+    ];
 
 
 function RubyDigit(stamp) {
@@ -51,10 +51,16 @@ RubyDigit.prototype.getStamp = function() {
 };
 
 var assembleToGoal = function() {
+    var prevousState = 0,
+        steps = 0;
     while (priorityStates.length > 0) {
         var state = priorityStates.shift();
         makeShifts( state );
-        console.log(state.shiftsNum)
+        steps++;
+        if (prevousState != state.shiftsNum) {
+            console.log('Shifts: ' + state.shiftsNum + ', steps: ' + steps);
+            prevousState = state.shiftsNum;
+        }
     }
 };
 
@@ -67,6 +73,10 @@ var makeShifts = function( state ) {
      }
 };
 
+var getSolution = function(state) {
+    return (state.prevState ? getSolution(state.prevState) : '') + ' ' + state.shiftCode;
+};
+
 var shift = function(state, index, shiftCode) {
     var rubyDigit = new RubyDigit(state.stamp);
     switch (shiftCode) {
@@ -76,15 +86,19 @@ var shift = function(state, index, shiftCode) {
         case 'd': rubyDigit.down(index); break;
     }
     var newStamp = rubyDigit.getStamp();
-    if ( usedStamps.indexOf(newStamp) ==-1 && newStamp != goal ) {
-        usedStamps.push(newStamp);
+    if ( !usedStamps[newStamp] && newStamp != goal ) {
+        usedStamps[newStamp] = true;
         priorityStates.push({
             stamp: newStamp,
             shiftsNum: state.shiftsNum+1,
+            shiftCode: shiftCode+index,
+            prevState: state
 //            shifts: state.shifts.push(index + shiftCode)  //will it be the copy of an array?
         });
     } else if ( newStamp == goal ) {
-        console.log('Assembled!')
+        console.log('Assembled in ' + (state.shiftsNum + 1));
+        console.log('Solution: ' + getSolution(state) + ' ' + index + shiftCode);
+        process.exit();
         priorityStates = []
     }
 };
