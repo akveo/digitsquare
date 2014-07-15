@@ -1,6 +1,8 @@
-var goal = '123456789',
-    initial = '394286157',
-    usedStamps = { initial: true },
+var goal = '968153742',
+    initial = '123456789',
+    digitsNum = initial.length,
+    rubyDigitSize = Math.sqrt(digitsNum),
+    usedStamps = ['123456789'],
     priorityStates = [
         {
             stamp: initial,
@@ -11,36 +13,55 @@ var goal = '123456789',
 
 
 function RubyDigit(stamp) {
-    this.array = [ stamp.slice(0,3).split(''), stamp.slice(3,6).split(''), stamp.slice(6).split('') ];
+    this.array = [];
+    for (var i = 0; i < digitsNum; i+=rubyDigitSize) {
+        this.array.push( stamp.slice(i, i+rubyDigitSize).split('') )
+    }
 }
 
 RubyDigit.prototype.up = function(column) {
-    var columnCopy = [ this.array[0][column], this.array[1][column], this.array[2][column] ];
-    this.array[0][column] = columnCopy[1];
-    this.array[1][column] = columnCopy[2];
-    this.array[2][column] = columnCopy[0];
+    var columnCopy = this.getColumnCopy(column);
+    for (var i = 0; i < rubyDigitSize; i++) {
+       this.array[i][column] = this.getUpOrLeftShiftedElement(i, columnCopy);
+    }
 };
 
 RubyDigit.prototype.down = function(column) {
-    var columnCopy = [ this.array[0][column], this.array[1][column], this.array[2][column] ];
-    this.array[0][column] = columnCopy[2];
-    this.array[1][column] = columnCopy[0];
-    this.array[2][column] = columnCopy[1];
+    var columnCopy = this.getColumnCopy(column);
+    for (var i = 0; i < rubyDigitSize; i++) {
+        this.array[i][column] = this.getDownOrRightShiftedElement(i, columnCopy);
+    }
 };
 
+RubyDigit.prototype.getColumnCopy = function(column) {
+    var columnCopy = [];
+    for (var i = 0; i < rubyDigitSize; i++) {
+        columnCopy.push(this.array[i][column]);
+    }
+    return columnCopy
+}
+
 RubyDigit.prototype.right = function(row) {
-    var rowCopy = [ this.array[row][0], this.array[row][1], this.array[row][2] ];
-    this.array[row][0] = rowCopy[2];
-    this.array[row][1] = rowCopy[0];
-    this.array[row][2] = rowCopy[1];
+    var rowCopy = this.getRowCopy(row);
+    for ( var i = 0; i < rubyDigitSize; i++) {
+        this.array[row][i] = this.getDownOrRightShiftedElement(i, rowCopy);
+    }
 };
 
 RubyDigit.prototype.left = function(row) {
-    var rowCopy = [ this.array[row][0], this.array[row][1], this.array[row][2] ];
-    this.array[row][0] = rowCopy[1];
-    this.array[row][1] = rowCopy[2];
-    this.array[row][2] = rowCopy[0];
+    var rowCopy = this.getRowCopy(row);
+    for (var i = 0; i < rubyDigitSize; i++) {
+        this.array[row][i] =  this.getUpOrLeftShiftedElement(i, rowCopy);
+    }
 };
+
+RubyDigit.prototype.getRowCopy = function(row) {
+    var rowCopy = [];
+    for (var i = 0; i < rubyDigitSize; i++) {
+        rowCopy.push(this.array[row][i]);
+    }
+    return rowCopy;
+}
 
 RubyDigit.prototype.getStamp = function() {
     var stamp = '';
@@ -49,6 +70,14 @@ RubyDigit.prototype.getStamp = function() {
     });
     return stamp
 };
+
+RubyDigit.prototype.getUpOrLeftShiftedElement = function(index, rowCopy) {
+    return index + 1 < rubyDigitSize ? rowCopy[index+1] : rowCopy[0];
+}
+
+RubyDigit.prototype.getDownOrRightShiftedElement = function(index, rowCopy) {
+    return index - 1 >= 0 ? rowCopy[index-1] : rowCopy[rubyDigitSize-1];
+}
 
 var assembleToGoal = function() {
     var prevousState = 0,
@@ -93,7 +122,6 @@ var shift = function(state, index, shiftCode) {
             shiftsNum: state.shiftsNum+1,
             shiftCode: shiftCode+index,
             prevState: state
-//            shifts: state.shifts.push(index + shiftCode)  //will it be the copy of an array?
         });
     } else if ( newStamp == goal ) {
         console.log('Assembled in ' + (state.shiftsNum + 1));
