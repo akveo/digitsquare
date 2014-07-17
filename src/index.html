@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <title>Ruby digits</title>
+    </head>
+    <body>
+    <h1>Hello world!</h1>
+        <script>
+            //This value replaced when installing into a phonegap built app.
+            var phonegapEnv = 'web';
+            (function () {
+                var match,
+                    envRegExp = /env=([\w\d\\.-_]+)/,
+                    match = envRegExp.exec((typeof location !== 'undefined' && location.href.split('?')[1]) || '');
+
+                if (match && match[1]) {
+                    phonegapEnv = match[1];
+                }
+
+                document.write('<script src="js/lib/' + phonegapEnv + '/cordova.js">\<\/script>');
+            }());
+        </script>
+
+        <script data-main="js/app" src="lib/js/require.js"></script>
+    </body>
+</html>
