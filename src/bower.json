@@ -1,0 +1,23 @@
+{
+  "name": "rubydigits",
+  "version": "0.0.1",
+  "main": "index.html",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "dependencies": {
+    "angular": "~1.2.20",
+    "requirejs": "~2.1.14",
+    "normalize-scss": "~3.0.1"
+  },
+  "exportsOverride": {
+    "angular": {
+      "js": "angular.js"
+    },
+    "requirejs": {
+      "js": "require.js"
+    },
+    "normalize-scss": {}
+  }
+}
