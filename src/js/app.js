@@ -18,6 +18,10 @@ requirejs.config({
 // your application logic in there.
 window.name = "NG_DEFER_BOOTSTRAP!";
 
+function ngCName(module, controllerName) {
+    return module.id.replace('app/', '') + '/' + controllerName;
+}
+
 requirejs(['angular', 'app/main'], function(angular, main) {
     angular.element(document).ready(function() {
         angular.resumeBootstrap([main['name']]);
