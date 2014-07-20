@@ -3,8 +3,6 @@
  */
 import scala.collection.mutable
 
-
-
 object RubyState {
   def apply(stamp: String) = {
     val size: Int = math.sqrt(stamp.length).toInt
@@ -95,9 +93,9 @@ val usedStamps = mutable.Set(initial)
 val started = System.currentTimeMillis()
 
 
-case class ShiftState(stamp: RubyState, shiftsNum: Int, shiftCode: String, prevState: ShiftState)
+case class ShiftState(stamp: RubyState, shiftsNum: Int, shiftItem: Int, shiftCode: Char, prevState: ShiftState)
 
-val priorityStates = mutable.Queue(ShiftState(initial, 0, null, null))
+val priorityStates = mutable.Queue(ShiftState(initial, 0, -1, 0, null))
 
 def assembleToGoal() {
   var prevousState = 0
@@ -116,25 +114,19 @@ def assembleToGoal() {
 def makeShifts(state: ShiftState) {
   var i = 0
   while (i < rubydigitShiftsPerDirection) {
-    shift(state, i, 'l')
-    shift(state, i, 'r')
-    shift(state, i, 'u')
-    shift(state, i, 'd')
+    if (state.shiftCode != 'r') shift(state, i, state.stamp.left(i), 'l')
+    if (state.shiftCode != 'l') shift(state, i, state.stamp.right(i),  'r')
+    if (state.shiftCode != 'd') shift(state, i, state.stamp.up(i), 'u')
+    if (state.shiftCode != 'u') shift(state, i, state.stamp.down(i), 'd')
     i += 1
   }
 }
 
-def shift(state: ShiftState, index: Int, shiftCode: Char) {
-  val newStamp = shiftCode match {
-    case 'l' => state.stamp.left(index)
-    case 'r' => state.stamp.right(index)
-    case 'u' => state.stamp.up(index)
-    case 'd' => state.stamp.down(index)
-  }
+def shift(state: ShiftState, index: Int, newStamp: RubyState, shiftCode: Char) {
   if ( !usedStamps.contains(newStamp) && newStamp != goal ) {
     if (newStamp != goal) {
       usedStamps.add(newStamp)
-      priorityStates.enqueue(ShiftState(newStamp, state.shiftsNum + 1, "" + shiftCode + index, state))
+      priorityStates.enqueue(ShiftState(newStamp, state.shiftsNum + 1, index, shiftCode, state))
     } else {
       println("Assembled in " + (state.shiftsNum + 1))
       println("Solution: " + getSolution(state) + " " + index + shiftCode)
@@ -145,7 +137,7 @@ def shift(state: ShiftState, index: Int, shiftCode: Char) {
 
 def getSolution(state: ShiftState): String = {
   if (state.prevState != null) {
-    getSolution(state.prevState) + " " + state.shiftCode
+    getSolution(state.prevState) + " " + state.shiftItem + state.shiftCode
   } else {
     ""
   }
