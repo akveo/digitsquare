@@ -10,7 +10,9 @@
         <title>Ruby digits</title>
     </head>
     <body>
-    <h1>Hello world!</h1>
+        <div class="layout">
+            <div ng-view></div>
+        </div>
         <script>
             //This value replaced when installing into a phonegap built app.
             var phonegapEnv = 'web';
@@ -26,7 +28,6 @@
                 document.write('<script src="js/lib/' + phonegapEnv + '/cordova.js">\<\/script>');
             }());
         </script>
-
         <script data-main="js/app" src="lib/js/require.js"></script>
     </body>
 </html>
