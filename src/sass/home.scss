@@ -15,10 +15,35 @@
 
         .menu-item {
             text-align: center;
-            font-family: Tahoma;
+            display: inline-block;
             width: 100%;
             font-size:48px;
             line-height: 80px;
+        }
+    }
+}
+
+.levels {
+    width: 100%;
+    height: 100%;
+    .level-item {
+        width: 20%;
+        height: 25%;
+        float: left;
+        
+
+        .level-item-cont {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .level-item-icon {
+            display: inline-block;
+            height: 25px;
+            font-size: 25px;
+            line-height: 25px;
+            background-color: #3443ab;
+            color: #fff;
         }
     }
 }
