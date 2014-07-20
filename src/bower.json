@@ -9,11 +9,19 @@
   "dependencies": {
     "angular": "~1.2.20",
     "requirejs": "~2.1.14",
-    "normalize-scss": "~3.0.1"
+    "normalize-scss": "~3.0.1",
+    "angular-route": "~1.2.20",
+    "angular-touch": "~1.2.20"
   },
   "exportsOverride": {
     "angular": {
       "js": "angular.js"
+    },
+    "angular-touch": {
+      "js": "angular-touch.js"
+    },
+    "angular-route": {
+      "js": "angular-route.js"
     },
     "requirejs": {
       "js": "require.js"
