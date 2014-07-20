@@ -1,8 +1,10 @@
-var goal = '968153742',
-    initial = '123456789',
+var goal = '123456789abcdefg',
+    initial = '5ea1d32f7g9cb648',
     digitsNum = initial.length,
     rubyDigitSize = Math.sqrt(digitsNum),
-    usedStamps = ['123456789'],
+    rubyDigitSizeOneLess = rubyDigitSize - 1,
+    rubydigitShiftsPerDirection = rubyDigitSize,
+    usedStamps = {initial: true},
     priorityStates = [
         {
             stamp: initial,
@@ -10,58 +12,47 @@ var goal = '968153742',
             shifts: []
         }
     ];
-
+var started = new Date().getTime();
 
 function RubyDigit(stamp) {
     this.array = [];
+    var splitted = stamp.split('');
     for (var i = 0; i < digitsNum; i+=rubyDigitSize) {
-        this.array.push( stamp.slice(i, i+rubyDigitSize).split('') )
+        this.array.push( splitted.slice(i, i+rubyDigitSize) )
     }
 }
 
 RubyDigit.prototype.up = function(column) {
-    var columnCopy = this.getColumnCopy(column);
-    for (var i = 0; i < rubyDigitSize; i++) {
-       this.array[i][column] = this.getUpOrLeftShiftedElement(i, columnCopy);
+    var first = this.array[0][column];
+    for (var i = 0; i < rubyDigitSizeOneLess; i++) {
+       this.array[i][column] = this.array[i + 1][column];
     }
+    this.array[rubyDigitSizeOneLess][column] = first;
 };
 
 RubyDigit.prototype.down = function(column) {
-    var columnCopy = this.getColumnCopy(column);
-    for (var i = 0; i < rubyDigitSize; i++) {
-        this.array[i][column] = this.getDownOrRightShiftedElement(i, columnCopy);
+    var last = this.array[rubyDigitSizeOneLess][column];
+    for (var i = rubyDigitSizeOneLess; i > 0; i--) {
+        this.array[i][column] = this.array[i - 1][column];
     }
+    this.array[0][column] = last;
 };
 
-RubyDigit.prototype.getColumnCopy = function(column) {
-    var columnCopy = [];
-    for (var i = 0; i < rubyDigitSize; i++) {
-        columnCopy.push(this.array[i][column]);
-    }
-    return columnCopy
-}
-
 RubyDigit.prototype.right = function(row) {
-    var rowCopy = this.getRowCopy(row);
-    for ( var i = 0; i < rubyDigitSize; i++) {
-        this.array[row][i] = this.getDownOrRightShiftedElement(i, rowCopy);
+    var last = this.array[row][rubyDigitSizeOneLess];
+    for (var i = rubyDigitSizeOneLess; i > 0; i--) {
+        this.array[row][i] = this.array[row][i - 1];
     }
+    this.array[row][0] = last;
 };
 
 RubyDigit.prototype.left = function(row) {
-    var rowCopy = this.getRowCopy(row);
-    for (var i = 0; i < rubyDigitSize; i++) {
-        this.array[row][i] =  this.getUpOrLeftShiftedElement(i, rowCopy);
+    var first = this.array[row][0];
+    for (var i = 0; i < rubyDigitSizeOneLess; i++) {
+        this.array[row][i] =  this.array[row][i + 1];
     }
+    this.array[row][rubyDigitSizeOneLess] = first;
 };
-
-RubyDigit.prototype.getRowCopy = function(row) {
-    var rowCopy = [];
-    for (var i = 0; i < rubyDigitSize; i++) {
-        rowCopy.push(this.array[row][i]);
-    }
-    return rowCopy;
-}
 
 RubyDigit.prototype.getStamp = function() {
     var stamp = '';
@@ -71,14 +62,6 @@ RubyDigit.prototype.getStamp = function() {
     return stamp
 };
 
-RubyDigit.prototype.getUpOrLeftShiftedElement = function(index, rowCopy) {
-    return index + 1 < rubyDigitSize ? rowCopy[index+1] : rowCopy[0];
-}
-
-RubyDigit.prototype.getDownOrRightShiftedElement = function(index, rowCopy) {
-    return index - 1 >= 0 ? rowCopy[index-1] : rowCopy[rubyDigitSize-1];
-}
-
 var assembleToGoal = function() {
     var prevousState = 0,
         steps = 0;
@@ -87,14 +70,14 @@ var assembleToGoal = function() {
         makeShifts( state );
         steps++;
         if (prevousState != state.shiftsNum) {
-            console.log('Shifts: ' + state.shiftsNum + ', steps: ' + steps);
+            console.log('Shifts: ' + state.shiftsNum + ', steps: ' + steps + ', timeElapsed: ' + (new Date().getTime() - started));
             prevousState = state.shiftsNum;
         }
     }
 };
 
 var makeShifts = function( state ) {
-     for ( var i = 0; i < 3; i++ ) {
+     for ( var i = 0; i < rubydigitShiftsPerDirection; i++ ) {
          shift(state, i, 'l');
          shift(state, i, 'r');
          shift(state, i, 'u');
