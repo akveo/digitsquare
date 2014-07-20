@@ -1,3 +1,8 @@
-define(['angular'], function(angular) {
-    console.log('Hello requirejs world');
+'use strict';
+
+define(['angular', 'angular-route', 'angular-touch'], function(angular) {
+    return angular.module('rubyDigits', [
+            'ngRoute',
+            'ngTouch'
+        ]);
 });
