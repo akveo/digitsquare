@@ -21,6 +21,7 @@ define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver'], funct
             $routeProvider
                 .when('/home', route.resolve('home/menu'))
                 .when('/levels', route.resolve('home/levels'))
+                .when('/game', route.resolve('game/game'))
                 .otherwise({ redirectTo: '/home' });
         }
     ]);

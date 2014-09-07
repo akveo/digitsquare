@@ -3,4 +3,6 @@
 @import 'layout';
 @import 'fonts';
 @import 'home';
-
+@import 'game';
+$elusiveWebfontPath: '../lib/fonts/' !default;
+@import '../bower_components/elusive-iconfont/sass/elusive-webfont.scss';
