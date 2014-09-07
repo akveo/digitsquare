@@ -12,7 +12,8 @@
     "normalize-scss": "~3.0.1",
     "angular-route": "~1.2.20",
     "angular-touch": "~1.2.20",
-    "localstorage-schema": "~0.0.1"
+    "localstorage-schema": "~0.0.1",
+    "elusive-iconfont": "*"
   },
   "exportsOverride": {
     "angular": {
@@ -30,6 +31,9 @@
     "localstorage-schema": {
       "js": "localstorage-schema.js"
     },
-    "normalize-scss": {}
+    "normalize-scss": {},
+    "elusive-iconfont": {
+      "../fonts": "fonts/*"
+    }
   }
 }
