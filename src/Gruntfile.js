@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
     var templatesDirs = ['index.html', 'views/**/*.html'],
+        fontsDir = ['fonts/*'],
         jsDirs = 'js/**/*js';
 
   // Project configuration.
@@ -24,6 +25,10 @@ module.exports = function(grunt) {
             scripts: {
                 files: jsDirs,
                 tasks: ['copy:scripts']
+            },
+            fonts: {
+                files: fontsDir,
+                tasks: ['copy:fonts']
             }
 
         },
@@ -48,6 +53,10 @@ module.exports = function(grunt) {
             scripts: {
                 src: 'js/**/*js',
                 dest: 'target/'
+            },
+            fonts: {
+                src: fontsDir,
+                dest: 'target/'
             }
         }
     });
@@ -58,7 +67,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
 
 
-    grunt.registerTask('buildAssets', ['bower:install', 'sass:build', 'copy:templates', 'copy:scripts']);
+    grunt.registerTask('buildAssets', ['bower:install', 'sass:build', 'copy:templates', 'copy:scripts', 'copy:fonts']);
 
     grunt.registerTask('src-watch',['buildAssets', 'watch']);
 
