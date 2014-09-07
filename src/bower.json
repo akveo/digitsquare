@@ -11,7 +11,8 @@
     "requirejs": "~2.1.14",
     "normalize-scss": "~3.0.1",
     "angular-route": "~1.2.20",
-    "angular-touch": "~1.2.20"
+    "angular-touch": "~1.2.20",
+    "localstorage-schema": "~0.0.1"
   },
   "exportsOverride": {
     "angular": {
@@ -25,6 +26,9 @@
     },
     "requirejs": {
       "js": "require.js"
+    },
+    "localstorage-schema": {
+      "js": "localstorage-schema.js"
     },
     "normalize-scss": {}
   }
