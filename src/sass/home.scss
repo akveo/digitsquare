@@ -1,24 +1,43 @@
 .home {
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
+    padding-top: 100px;
+    text-align: center;
+    .app-title {
+        font-family: DeusEx;
+        font-size: 42px;
+        color: #9bcb41;
+    }
     .menu {
-        $width: 400px;
-        $height: 240px;
-        
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: $width;
-        height: $height;
-        margin-left: -($width / 2);
-        margin-top: -($height / 2);
-
+        $width: 100%;
+        padding: 0 40px;
+        margin-top: 10px;
         .menu-item {
-            text-align: center;
             display: inline-block;
+            box-sizing: border-box;
             width: 100%;
-            font-size:48px;
-            line-height: 80px;
+            min-height: 45px;
+            padding: 10px 0;
+
+            background-color: #9bcb41;
+            
+            text-align: center;
+            font-size: 25px;
+            font-family: UbuntuBold;
+            color: white;
+
+            &.disabled {
+                background-color: #c6c7c9;
+            }
+
+            &.ng-click-active {
+                background-color: #d9df3f;
+            }
+
+            &+.menu-item {
+                margin-top: 10px;
+            }
         }
     }
 }

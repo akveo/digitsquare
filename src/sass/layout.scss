@@ -1,13 +1,70 @@
 html, body {
     width: 100%;
     height: 100%;
+    position: relative;
+}
+
+.app-background {
+    position: absolute;
+    left: 0;
+    right: 100%;
+    top:0;
+    bottom: 100%;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: #f0f0f0;
+
+    $squareSize: 22px;
+    .square-item {
+        display: inline-block;
+        width: $squareSize;
+        height: $squareSize;
+        background-color: transparent;
+        margin: 0 2px;
+        &.c2d662 {
+            background-color: #c2d662;
+        }
+        &.d8de3f {
+            background-color: #d8de3f;
+        }
+        &.cbcb44 {
+            background-color: #cbcb44;
+        }
+        &.a2a931 {
+            background-color: #a2a931;
+        }
+        &.e1e35c {
+            background-color: #e1e35c;
+        }
+        &.x8c9830 {
+            background-color: #8c9830;
+        }
+        &.a2c64c {
+            background-color: #a2c64c;
+        }
+        &.ebe85b {
+            background-color: #ebe85b;
+        }
+    }
+    .top-squares {
+        position: absolute;
+        right: 2px;
+        top: 4px;
+        text-align: right;
+    }
+    .bottom-squares {
+        position: absolute;
+        bottom: 0;
+        left: 2px;
+    }
 }
 
 .layout {
     width: 100%;
     height: 100%;
     position: relative;
-    background-color: #cbbc54;  
+    background-color: transparent;  
     font-family: Tahoma;
 }
 
