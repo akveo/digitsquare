@@ -1,8 +1,49 @@
 .game-container {
     
+    $watColor: #9acb40;
     .game-field {
         padding: 0 20px;
-        
+        box-sizing: border-box;
+        width: 100%;
+        text-align: center;
+        .game-matrix {
+            width: 280px;
+            height: 280px;
+            position: relative;
+            display: inline-block;
+            background-color: white;
+            .matrix-cell {
+                font-family: UbuntuBold;
+                position: absolute;
+            }
+            &.s3x3 {
+                padding: 2px;
+                box-sizing: border-box;
+                .matrix-cell {
+                    top: 2px;
+                    left: 2px;
+                    width: 90px;
+                    height: 90px;
+                    line-height: 90px;
+                    padding: 1px;
+                    font-size: 60px;
+                    box-sizing: border-box;
+                    text-align: center;
+                    background-color: $watColor;
+                    @include transitionTransform(0.1s, ease-out);
+                    @for $i from 0 through 2 {
+                        @for $j from 0 through 2 {
+                            &.pos#{$i}#{$j} {
+                                @include translate($j * 92px, $i * 92px);
+                                &.moveUp {
+                                    @include translate($j * 92px, $i * 92px - 92px / 3);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     .nav-controls {
@@ -10,7 +51,6 @@
         box-sizing: border-box;
         width: 100%;
         $iconWidth: 50px;
-        $watColor: #9acb40;
         font-family: UbuntuBold;
         .t-cell {
             vertical-align: middle;
