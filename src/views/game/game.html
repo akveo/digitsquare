@@ -14,16 +14,8 @@
         </div>
     </div>
     <div class="game-field">
-        <div class="game-matrix s3x3">
-            <div class="matrix-cell">1</div>
-            <div class="matrix-cell pos01">2</div>
-            <div class="matrix-cell pos02">3</div>
-            <div class="matrix-cell pos10">4</div>
-            <div class="matrix-cell pos11">5</div>
-            <div class="matrix-cell pos12">6</div>
-            <div class="matrix-cell pos20">7</div>
-            <div class="matrix-cell pos21">8</div>
-            <div class="matrix-cell pos22">9</div>
+        <div class="game-matrix s3x3" style="width: 280px" >
+            <div class="matrix-cell" data-row="{{Math.floor(index / matrixData.sideSize)}}" data-col="{{index % matrixData.sideSize}}" style="width: {{matrixData.sideSizePercent}}; padding-bottom: {{matrixData.sideSizePercent}}; height: 0" ng-repeat="(index, value) in matrixData.initialState" swipe-cell>{{value}}</div>
         </div>
     </div>
     
