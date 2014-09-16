@@ -7,7 +7,7 @@
         width: 100%;
         text-align: center;
         .game-matrix {
-            width: 280px;
+            width: 100%;
             height: 280px;
             position: relative;
             display: inline-block;
@@ -15,6 +15,7 @@
             .matrix-cell {
                 font-family: UbuntuBold;
                 position: absolute;
+                border: 2px solid white;
             }
             &.s3x3 {
                 padding: 2px;
@@ -33,10 +34,20 @@
                     @include transitionTransform(0.1s, ease-out);
                     @for $i from 0 through 2 {
                         @for $j from 0 through 2 {
-                            &.pos#{$i}#{$j} {
+                            &[data-row="#{$i}"][data-col="#{$j}"] {
                                 @include translate($j * 92px, $i * 92px);
+                                $moveOffset: 92px / 4;
                                 &.moveUp {
-                                    @include translate($j * 92px, $i * 92px - 92px / 3);
+                                    @include translate($j * 92px, $i * 92px - $moveOffset);
+                                }
+                                &.moveDown {
+                                    @include translate($j * 92px, $i * 92px + $moveOffset);
+                                }
+                                &.moveLeft {
+                                    @include translate($j * 92px - $moveOffset, $i * 92px);
+                                }
+                                &.moveRight {
+                                    @include translate($j * 92px + $moveOffset, $i * 92px);
                                 }
                             }
                         }
