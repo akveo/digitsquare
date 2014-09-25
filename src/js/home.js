@@ -1,7 +1,9 @@
 'use strict';
 
 define(['module', 'app/main'], function(module, main) {
-    main.register.controller(ngCName(module, 'menuController'), [function() {}]);
+    main.register.controller(ngCName(module, 'menuController'), ['$scope', function($scope) {
+        $scope.fullOpacityClass = true;
+    }]);
     main.register.controller(ngCName(module, 'levelsController'), ['$scope', function($scope) {
         var res = [];
         for (var i = 0; i < 20; i++) {

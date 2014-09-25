@@ -4,7 +4,12 @@ html, body {
     position: relative;
 }
 
+.fullOpacity+.app-background {
+    opacity: 1;
+}
+
 .app-background {
+    opacity: 0.1;
     position: absolute;
     left: 0;
     right: 100%;
