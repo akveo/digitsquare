@@ -5,17 +5,17 @@
                 <a class="control-icon el-icon-chevron-left" ng-href="#/home" ng-click></a>
             </div>
             <div class="t-cell chapter-label">
-                <h1>Chapter 1</h1>
+                <h1>{{chapter.chapterLabel}}</h1>
             </div>
         </div>
     </div>
     <div class="levels-links">
-        <div class="nav-link level-item" ng-repeat="(index, level) in levels" data-add-a-space-between ng-class="{locked: index > 5}">
-            <a class="inline-block" ng-href="#/game/{{level.id}}" ng-if="index <= 5" ng-click>
-                <span class="level-item-icon">{{level.id}}</span><br />
-                <span class="level-icon-rating"><i class="el-icon-star rewarded"></i><i class="el-icon-star"></i><i class="el-icon-star"></i></span>
+        <div class="nav-link level-item" ng-repeat="(index, level) in chapter.chapterLevels" data-add-a-space-between ng-class="{locked: level.enabled}">
+            <a class="inline-block" ng-href="#/game/{{level.label}}" ng-if="level.enabled" ng-click>
+                <span class="level-item-icon">{{level.label}}</span><br />
+                <span class="level-icon-rating"><span ng-if="level.isCompleted"><i class="el-icon-star" ng-repeat="index in [1,2,3]" ng-class="{rewarded: index <= level.score}"></i></span>&nbsp;</span>
             </a>
-            <span class="inline-block" ng-if="index > 5">
+            <span class="inline-block" ng-if="!level.enabled">
                 <span class="level-item-icon disabled"><i class="fa fa-lock"></i></span><br />
                 <span class="level-icon-rating">&nbsp;</span>
             </span>
@@ -24,13 +24,15 @@
     <div class="nav-controls table">
         <div class="t-row">
             <div class="t-cell text-left">
-                <div class="control-icon fa fa-angle-double-left" ng-click></div>
+                <a class="control-icon fa fa-angle-double-left" ng-if="prevChapter !== false" ng-click ng-href="#/levels/{{prevChapter}}"></a>
+                <div class="control-icon fa fa-angle-double-left disabled" ng-if="prevChapter === false"></div>
             </div>
             <div class="t-cell text-center level-breadcrumb">
-                <div class="fa fa-circle active"></div> <div class="fa fa-circle"></div> <div class="fa fa-circle"></div>
+                <div class="fa fa-circle" ng-repeat="chapterObj in chapters" ng-class="{ active: chapterObj.selected }" data-add-a-space-between></div>
             </div>
             <div class="t-cell text-right">
-                <div class="control-icon fa fa-angle-double-right" ng-click></div>
+                <a class="control-icon fa fa-angle-double-right" ng-if="nextChapter" ng-click ng-href="#/levels/{{nextChapter}}"></a>
+                <div class="control-icon fa fa-angle-double-right disabled" ng-if="!nextChapter"></div>
             </div>
         </div>
     </div>

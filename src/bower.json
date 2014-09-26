@@ -12,7 +12,7 @@
     "normalize-scss": "~3.0.1",
     "angular-route": "~1.2.20",
     "angular-touch": "~1.2.20",
-    "localstorage-schema": "~0.0.1",
+    "localstorage-schema": "~0.0.2",
     "elusive-iconfont": "*",
     "fontawesome": "~4.2.0"
   },

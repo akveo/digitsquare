@@ -1,10 +1,11 @@
 'use strict';
 
-define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver'], function(angular) {
+define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/data'], function(angular) {
     var main = angular.module('rubyDigits', [
             'ngRoute',
             'ngTouch',
-            'routeResolverServices'
+            'routeResolverServices',
+            'digitsData'
         ]);
 
     main.config(['$routeProvider', 'routeResolverProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', 
@@ -20,7 +21,8 @@ define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver'], funct
             var route = routeResolverProvider.route;
             $routeProvider
                 .when('/home', route.resolve('home/menu'))
-                .when('/levels', route.resolve('home/levels'))
+                .when('/levels', { redirectTo: '/levels/0' })
+                .when('/levels/:groupId', route.resolve('home/levels'))
                 .when('/game/:id', route.resolve('game/game'))
                 .otherwise({ redirectTo: '/home' });
         }
