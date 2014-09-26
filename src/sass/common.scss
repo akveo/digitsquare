@@ -84,7 +84,12 @@ $iconWidth: 50px;
         cursor: pointer;
         @include no-user-select;
 
-        &.ng-click-active {
+        &.disabled {
+            background-color: #999;
+            color: white;
+        }
+
+        &.ng-click-active:not(.disabled) {
             background-color: #d9df3f;
         }
 
