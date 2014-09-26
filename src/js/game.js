@@ -2,9 +2,12 @@
 
 define(['module', 'app/main', 'angular'], function(module, main, angular) {
     main.register
-            .controller(ngCName(module, 'gameController'), function($scope) {
+            .controller(ngCName(module, 'gameController'), function($scope, $route) {
                 var initialState = [1,2,3,4,5,6,7,8,9],
                     sideSize = Math.sqrt(initialState.length);
+                $scope.reloadLevel = function() {
+                    return $route.reload();
+                }
                 if (Math.round(sideSize) === sideSize) {
                     $scope.matrixData = {
                         initialState: initialState,

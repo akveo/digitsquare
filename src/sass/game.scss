@@ -1,6 +1,5 @@
 .game-container {
     
-    $watColor: #9acb40;
     .game-field {
         padding: 0 20px;
         box-sizing: border-box;
@@ -58,23 +57,6 @@
     }
     
     .nav-controls {
-        padding: 20px;
-        box-sizing: border-box;
-        width: 100%;
-        $iconWidth: 50px;
-        font-family: UbuntuBold;
-        .t-cell {
-            vertical-align: middle;
-        }
-        .control-icon {
-            width: $iconWidth;
-            height: $iconWidth;
-            line-height: 50px;
-            font-size: 25px;
-            text-align: center;
-            background-color: $watColor;
-            color: white;
-        }
         .level-cell {
             font-size: 62px;
             color: $watColor;

@@ -13,7 +13,8 @@
     "angular-route": "~1.2.20",
     "angular-touch": "~1.2.20",
     "localstorage-schema": "~0.0.1",
-    "elusive-iconfont": "*"
+    "elusive-iconfont": "*",
+    "fontawesome": "~4.2.0"
   },
   "exportsOverride": {
     "angular": {
@@ -33,6 +34,9 @@
     },
     "normalize-scss": {},
     "elusive-iconfont": {
+      "../fonts": "fonts/*"
+    },
+    "fontawesome": {
       "../fonts": "fonts/*"
     }
   }
