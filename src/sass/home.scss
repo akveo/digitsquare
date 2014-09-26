@@ -45,24 +45,73 @@
 .levels {
     width: 100%;
     height: 100%;
+    .levels-links {
+        padding: 0 20px;
+        text-align: justify;
+        font-size: 0.1px;
+        &:after{
+            content: "";
+            display: inline-block;
+            width: 100%;
+        }
+    }
     .level-item {
-        width: 20%;
-        height: 25%;
-        float: left;
-        
+        display: inline-block;
+        text-align: center;
+        margin-bottom: 10px;
 
-        .level-item-cont {
-            vertical-align: middle;
-            text-align: center;
+        .ng-click-active .level-item-icon {
+            background-color: #d9df3f;
         }
 
         .level-item-icon {
             display: inline-block;
-            height: 25px;
+            width: $iconWidth;
+            height: $iconWidth;
             font-size: 25px;
-            line-height: 25px;
-            background-color: #3443ab;
+            line-height: $iconWidth;
+            background-color: $labelsColor;
             color: #fff;
+            &.disabled {
+                background-color: #b6b6b6;
+                color: #505050;
+            }
+        }
+        .level-icon-rating {
+            width: $iconWidth;
+            height: $iconWidth / 2;
+            line-height: 35px;
+            display: inline-block;
+            i {
+                font-size: 14px;
+                text-align: center;
+                color: #999;
+                &.rewarded {
+                    color: #f3d231;
+                }
+            }
+        }
+    }
+
+    .nav-controls {
+        .chapter-label {
+            text-align: right;
+            h1 {
+                color: $labelsColor;
+                font-family: UbuntuBold;
+                font-size: 35px;
+                line-height: 50px;
+                margin: 0;
+            }
+        }
+        .level-breadcrumb {
+            .fa {
+                display: inline-block;
+                color: #5d8710;
+                &.active {
+                    color: #f3d231;
+                }
+            }
         }
     }
 }

@@ -11,4 +11,12 @@ define(['module', 'app/main'], function(module, main) {
         }
         $scope.levels = res;
     }]);
+    main.register.directive('addASpaceBetween', [function () {
+            return function (scope, element) {
+                if(!scope.$last){
+                    element.after('&nbsp;');
+                }
+            }
+        }
+    ])
 });

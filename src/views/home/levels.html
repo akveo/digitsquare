@@ -1,11 +1,37 @@
 <div class="levels">
-    <a class="nav-link block level-item" ng-repeat="level in levels" ng-href="#/game/{{level.id}}">
-        <div class="table wh100">
-            <div class="t-row">
-                <div class="level-item-cont t-cell">
-                    <span class="level-item-icon">{{level.id}}</span>
-                </div>
-            </div> 
+    <div class="nav-controls table">
+        <div class="t-row">
+            <div class="t-cell">
+                <a class="control-icon el-icon-chevron-left" ng-href="#/home" ng-click></a>
+            </div>
+            <div class="t-cell chapter-label">
+                <h1>Chapter 1</h1>
+            </div>
         </div>
-    </a>
+    </div>
+    <div class="levels-links">
+        <div class="nav-link level-item" ng-repeat="(index, level) in levels" data-add-a-space-between ng-class="{locked: index > 5}">
+            <a class="inline-block" ng-href="#/game/{{level.id}}" ng-if="index <= 5" ng-click>
+                <span class="level-item-icon">{{level.id}}</span><br />
+                <span class="level-icon-rating"><i class="el-icon-star rewarded"></i><i class="el-icon-star"></i><i class="el-icon-star"></i></span>
+            </a>
+            <span class="inline-block" ng-if="index > 5">
+                <span class="level-item-icon disabled"><i class="fa fa-lock"></i></span><br />
+                <span class="level-icon-rating">&nbsp;</span>
+            </span>
+        </div>
+    </div>
+    <div class="nav-controls table">
+        <div class="t-row">
+            <div class="t-cell text-left">
+                <div class="control-icon fa fa-angle-double-left" ng-click></div>
+            </div>
+            <div class="t-cell text-center level-breadcrumb">
+                <div class="fa fa-circle active"></div> <div class="fa fa-circle"></div> <div class="fa fa-circle"></div>
+            </div>
+            <div class="t-cell text-right">
+                <div class="control-icon fa fa-angle-double-right" ng-click></div>
+            </div>
+        </div>
+    </div>
 </div>
