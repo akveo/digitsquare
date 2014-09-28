@@ -46,6 +46,9 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                 },
                 getChapter: function(index) {
                     return levelsList[index];
+                },
+                getLevel: function(chapterId, levelId) {
+                    return this.getChapter(chapterId).chapterLevels.filter(function(level) { return level.label == levelId; })[0];
                 }
             };
         }).factory('combinedData', function(playerData, levelsData) {
