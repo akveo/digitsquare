@@ -2,6 +2,7 @@
 
 define(['module', 'app/main'], function(module, main) {
     main.register.controller(ngCName(module, 'menuController'), ['$scope', 'levelsData', 'playerData', function($scope, levelsData, playerData) {
+        $scope.savedGameState = playerData.getGameState();
         $scope.fullOpacityClass = true;
     }]);
     main.register.controller(ngCName(module, 'levelsController'), ['$scope', '$routeParams', 'levelsData', 'playerData', 'combinedData', function($scope, $routeParams, levelsData, playerData, combinedData) {

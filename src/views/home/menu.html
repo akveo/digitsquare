@@ -1,7 +1,8 @@
 <div class="home"> 
     <div class="app-title">Digitals</div>
     <div class="menu">
-        <a class="nav-link menu-item disabled" ng-href="#/levels" ng-click="">Continue</a>
+        <a class="nav-link menu-item" ng-href="#/game/{{savedGameState.chapterId}}/{{savedGameState.levelId}}?savedGame=true" ng-click="" ng-if="savedGameState">Continue</a>
+        <span class="nav-link menu-item disabled" ng-if="!savedGameState">Continue</span>
         <a class="nav-link menu-item" ng-href="#/levels" ng-click="">New Game</a>
         <a class="nav-link menu-item" ng-href="#/settings" ng-click="">Settings</a>
         <a class="nav-link menu-item" ng-href="#/about" ng-click="">About</a>
