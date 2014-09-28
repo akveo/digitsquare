@@ -12,9 +12,17 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
         });
     }
 
-    function validateStateMatrix(stateMatrix, goalArray, sideSize) {
-        return stateMatrix.reduce(function(agg, element) {
-            return agg && element.label == goalArray[element.row * sideSize + element.column]
+    function stateMatrixToStateArray(stateMatrix, sideSize) {
+        var res = [];
+        stateMatrix.forEach(function(el, index) {
+            res[el.row * sideSize + el.column] = el.label;
+        })
+        return res;
+    }
+
+    function validateStateArray(stateArray, goalArray) {
+        return stateArray.reduce(function(agg, element, index) {
+            return agg && element == goalArray[index];
         }, true)
     }
 
@@ -24,20 +32,27 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
     }
 
     main.register
-            .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, combinedData, $location) {
+            .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location) {
                 var chapterId = $routeParams.chapterId,
                     levelId = $routeParams.levelId,
-                    levelData = levelsData.getLevel(chapterId, levelId);
+                    levelData = levelsData.getLevel(chapterId, levelId),
+                    currentState = levelData.initial;
 
-                var initialState = levelData.initial,
-                    sideSize = Math.sqrt(initialState.length),
-                    initialStateMatrix = prepareStateMatrix(initialState, sideSize);
-
-                $scope.reloadLevel = function() {
-                    return $route.reload();
+                if ($routeParams.savedGame) {
+                    var savedGameState = playerData.getGameState();
+                    currentState = savedGameState.currentState;
                 }
 
-                $scope.chapterId = parseInt($routeParams.chapterId) + 1;
+
+                var sideSize = Math.sqrt(currentState.length),
+                    initialStateMatrix = prepareStateMatrix(currentState, sideSize),
+                    currentStateObj = { 
+                        chapterId: chapterId,
+                        levelId: levelId,
+                        currentState: currentState
+                    };
+
+                $scope.chapterId = parseInt($routeParams.chapterId);
                 $scope.levelId = $routeParams.levelId;
                 $scope.movesCount = 0;
 
@@ -93,11 +108,14 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                             delete el.animClass;
                         });
                         $scope.movesCount++;
+                        currentState = stateMatrixToStateArray(initialStateMatrix, sideSize);
+                        currentStateObj.currentState = currentState;
+                        playerData.updateGameState(currentStateObj);
                     });
                 };
 
                 $scope.whenAnimationEnd = function() {
-                    if (validateStateMatrix(initialStateMatrix, levelData.goal, sideSize)) {
+                    if (validateStateArray(currentState, levelData.goal)) {
                         alert("Nice job! Press 'OK' to go to the next level.");
                         var nextLevelInfo = combinedData.completeLevel(chapterId, levelId, $scope.movesCount);
                         $scope.$apply(function() {
@@ -105,6 +123,8 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                         });
                     }
                 }
+
+                playerData.updateGameState(currentStateObj);
 
             });
     main.register.directive('swipeCell', function() {

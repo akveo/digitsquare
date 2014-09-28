@@ -3,13 +3,13 @@
         <div class="t-row">
             <div class="t-cell">
                 <a class="control-icon el-icon-pause" ng-click ng-href="#/home"></a><br /><br />
-                <a class="control-icon el-icon-repeat" ng-click="reloadLevel()"></a>
+                <a class="control-icon el-icon-repeat" ng-click="" ng-href="#/game/{{chapterId}}/{{levelId}}"></a>
             </div>
             <div class="level-cell t-cell">
-                {{chapterId}}-{{levelId}}
+                {{chapterId + 1}}-{{levelId}}
             </div>
             <div class="game-goal-cell t-cell">
-                {{chapterId}}-{{levelId}}
+                {{chapterId + 1}}-{{levelId}}
             </div>
         </div>
     </div>
