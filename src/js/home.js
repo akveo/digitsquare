@@ -6,6 +6,7 @@ define(['module', 'app/main'], function(module, main) {
     }]);
     main.register.controller(ngCName(module, 'levelsController'), ['$scope', '$routeParams', 'levelsData', 'playerData', 'combinedData', function($scope, $routeParams, levelsData, playerData, combinedData) {
         var chapterId = parseInt($routeParams.groupId);
+        $scope.chapterId = chapterId;
         $scope.chapter = combinedData.getChapterExtendedWithUserData(chapterId);
         var chapters = $scope.chapters = levelsData.getReducedChapters().map(function(label, i) {
             return { label: label, selected: i == chapterId };

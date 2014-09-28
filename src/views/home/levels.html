@@ -11,7 +11,7 @@
     </div>
     <div class="levels-links">
         <div class="nav-link level-item" ng-repeat="(index, level) in chapter.chapterLevels" data-add-a-space-between ng-class="{locked: level.enabled}">
-            <a class="inline-block" ng-href="#/game/{{level.label}}" ng-if="level.enabled" ng-click>
+            <a class="inline-block" ng-href="#/game/{{chapterId}}/{{level.label}}" ng-if="level.enabled" ng-click>
                 <span class="level-item-icon">{{level.label}}</span><br />
                 <span class="level-icon-rating"><span ng-if="level.isCompleted"><i class="el-icon-star" ng-repeat="index in [1,2,3]" ng-class="{rewarded: index <= level.score}"></i></span>&nbsp;</span>
             </a>
