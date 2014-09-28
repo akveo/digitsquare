@@ -24,7 +24,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
     }
 
     main.register
-            .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData) {
+            .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, combinedData, $location) {
                 var chapterId = $routeParams.chapterId,
                     levelId = $routeParams.levelId,
                     levelData = levelsData.getLevel(chapterId, levelId);
@@ -39,6 +39,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
 
                 $scope.chapterId = parseInt($routeParams.chapterId) + 1;
                 $scope.levelId = $routeParams.levelId;
+                $scope.movesCount = 0;
 
                 if (Math.round(sideSize) === sideSize) {
                     $scope.initialStateMatrix = initialStateMatrix;
@@ -91,12 +92,17 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                             }
                             delete el.animClass;
                         });
+                        $scope.movesCount++;
                     });
                 };
 
                 $scope.whenAnimationEnd = function() {
                     if (validateStateMatrix(initialStateMatrix, levelData.goal, sideSize)) {
                         alert("Nice job! Press 'OK' to go to the next level.");
+                        var nextLevelInfo = combinedData.completeLevel(chapterId, levelId, $scope.movesCount);
+                        $scope.$apply(function() {
+                            $location.path('/game/' + nextLevelInfo.chapterId + '/' + nextLevelInfo.levelId);
+                        });
                     }
                 }
 

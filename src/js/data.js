@@ -24,10 +24,10 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                     return this.updateGameState(state);
                 },
                 setLevelScore: function(levelId, scoreObj) {
-                    return levelsScores.insert(scoreObj, levelId);
+                    return levelsScores.object(levelId).persist(scoreObj);
                 },
                 getLevelScore: function(levelId) {
-                    return levelsScores.get(levelId);
+                    return levelsScores.get(levelId) || {};
                 },
                 getScoresForLevels: function(levelsIdsArray) {
                     var scoresLevels = levelsScores.keys();
@@ -49,6 +49,22 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                 },
                 getLevel: function(chapterId, levelId) {
                     return this.getChapter(chapterId).chapterLevels.filter(function(level) { return level.label == levelId; })[0];
+                },
+                getNextLevelId: function(levelId) {
+                    var wasPrevios = false;
+                    for (var i = 0; i < levelsList.length; i++) {
+                        var chapter = levelsList[i],
+                            chapterLevels = chapter.chapterLevels;
+                        for (var j = 0; j < chapterLevels.length; j++) {
+                            var level = chapterLevels[j].label;
+                            if (wasPrevios) {
+                                return { chapterId: i, levelId: level };
+                            }
+                            if (level == levelId) {
+                                wasPrevios = true;
+                            }
+                        }
+                    }
                 }
             };
         }).factory('combinedData', function(playerData, levelsData) {
@@ -60,14 +76,43 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                         return {
                             label: level.label,
                             enabled: level.preEnabled || (levelScore && levelScore.enabled),
-                            isCompleted: levelScore && levelScore.isCompleted,
-                            score: levelScore && levelScore.starsNum || 0
+                            isCompleted: levelScore.isCompleted,
+                            score: levelScore.score || 0
                         };
                     });
                     return {
                         chapterLabel: chapter.chapterLabel,
                         chapterLevels: extendedLevels
                     };
+                },
+                unlockNextLevel: function(levelId) {
+                    var nextLevelInfo = levelsData.getNextLevelId(levelId),
+                        levelScore = playerData.getLevelScore(nextLevelInfo.levelId);
+
+                    levelScore.enabled = true;
+
+                    playerData.setLevelScore(nextLevelInfo.levelId, levelScore);
+                    return nextLevelInfo;
+                },
+                completeLevel: function(chapterId, levelId, movesCount) {
+                    var nextLevelInfo = this.unlockNextLevel(levelId);
+
+                    var levelScore = playerData.getLevelScore(levelId),
+                        levelData = levelsData.getLevel(chapterId, levelId);
+
+                    levelScore.isCompleted = true;
+                    if (!levelScore.movesCount || movesCount < levelScore.movesCount) {
+                        levelScore.movesCount = movesCount;
+                        levelScore.score = 3 - levelData.movesCountForStars.reduce(function(agg, curr, index) {
+                            if (agg == -1 && curr >= movesCount) {
+                                return index;
+                            }
+                            return agg;
+                        }, -1);
+                    }
+
+                    playerData.setLevelScore(levelId, levelScore);
+                    return nextLevelInfo;
                 }
             };
         });
