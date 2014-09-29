@@ -3,7 +3,7 @@
 requirejs.config({
     baseUrl: 'lib/js',
     paths: {
-        app: '../../../js'
+        app: '../../js'
     },
     shim: {
         'angular' : {'exports' : 'angular'},
