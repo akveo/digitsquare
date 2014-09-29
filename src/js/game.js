@@ -106,18 +106,20 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                             el.column = (el.column + 1 + sideSize) % sideSize;
                         }
                     };
-                    $scope.$apply(function() {
-                        initialStateMatrix.forEach(function(el) {
-                            if (matchesState(el, row, column, direction)) {
-                                moveFunctions[direction](el);
-                            }
-                            delete el.animClass;
+                    if (direction) {
+                        $scope.$apply(function() {
+                            initialStateMatrix.forEach(function(el) {
+                                if (matchesState(el, row, column, direction)) {
+                                    moveFunctions[direction](el);
+                                }
+                                delete el.animClass;
+                            });
+                            $scope.movesCount++;
+                            currentState = stateMatrixToStateArray(initialStateMatrix, sideSize);
+                            currentStateObj.currentState = currentState;
+                            playerData.updateGameState(currentStateObj);
                         });
-                        $scope.movesCount++;
-                        currentState = stateMatrixToStateArray(initialStateMatrix, sideSize);
-                        currentStateObj.currentState = currentState;
-                        playerData.updateGameState(currentStateObj);
-                    });
+                    }
                 };
 
                 $scope.whenAnimationEnd = function() {
