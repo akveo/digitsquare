@@ -60,6 +60,9 @@
         .level-cell {
             font-size: 62px;
             color: $watColor;
+            .moves {
+                font-size: 20px;
+            }
         }
         .game-goal-cell {
 

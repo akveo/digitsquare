@@ -6,7 +6,8 @@
                 <span class="control-icon el-icon-repeat" ng-click="reloadGame()"></span>
             </div>
             <div class="level-cell t-cell">
-                {{chapterId + 1}}-{{levelId}}
+                <div>{{chapterId + 1}}-{{levelId}}</div>
+                <div class="moves">Moves: {{movesCount}}</div>
             </div>
             <div class="game-goal-cell t-cell">
                 {{chapterId + 1}}-{{levelId}}
