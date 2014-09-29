@@ -4,7 +4,7 @@ define(['module', 'app/main'], function(module, main) {
     main.register.controller(ngCName(module, 'menuController'), ['$scope', 'levelsData', 'playerData', function($scope, levelsData, playerData) {
         var savedGameState = $scope.savedGameState = playerData.getGameState();
         $scope.fullOpacityClass = true;
-        $scope.savedGameUrl = '/game/' + savedGameState.chapterId + '/' + savedGameState.levelId;
+        $scope.savedGameUrl = savedGameState && ('/game/' + savedGameState.chapterId + '/' + savedGameState.levelId);
     }]);
     main.register.controller(ngCName(module, 'levelsController'), ['$scope', '$routeParams', 'levelsData', 'playerData', 'combinedData', function($scope, $routeParams, levelsData, playerData, combinedData) {
         var chapterId = parseInt($routeParams.groupId);
