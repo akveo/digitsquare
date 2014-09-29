@@ -26,7 +26,12 @@ define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/d
                 .when('/game/:chapterId/:levelId', route.resolve('game/game'))
                 .otherwise({ redirectTo: '/home' });
         }
-    ]);
+    ]).run(function($rootScope, $location) {
+        $rootScope.goToPath = function(url, search) {
+            $location.path(url);
+            search && $location.search(search);
+        };
+    });
 
     return main;
 });
