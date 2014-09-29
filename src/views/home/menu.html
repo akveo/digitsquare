@@ -1,11 +1,11 @@
 <div class="home"> 
     <div class="app-title">Digitals</div>
     <div class="menu">
-        <a class="nav-link menu-item" ng-href="#/game/{{savedGameState.chapterId}}/{{savedGameState.levelId}}?savedGame=true" ng-click="" ng-if="savedGameState">Continue</a>
+        <span class="nav-link menu-item" ng-click="goToPath(savedGameUrl, 'savedGame=true')" ng-if="savedGameState">Continue</span>
         <span class="nav-link menu-item disabled" ng-if="!savedGameState">Continue</span>
-        <a class="nav-link menu-item" ng-href="#/levels" ng-click="">New Game</a>
-        <a class="nav-link menu-item" ng-href="#/settings" ng-click="">Settings</a>
-        <a class="nav-link menu-item" ng-href="#/about" ng-click="">About</a>
-        <a class="nav-link menu-item" ng-href="#/help" ng-click="">Help</a>
+        <span class="nav-link menu-item" ng-click="goToPath('/levels')">New Game</span>
+        <span class="nav-link menu-item" ng-click="goToPath('/settings')">Settings</span>
+        <span class="nav-link menu-item" ng-click="goToPath('/about')">About</span>
+        <span class="nav-link menu-item" ng-click="goToPath('/help')">Help</span>
     </div>
 </div>

@@ -64,7 +64,13 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                     throw Error('Not valid matrix initial state!');
                 }
 
-
+                $scope.reloadGame = function() {
+                    if ($routeParams.savedGame) {
+                        $location.search('');
+                    } else {
+                        $route.reload();
+                    }
+                }
 
                 $scope.whenMoved = function(row, column, direction) {
                     var moveClasses = {
