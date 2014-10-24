@@ -10,7 +10,12 @@
                 <div class="moves">Moves: {{movesCount}}</div>
             </div>
             <div class="game-goal-cell t-cell">
-                {{chapterId + 1}}-{{levelId}}
+                <div class="goal-label">Goal:</div>
+                <div class="table goal-table">
+                    <div class="t-row" ng-repeat="row in [] | range:sideSize">
+                        <div class="t-cell" ng-repeat="column in [] | range:sideSize">{{goalArray[sideSize*row+column]}}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

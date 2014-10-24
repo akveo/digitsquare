@@ -36,10 +36,11 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                 var chapterId = $routeParams.chapterId,
                     levelId = $routeParams.levelId,
                     levelData = levelsData.getLevel(chapterId, levelId),
-                    currentState = levelData.initial;
+                    currentState = levelData.initial,
+                    savedGameState;
 
                 if ($routeParams.savedGame) {
-                    var savedGameState = playerData.getGameState();
+                    savedGameState = playerData.getGameState();
                     currentState = savedGameState.currentState;
                 }
 
@@ -50,12 +51,13 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                         chapterId: chapterId,
                         levelId: levelId,
                         currentState: currentState,
-                        movesCount: savedGameState.movesCount || 0
+                        movesCount: savedGameState && savedGameState.movesCount || 0
                     };
 
                 $scope.chapterId = parseInt($routeParams.chapterId);
                 $scope.levelId = $routeParams.levelId;
                 $scope.movesCount = currentStateObj.movesCount;
+                $scope.goalArray = levelData.goal;
 
                 if (Math.round(sideSize) === sideSize) {
                     $scope.initialStateMatrix = initialStateMatrix;
@@ -206,4 +208,13 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                     }
                 }
             });
+
+    main.register.filter('range', function() {
+        return function(input, total) {
+            total = parseInt(total);
+            for (var i=0; i<total; i++)
+              input.push(i);
+            return input;
+        };
+    });
 });

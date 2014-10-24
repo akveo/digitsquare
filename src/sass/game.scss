@@ -1,3 +1,4 @@
+$matrixColor: #a2c64c;
 @mixin percent-matrix($sideSize) {
     padding: 2px;
     box-sizing: border-box;
@@ -11,7 +12,7 @@
         font-size: 60px;
         box-sizing: border-box;
         text-align: center;
-        background-color: #a2c64c;
+        background-color: $matrixColor;
         color: white;
         @include transitionTransform(0.1s, ease-out);
         @for $i from 0 through $sideSize - 1 {
@@ -71,7 +72,27 @@
             }
         }
         .game-goal-cell {
-
+            .goal-label {
+                width: 100%;
+                text-align: center;
+                color: $watColor;
+                margin-bottom: 10px;
+                display: inline-block;
+            }
+            .goal-table {
+                width: 100%;
+                border: solid 1px white;
+                font-size: 20px;
+                color: white;
+                background-color: $matrixColor;
+                .t-row {
+                    text-align: center;
+                    .t-cell {
+                        vertical-align: middle;
+                        border: solid 1px white;
+                    }
+                }
+            }
         }
     }
     
