@@ -49,12 +49,13 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                     currentStateObj = { 
                         chapterId: chapterId,
                         levelId: levelId,
-                        currentState: currentState
+                        currentState: currentState,
+                        movesCount: savedGameState.movesCount || 0
                     };
 
                 $scope.chapterId = parseInt($routeParams.chapterId);
                 $scope.levelId = $routeParams.levelId;
-                $scope.movesCount = 0;
+                $scope.movesCount = currentStateObj.movesCount;
 
                 if (Math.round(sideSize) === sideSize) {
                     $scope.initialStateMatrix = initialStateMatrix;
@@ -117,6 +118,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                             $scope.movesCount++;
                             currentState = stateMatrixToStateArray(initialStateMatrix, sideSize);
                             currentStateObj.currentState = currentState;
+                            currentStateObj.movesCount = $scope.movesCount;
                             playerData.updateGameState(currentStateObj);
                         });
                     }
