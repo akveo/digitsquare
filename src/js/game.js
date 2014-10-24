@@ -147,6 +147,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                         $element.bind('touchstart', onTouchStart);
 
                         function onTouchStart(event) {
+                            console.log('message');
                             event.preventDefault();
 
                             $scope.startX = event.touches[0].pageX;
