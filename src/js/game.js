@@ -32,7 +32,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
     }
 
     main.register
-            .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location) {
+            .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location, panelModal, $rootScope) {
                 var chapterId = $routeParams.chapterId,
                     levelId = $routeParams.levelId,
                     levelData = levelsData.getLevel(chapterId, levelId),
@@ -128,11 +128,16 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
 
                 $scope.whenAnimationEnd = function() {
                     if (validateStateArray(currentState, levelData.goal)) {
-                        alert("Nice job! Press 'OK' to go to the next level.");
                         var nextLevelInfo = combinedData.completeLevel(chapterId, levelId, $scope.movesCount);
-                        $scope.$apply(function() {
-                            $location.path('/game/' + nextLevelInfo.chapterId + '/' + nextLevelInfo.levelId);
+                        var childScope = angular.extend($rootScope.$new(), {
+                            stars: levelsData.getLevelStars(levelData, $scope.movesCount),
+                            currentChapter: chapterId,
+                            nextChapter: nextLevelInfo.chapterId,
+                            nextLevel: nextLevelInfo.levelId,
+                            repeatClicked: function() { $scope.reloadGame(); }
                         });
+                        var modal = panelModal('views/game/nextLevelModal.html', childScope);
+                        modal.show();
                     }
                 }
 
@@ -151,7 +156,6 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                         $element.bind('touchstart', onTouchStart);
 
                         function onTouchStart(event) {
-                            console.log('message');
                             event.preventDefault();
 
                             $scope.startX = event.touches[0].pageX;
