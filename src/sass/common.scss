@@ -101,3 +101,33 @@ $iconWidth: 50px;
         }
     }
 }
+
+.panel-modal-container {
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    .panel-modal-body {
+        padding: 60px 20px 0 20px;
+        color: white;
+        box-sizing: border-box;
+        .modal-title {
+            text-align: center;
+            font-size: 30px;
+            width: 100%;
+            &+.modal-title {
+                margin-top: 10px;
+            }
+        }
+    }
+}
+
+i.el-icon-star {
+    color: #999;
+    &.rewarded {
+        color: #f3d231;
+    }
+}

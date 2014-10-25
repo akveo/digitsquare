@@ -50,6 +50,14 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                 getLevel: function(chapterId, levelId) {
                     return this.getChapter(chapterId).chapterLevels.filter(function(level) { return level.label == levelId; })[0];
                 },
+                getLevelStars: function(levelData, moves) {
+                    return 3 - levelData.movesCountForStars.reduce(function(agg, curr, index) {
+                        if (agg == 3 && curr >= moves) {
+                            return index;
+                        }
+                        return agg;
+                    }, 3);
+                },
                 getNextLevelId: function(levelId) {
                     var wasPrevios = false;
                     for (var i = 0; i < levelsList.length; i++) {
@@ -58,7 +66,7 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                         for (var j = 0; j < chapterLevels.length; j++) {
                             var level = chapterLevels[j].label;
                             if (wasPrevios) {
-                                return { chapterId: i, levelId: level };
+                                return { chapterId: i, levelId: level, currentState: chapterLevels[j].initial };
                             }
                             if (level == levelId) {
                                 wasPrevios = true;
@@ -96,6 +104,7 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                 },
                 completeLevel: function(chapterId, levelId, movesCount) {
                     var nextLevelInfo = this.unlockNextLevel(levelId);
+                    playerData.updateGameState(angular.extend({ movesCount: 0 }, nextLevelInfo));
 
                     var levelScore = playerData.getLevelScore(levelId),
                         levelData = levelsData.getLevel(chapterId, levelId);
@@ -103,12 +112,7 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                     levelScore.isCompleted = true;
                     if (!levelScore.movesCount || movesCount < levelScore.movesCount) {
                         levelScore.movesCount = movesCount;
-                        levelScore.score = 3 - levelData.movesCountForStars.reduce(function(agg, curr, index) {
-                            if (agg == -1 && curr >= movesCount) {
-                                return index;
-                            }
-                            return agg;
-                        }, -1);
+                        levelScore.score = levelsData.getLevelStars(levelData, movesCount);
                     }
 
                     playerData.setLevelScore(levelId, levelScore);

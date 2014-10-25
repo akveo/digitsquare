@@ -1,11 +1,12 @@
 'use strict';
 
-define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/data'], function(angular) {
+define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/data', 'app/helper'], function(angular) {
     var main = angular.module('rubyDigits', [
             'ngRoute',
             'ngTouch',
             'routeResolverServices',
-            'digitsData'
+            'digitsData',
+            'helper'
         ]);
 
     main.config(['$routeProvider', 'routeResolverProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', 

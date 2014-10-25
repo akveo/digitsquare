@@ -97,3 +97,21 @@ $matrixColor: #a2c64c;
     }
     
 }
+
+.game-completed-modal {
+    padding-top: 130px!important;
+    .score-stars {
+        i {
+            display: inline-block;
+            &+i {
+                margin-left: 5px;
+            }    
+        }
+    }
+    .nav-controls {
+        text-align: center;
+        .control-icon+.control-icon {
+            margin-left: 20px;
+        }
+    }
+}
