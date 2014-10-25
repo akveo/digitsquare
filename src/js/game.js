@@ -37,12 +37,13 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                     levelId = $routeParams.levelId,
                     levelData = levelsData.getLevel(chapterId, levelId),
                     currentState = levelData.initial,
-                    savedGameState;
+                    savedGameState = playerData.getGameState();
 
                 if ($routeParams.savedGame) {
-                    savedGameState = playerData.getGameState();
                     currentState = savedGameState.currentState;
                 }
+
+                $scope.enableNewGameTutorial = levelId == '1' && chapterId == '0';
 
 
                 var sideSize = Math.sqrt(currentState.length),
@@ -141,6 +142,18 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                     }
                 }
 
+                $scope.displayTutorialWindow = function(tutorialAttachParams) {
+                    console.log(tutorialAttachParams.html);
+                    var s = tutorialAttachParams.styleObj,
+                        scope = {
+                            icons: s,
+                            textAbove: angular.extend({}, s, { height: null, width: null, top: s.top, bottom: null, left: 0, right: 0 }),
+                            textUnder: angular.extend({}, s, { height: null, width: null, top: s.bottom, bottom: null, left: 0, right: 0 })
+                        };
+                    panelModal('views/game/startGameTutorial.html', angular.extend($rootScope.$new(), scope))
+                        .show();
+                }
+
                 playerData.updateGameState(currentStateObj);
 
             });
@@ -212,6 +225,39 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                     }
                 }
             });
+
+    main.register.directive('tutorialAttach', function($timeout) {
+        return {
+            restrict: 'A',
+            scope: {
+                enabled: '&tutorialAttach',
+                nodePosition: '&nodePosition',
+            },
+            controller: function ($scope, $element, $attrs) {
+                if ($scope.enabled()) {
+                    $scope.enabled(false);
+                    $timeout(function() {
+                        var childs = $element.find('div'),
+                            centralChild = childs[Math.floor(childs.length / 2)],
+                            pos = centralChild.getBoundingClientRect(),
+                            computedStyle = window.getComputedStyle(centralChild),
+                            pxPos = {};
+
+                        Object.keys(pos).forEach(function(key) {
+                            pxPos[key] = Math.floor(pos[key]) + 'px';
+                        });
+
+                        $scope.nodePosition({
+                            attachNodeParams: {
+                                styleObj: pxPos,
+                                html: centralChild.innerHTML
+                            }
+                        });
+                    }, 0);
+                }
+            }
+        }
+    });
 
     main.register.filter('range', function() {
         return function(input, total) {

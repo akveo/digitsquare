@@ -13,9 +13,9 @@ define(['angular'], function(angular) {
                         element.remove();
                         currentScope.goToPath(link);
                     };
-                    currentScope.closeAndExecute = function(cb) {
+                    currentScope.closePanel = function(cb) {
                         element.remove();
-                        cb();
+                        cb && cb();
                     };
 
                     angular.element(document.body).append(element);

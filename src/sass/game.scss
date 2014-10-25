@@ -115,3 +115,50 @@ $matrixColor: #a2c64c;
         }
     }
 }
+
+.tutorial-container {
+    width: 100%;
+    height: 100%;
+    .pseudo-matrix-cell {
+        position: absolute;
+        text-align: center;
+    }
+
+    color: white;
+    .hint-actions {
+        position: absolute;
+        i {
+            width: 100%;
+            text-align: center;
+            display: block;
+            font-size: 37px;
+
+            &:first-child {
+                margin-top: calc(50% - 37px / 2);
+            }
+
+            &+i {
+                margin-top: 10px;
+            }
+        }
+    }
+
+    .text-above,.text-below {
+        position: absolute;
+        padding: 0 20px;
+    }
+
+    .text-above {
+        margin-top: -40px;
+        text-align: center;
+        font-size: 20px;
+        font-family: Ubuntu;
+    }
+
+    .text-below {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 12px;
+        font-family: Ubuntu;
+    }
+}
