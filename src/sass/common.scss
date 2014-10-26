@@ -46,7 +46,7 @@ $iconWidth: 50px;
 } 
 // translate
 @mixin translate ($x, $y) {
-   @include transform(translate($x, $y));
+   @include transform(translate3d($x, $y, 0));
 }
 // skew
 @mixin skew ($x, $y) {
@@ -83,6 +83,7 @@ $iconWidth: 50px;
         color: white;
         cursor: pointer;
         @include no-user-select;
+        outline: 0;
 
         &.disabled {
             background-color: #999;
@@ -98,6 +99,11 @@ $iconWidth: 50px;
         }
         &.fa {
             font-size: 40px;
+        }
+
+        &:focus {
+            outline: 0;
+            @include no-user-select;
         }
     }
 }

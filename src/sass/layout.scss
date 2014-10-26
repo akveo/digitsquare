@@ -5,6 +5,11 @@ html, body {
     font-family: UbuntuBold;
 }
 
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+    @include no-user-select();
+}
+
 .fullOpacity+.app-background {
     opacity: 1;
 }
@@ -79,6 +84,10 @@ html, body {
     color: #3443ab;
     text-decoration: none;
     cursor: pointer;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 .table {

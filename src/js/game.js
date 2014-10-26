@@ -31,6 +31,11 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                     (['l', 'r'].indexOf(direction) != -1 && el.row == row);
     }
 
+    function appendLog(text) {
+        var element = document.getElementById('logger');
+        element.innerHTML = text;
+    }
+
     main.register
             .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location, panelModal, $rootScope) {
                 var chapterId = $routeParams.chapterId,
@@ -169,6 +174,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                         $element.bind('touchstart', onTouchStart);
 
                         function onTouchStart(event) {
+                            appendLog('TouchStart');
                             event.preventDefault();
 
                             $scope.startX = event.touches[0].pageX;
@@ -180,7 +186,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                         }
 
                         function onTouchMove(event) {
-
+                            appendLog('TouchMove');
                             event.preventDefault();
                             var direction = '',
                                 posX = event.changedTouches[0].pageX,
@@ -216,6 +222,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
 
                         // Unbinds methods when touch interaction ends
                         function onTouchEnd(event) {
+                            appendLog('TouchEnd');
                             event.preventDefault();
                             $element.unbind('touchmove', onTouchMove);
                             $element.unbind('touchend', onTouchEnd);
