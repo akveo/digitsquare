@@ -57,6 +57,18 @@ module.exports = function(grunt) {
             fonts: {
                 src: fontsDir,
                 dest: 'target/'
+            },
+            dist: {
+                expand: true,
+                cwd: 'target/',
+                src: '**',
+                dest: '../app/www'
+            }
+        },
+        exec: {
+            buildAndroid: {
+                cwd: '../app/',
+                command: 'phonegap build android --release'
             }
         }
     });
@@ -65,10 +77,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-copy');
-
+    grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('buildAssets', ['bower:install', 'sass:build', 'copy:templates', 'copy:scripts', 'copy:fonts']);
 
     grunt.registerTask('src-watch',['buildAssets', 'watch']);
+    grunt.registerTask('dist-src', ['buildAssets', 'copy:dist']);
+    grunt.registerTask('build-android', ['dist-src', 'exec:buildAndroid']);
 
 };

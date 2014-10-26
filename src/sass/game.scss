@@ -55,6 +55,7 @@ $matrixColor: #a2c64c;
                 font-family: UbuntuBold;
                 position: absolute;
                 border: 2px solid white;
+                @include translate(0, 0);
             }
 
             &.s3x3 {
