@@ -24,6 +24,5 @@
             <div class="matrix-cell" data-row="{{value.row}}" data-col="{{value.column}}" style="width: {{sideSizePercent}}; padding-bottom: {{sideSizePercent}}; height: 0" ng-repeat="(index, value) in initialStateMatrix" swipe-cell="whenMoveEnd(value.row, value.column, direction)" swipe-cell-on-move="whenMoved(value.row, value.column, direction)" swipe-cell-animation-end="whenAnimationEnd()" ng-class="value.animClass">{{value.label}}</div>
         </div>
     </div>
-    <div id="logger" style="width"></div>
     
 </div>

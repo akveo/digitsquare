@@ -31,11 +31,6 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                     (['l', 'r'].indexOf(direction) != -1 && el.row == row);
     }
 
-    function appendLog(text) {
-        var element = document.getElementById('logger');
-        element.innerHTML = text;
-    }
-
     main.register
             .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location, panelModal, $rootScope) {
                 var chapterId = $routeParams.chapterId,
@@ -173,21 +168,23 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                     controller: function ($scope, $element, $attrs) {
                         $element.bind('touchstart', onTouchStart);
 
-                        function onTouchStart(event) {
-                            appendLog('TouchStart');
-                            event.preventDefault();
+                        var firstMove;
 
+                        function onTouchStart(event) {
                             $scope.startX = event.touches[0].pageX;
                             $scope.startY = event.touches[0].pageY;
                             $scope.boundingRect = $element[0].getBoundingClientRect();
                             $scope.parent = $element.parent()[0];
                             $element.bind('touchmove', onTouchMove);
                             $element.bind('touchend', onTouchEnd);
+                            firstMove = true;
                         }
 
                         function onTouchMove(event) {
-                            appendLog('TouchMove');
-                            event.preventDefault();
+                            if (firstMove) {
+                                firstMove = false;
+                                event.preventDefault();
+                            }
                             var direction = '',
                                 posX = event.changedTouches[0].pageX,
                                 posY = event.changedTouches[0].pageY,
@@ -222,8 +219,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
 
                         // Unbinds methods when touch interaction ends
                         function onTouchEnd(event) {
-                            appendLog('TouchEnd');
-                            event.preventDefault();
+                            firstMove = false;
                             $element.unbind('touchmove', onTouchMove);
                             $element.unbind('touchend', onTouchEnd);
                             $element.bind('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', onTransitionEnd);
