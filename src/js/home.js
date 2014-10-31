@@ -10,8 +10,8 @@ define(['module', 'app/main'], function(module, main) {
         var chapterId = parseInt($routeParams.groupId);
         $scope.chapterId = chapterId;
         $scope.chapter = combinedData.getChapterExtendedWithUserData(chapterId);
-        var chapters = $scope.chapters = levelsData.getReducedChapters().map(function(label, i) {
-            return { label: label, selected: i == chapterId };
+        var chapters = $scope.chapters = levelsData.getChaptersArray().map(function(chapter, i) {
+            return { label: chapter.label, selected: chapter.id == chapterId };
         });
         $scope.prevChapter = chapters[chapterId - 1] ? chapterId - 1 : false;
         $scope.nextChapter = chapters[chapterId + 1] ? chapterId + 1 : false;

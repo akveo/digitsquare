@@ -33,29 +33,31 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
 
     main.register
             .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location, panelModal, $rootScope) {
-                var chapterId = $routeParams.chapterId,
-                    levelId = $routeParams.levelId,
-                    levelData = levelsData.getLevel(chapterId, levelId),
+                var levelId = $routeParams.levelId,
+                    chapterId = levelId.split('-')[0],
+                    levelIndex = levelId.split('-')[1],
+                    levelData = levelsData.getLevel(levelId),
                     currentState = levelData.initial,
-                    savedGameState = playerData.getGameState();
+                    savedGameState = playerData.getGameState(),
+                    movesCount = 0;
 
                 if ($routeParams.savedGame) {
                     currentState = savedGameState.currentState;
+                    movesCount = savedGameState && savedGameState.movesCount || 0;
                 }
 
-                $scope.enableNewGameTutorial = levelId == '1' && chapterId == '0';
+                $scope.enableNewGameTutorial = levelId == '1-1';
 
 
                 var sideSize = Math.sqrt(currentState.length),
                     initialStateMatrix = prepareStateMatrix(currentState, sideSize),
                     currentStateObj = { 
-                        chapterId: chapterId,
                         levelId: levelId,
                         currentState: currentState,
-                        movesCount: savedGameState && savedGameState.movesCount || 0
+                        movesCount: movesCount
                     };
 
-                $scope.chapterId = parseInt($routeParams.chapterId);
+                $scope.chapterId = parseInt(chapterId);
                 $scope.levelId = $routeParams.levelId;
                 $scope.movesCount = currentStateObj.movesCount;
                 $scope.goalArray = levelData.goal;
@@ -129,12 +131,11 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
 
                 $scope.whenAnimationEnd = function() {
                     if (validateStateArray(currentState, levelData.goal)) {
-                        var nextLevelInfo = combinedData.completeLevel(chapterId, levelId, $scope.movesCount);
+                        var nextLevelId = combinedData.completeLevel(levelId, $scope.movesCount);
                         var childScope = angular.extend($rootScope.$new(), {
                             stars: levelsData.getLevelStars(levelData, $scope.movesCount),
                             currentChapter: chapterId,
-                            nextChapter: nextLevelInfo.chapterId,
-                            nextLevel: nextLevelInfo.levelId,
+                            nextLevel: nextLevelId,
                             repeatClicked: function() { $scope.reloadGame(); }
                         });
                         var modal = panelModal('views/game/nextLevelModal.html', childScope);
@@ -143,7 +144,6 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                 }
 
                 $scope.displayTutorialWindow = function(tutorialAttachParams) {
-                    console.log(tutorialAttachParams.html);
                     var s = tutorialAttachParams.styleObj,
                         scope = {
                             icons: s,

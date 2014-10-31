@@ -6,14 +6,14 @@
                 <span class="control-icon el-icon-repeat" ng-click="reloadGame()"></span>
             </div>
             <div class="level-cell t-cell">
-                <div>{{chapterId + 1}}-{{levelId}}</div>
+                <div>{{levelId}}</div>
                 <div class="moves">Moves: {{movesCount}}</div>
             </div>
             <div class="game-goal-cell t-cell">
                 <div class="goal-label">Goal:</div>
                 <div class="table goal-table">
                     <div class="t-row" ng-repeat="row in [] | range:sideSize">
-                        <div class="t-cell" ng-repeat="column in [] | range:sideSize">{{goalArray[sideSize*row+column]}}</div>
+                        <div class="t-cell" ng-repeat="column in [] | range:sideSize">{{goalArray[sideSize*row+column] || '&nbsp;'}}</div>
                     </div>
                 </div>
             </div>
