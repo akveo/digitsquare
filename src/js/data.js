@@ -37,18 +37,38 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
         })
         .factory('levelsData', function() {
             var levelsDao = {};
+
+            function _clone(obj) {
+                return JSON.parse(JSON.stringify(obj));
+            }
+
             return {
-                getFullList: function() {
-                    return levelsList;
+                getChapters: function() {
+                    return levelsList.chapters;
                 },
-                getReducedChapters: function() {
-                    return levelsList.map(function(chapter) { return chapter.chapterLabel; });
+                getChaptersArray: function() {
+                    return Object.keys(this.getChapters()).map(function(chapterId) { 
+                        return this.getChapter(chapterId);
+                    }, this);
                 },
-                getChapter: function(index) {
-                    return levelsList[index];
+                getNextChapter: function(chapterId) {
+                    return this.getChapter('' + (parseInt(chapterId) + 1));
                 },
-                getLevel: function(chapterId, levelId) {
-                    return this.getChapter(chapterId).chapterLevels.filter(function(level) { return level.label == levelId; })[0];
+                getChapter: function(chapterId) {
+                    return this.getChapters()[chapterId];
+                },                
+                getFullChapter: function(chapterId) {
+                    var chapter = _clone(this.getChapter(chapterId));
+                    chapter.levels = chapter.levels.map(function(levelId) {
+                        return {
+                            id: levelId, 
+                            data: this.getLevel(levelId)
+                        };
+                    }, this);
+                    return chapter;
+                },
+                getLevel: function(levelId) {
+                    return levelsList.levels[levelId];
                 },
                 getLevelStars: function(levelData, moves) {
                     return 3 - levelData.movesCountForStars.reduce(function(agg, curr, index) {
@@ -60,54 +80,60 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                 },
                 getNextLevelId: function(levelId) {
                     var wasPrevios = false;
-                    for (var i = 0; i < levelsList.length; i++) {
-                        var chapter = levelsList[i],
-                            chapterLevels = chapter.chapterLevels;
-                        for (var j = 0; j < chapterLevels.length; j++) {
-                            var level = chapterLevels[j].label;
-                            if (wasPrevios) {
-                                return { chapterId: i, levelId: level, currentState: chapterLevels[j].initial };
-                            }
-                            if (level == levelId) {
-                                wasPrevios = true;
-                            }
-                        }
+                    var splittedLevel = levelId.split('-'),
+                        chapter = this.getChapter(splittedLevel[0]),
+                        nextLevel = chapter.levels[chapter.levels.indexOf(levelId) + 1];
+
+                    if (!nextLevel) {
+                        var nextChapter = this.getNextChapter(chapterId);
+                        nextLevel = nextChapter && nextChapter.levels[0];
                     }
+
+                    return nextLevel;
+                },
+                getInitialLevelDataForLevel: function(levelId) {
+                    var level = this.getLevel(levelId);
+                    return { 
+                        levelId: levelId,
+                        currentState: level.initial,
+                        movesCount: 0
+                    };
                 }
             };
         }).factory('combinedData', function(playerData, levelsData) {
             return {
                 getChapterExtendedWithUserData: function(chapterId) {
                     var chapter = levelsData.getChapter(chapterId);
-                    var extendedLevels = chapter.chapterLevels.map(function(level) {
-                        var levelScore = playerData.getLevelScore(level.label);
+                    var extendedLevels = levelsData.getFullChapter(chapterId).levels.map(function(level) {
+                        var levelScore = playerData.getLevelScore(level.id);
                         return {
-                            label: level.label,
-                            enabled: level.preEnabled || (levelScore && levelScore.enabled),
+                            id: level.id,
+                            label: level.data.label,
+                            enabled: level.data.preEnabled || (levelScore && levelScore.enabled),
                             isCompleted: levelScore.isCompleted,
                             score: levelScore.score || 0
                         };
                     });
                     return {
-                        chapterLabel: chapter.chapterLabel,
+                        chapterLabel: chapter.label,
                         chapterLevels: extendedLevels
                     };
                 },
                 unlockNextLevel: function(levelId) {
-                    var nextLevelInfo = levelsData.getNextLevelId(levelId),
-                        levelScore = playerData.getLevelScore(nextLevelInfo.levelId);
+                    var nextLevelId = levelsData.getNextLevelId(levelId),
+                        levelScore = playerData.getLevelScore(nextLevelId);
 
                     levelScore.enabled = true;
 
-                    playerData.setLevelScore(nextLevelInfo.levelId, levelScore);
-                    return nextLevelInfo;
+                    playerData.setLevelScore(nextLevelId, levelScore);
+                    return nextLevelId;
                 },
-                completeLevel: function(chapterId, levelId, movesCount) {
-                    var nextLevelInfo = this.unlockNextLevel(levelId);
-                    playerData.updateGameState(angular.extend({ movesCount: 0 }, nextLevelInfo));
+                completeLevel: function(levelId, movesCount) {
+                    var nextLevelId = this.unlockNextLevel(levelId);
+                    playerData.updateGameState(levelsData.getInitialLevelDataForLevel(nextLevelId));
 
                     var levelScore = playerData.getLevelScore(levelId),
-                        levelData = levelsData.getLevel(chapterId, levelId);
+                        levelData = levelsData.getLevel(levelId);
 
                     levelScore.isCompleted = true;
                     if (!levelScore.movesCount || movesCount < levelScore.movesCount) {
@@ -116,7 +142,7 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                     }
 
                     playerData.setLevelScore(levelId, levelScore);
-                    return nextLevelInfo;
+                    return nextLevelId;
                 }
             };
         });

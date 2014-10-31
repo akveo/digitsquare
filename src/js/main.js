@@ -22,9 +22,9 @@ define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/d
             var route = routeResolverProvider.route;
             $routeProvider
                 .when('/home', route.resolve('home/menu'))
-                .when('/levels', { redirectTo: '/levels/0' })
+                .when('/levels', { redirectTo: '/levels/1' })
                 .when('/levels/:groupId', route.resolve('home/levels'))
-                .when('/game/:chapterId/:levelId', route.resolve('game/game'))
+                .when('/game/:levelId', route.resolve('game/game'))
                 .otherwise({ redirectTo: '/home' });
         }
     ]).run(function($rootScope, $location) {
