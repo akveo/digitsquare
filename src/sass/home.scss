@@ -42,10 +42,20 @@
     }
 }
 
+.chapters-container {
+    width: 1000%;
+    &.include-transition {
+        @include transitionTransform(0.2s, ease-out);
+    }
+}
+
 .levels {
     width: 100%;
     height: 100%;
+    overflow: hidden;
     .levels-links {
+        float: left;
+        width: 280px;
         padding: 0 20px;
         text-align: justify;
         font-size: 0.1px;

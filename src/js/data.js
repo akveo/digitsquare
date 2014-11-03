@@ -46,6 +46,9 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                 getChapters: function() {
                     return levelsList.chapters;
                 },
+                getChaperIds: function() {
+                    return Object.keys(this.getChapters());
+                },
                 getChaptersArray: function() {
                     return Object.keys(this.getChapters()).map(function(chapterId) { 
                         return this.getChapter(chapterId);
@@ -115,9 +118,13 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                         };
                     });
                     return {
+                        id: chapterId,
                         chapterLabel: chapter.label,
                         chapterLevels: extendedLevels
                     };
+                },
+                getChaptersExtendedWithUserData: function() {
+                    return levelsData.getChaperIds().map(this.getChapterExtendedWithUserData.bind(this));
                 },
                 unlockNextLevel: function(levelId) {
                     var nextLevelId = levelsData.getNextLevelId(levelId),
