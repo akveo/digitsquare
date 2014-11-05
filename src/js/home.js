@@ -10,6 +10,14 @@ define(['module', 'app/main'], function(module, main) {
         var chapterId = parseInt($routeParams.initialGroup) || '1';
         $scope.chapterId = chapterId;
         var fullChapters = $scope.fullChapters = combinedData.getChaptersExtendedWithUserData();
+        $scope.groupedChapters = fullChapters.map(function(chapter) {
+            return chapter.chapterLevels.reduce(function(acc, val, i) {
+                var index = Math.floor(i / 5);
+                if (!acc[index]) acc[index] = [];
+                acc[index].push(val);
+                return acc;
+            } , []); 
+        });
         var selectedChapterIndex = 0;
         fullChapters.forEach(function(c, i) { 
             if (c.id == chapterId) {
