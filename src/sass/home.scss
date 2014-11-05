@@ -42,12 +42,16 @@
     }
 }
 
-.chapters-container {
-    width: 1000%;
-    &.include-transition {
-        @include transitionTransform(0.2s, ease-out);
+.chapters-body {
+    overflow: hidden;
+    .chapters-container {
+        display: inline-block;
+        &.include-transition {
+            @include transitionTransform(0.2s, ease-out);
+        }
     }
 }
+
 
 .levels {
     width: 100%;
@@ -55,20 +59,18 @@
     overflow: hidden;
     .levels-links {
         float: left;
-        width: 280px;
+        width: 100%;
         padding: 0 20px;
-        text-align: justify;
-        font-size: 0.1px;
-        &:after{
-            content: "";
-            display: inline-block;
-            width: 100%;
-        }
+        box-sizing: border-box;
     }
     .level-item {
         display: inline-block;
         text-align: center;
         margin-bottom: 10px;
+        width: 20%;
+        border-left: 2px solid transparent;
+        border-right: 2px solid transparent;
+        box-sizing: border-box;
 
         .ng-click-active .level-item-icon {
             background-color: #d9df3f;
@@ -76,7 +78,7 @@
 
         .level-item-icon {
             display: inline-block;
-            width: $iconWidth;
+            width: 100%;
             height: $iconWidth;
             font-size: 25px;
             line-height: $iconWidth;

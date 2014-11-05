@@ -9,19 +9,21 @@
             </div>
         </div>
     </div>
-    <div class="chapters-container" ng-style="{ transform: 'translate3d(-' + offsetX + 'px,0,0)' }" swipe-panel="swipeProcess(delta)" swipe-end="swipeEnd(delta)" ng-class="{ 'include-transition': includeTransitionClass }">
-        <div class="levels-links" ng-repeat="chapter in fullChapters" >
-            <div class="nav-link level-item" ng-repeat="(index, level) in chapter.chapterLevels" data-add-a-space-between ng-class="{locked: level.enabled}">
-                <span class="inline-block" ng-if="level.enabled" ng-click="goToPath('/game/' + level.id)">
-                    <span class="level-item-icon">{{level.label}}</span><br />
-                    <span class="level-icon-rating"><span ng-if="level.isCompleted"><i class="el-icon-star" ng-repeat="index in [1,2,3]" ng-class="{rewarded: index <= level.score}"></i></span>&nbsp;</span>
-                </span>
-                <span class="inline-block" ng-if="!level.enabled">
-                    <span class="level-item-icon disabled"><i class="fa fa-lock"></i></span><br />
-                    <span class="level-icon-rating">&nbsp;</span>
-                </span>
-            </div>
-        </div>    
+    <div class="chapters-body">
+        <div class="chapters-container" ng-style="{ transform: 'translate3d(' + -(screenWidth * currentIndex + deltaOffset) + 'px,0,0)', '-webkit-transform': 'translate3d(' + -(screenWidth * currentIndex + deltaOffset) + 'px,0,0)', width: screenWidth * fullChapters.length + 'px' }" swipe-panel="swipeProcess(delta)" swipe-end="swipeEnd(delta)" ng-class="{ 'include-transition': includeTransitionClass }">
+            <div class="levels-links" ng-repeat="chapter in fullChapters" ng-style="{ width: screenWidth + 'px' }">
+                <div class="nav-link level-item" ng-repeat="(index, level) in chapter.chapterLevels" ng-class="{locked: level.enabled}">
+                    <span class="inline-block" ng-if="level.enabled" ng-click="goToPath('/game/' + level.id)">
+                        <span class="level-item-icon">{{level.label}}</span><br />
+                        <span class="level-icon-rating"><span ng-if="level.isCompleted"><i class="el-icon-star" ng-repeat="index in [1,2,3]" ng-class="{rewarded: index <= level.score}"></i></span>&nbsp;</span>
+                    </span>
+                    <span class="inline-block" ng-if="!level.enabled">
+                        <span class="level-item-icon disabled"><i class="fa fa-lock"></i></span><br />
+                        <span class="level-icon-rating">&nbsp;</span>
+                    </span>
+                </div>
+            </div>    
+        </div>
     </div>
     <div class="nav-controls table">
         <div class="t-row">
@@ -29,7 +31,7 @@
                 <div class="control-icon fa fa-angle-double-left" ng-class="{ disabled: !fullChapters[currentIndex - 1] }" ng-click="goToChapter(currentIndex - 1)"></div>
             </div>
             <div class="t-cell text-center level-breadcrumb">
-                <div class="fa fa-circle" ng-repeat="chapterObj in chapters" ng-class="{ active: chapterObj.selected }" data-add-a-space-between></div>
+                <div class="fa fa-circle" ng-repeat="chapterCircle in [] | range:fullChapters.length" ng-class="{ active: chapterCircle == currentIndex }" data-add-a-space-between></div>
             </div>
             <div class="t-cell text-right">
                 <div class="control-icon fa fa-angle-double-right" ng-class="{ disabled: !fullChapters[currentIndex + 1] }" ng-click="goToChapter(currentIndex + 1)"></div>
