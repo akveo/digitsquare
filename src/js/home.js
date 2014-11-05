@@ -17,7 +17,7 @@ define(['module', 'app/main'], function(module, main) {
             }
         });
         $scope.currentIndex = selectedChapterIndex;
-        $scope.offsetX = screen.availWidth * selectedChapterIndex;
+        $scope.deltaOffset = 0;
 
         function includeTransitionClass() {
             $scope.includeTransitionClass = true;
@@ -28,24 +28,23 @@ define(['module', 'app/main'], function(module, main) {
         function tryChangeChapter(newChapterIndex, returnToBase) {
             if (fullChapters[newChapterIndex]) {
                 $scope.currentIndex = newChapterIndex;
-                $scope.offsetX = screen.availWidth * newChapterIndex;
-                includeTransitionClass();
             } else if (returnToBase) {
-                $scope.offsetX = screen.availWidth * $scope.currentIndex;
-                includeTransitionClass();
+                $scope.currentIndex = $scope.currentIndex;
             }
+            includeTransitionClass();
         }
         $scope.goToChapter = function(newChapterIndex) {
             tryChangeChapter(newChapterIndex);
         };
         $scope.swipeProcess = function(delta) {
             $scope.$apply(function() {
-                $scope.offsetX = screen.availWidth * $scope.currentIndex - delta;
+                $scope.deltaOffset = -delta;
             });
         };
         $scope.swipeEnd = function(delta) {
             $scope.$apply(function() {
                 var newIndex = Math.round((screen.availWidth * $scope.currentIndex - delta) / screen.availWidth);
+                $scope.deltaOffset = 0;
                 tryChangeChapter(newIndex, true);
             });
         };

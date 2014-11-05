@@ -25,13 +25,25 @@ define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/d
                 .when('/levels', route.resolve('home/levels'))
                 .when('/game/:levelId', route.resolve('game/game'))
                 .otherwise({ redirectTo: '/home' });
+
+            main.register.filter('range', function() {
+                return function(input, total) {
+                    total = parseInt(total);
+                    for (var i=0; i<total; i++)
+                      input.push(i);
+                    return input;
+                };
+            });
         }
     ]).run(function($rootScope, $location) {
         $rootScope.goToPath = function(url, search) {
             $location.path(url);
             search && $location.search(search);
         };
+        $rootScope.screenWidth = screen.availWidth;
     });
+
+
 
     return main;
 });
