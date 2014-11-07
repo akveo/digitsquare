@@ -2,11 +2,15 @@
 
 define(['module', 'app/main'], function(module, main) {
     main.register.controller(ngCName(module, 'menuController'), ['$scope', 'levelsData', 'playerData', function($scope, levelsData, playerData) {
+        $scope.watchBack(function() {
+            navigator.app.exitApp();
+        });
         var savedGameState = $scope.savedGameState = playerData.getGameState();
         $scope.fullOpacityClass = true;
         $scope.savedGameUrl = savedGameState && ('/game/' + savedGameState.levelId);
     }]);
     main.register.controller(ngCName(module, 'levelsController'), ['$scope', '$routeParams', 'levelsData', 'playerData', 'combinedData', '$timeout', function($scope, $routeParams, levelsData, playerData, combinedData, $timeout) {
+        $scope.navBack('/home');
         var chapterId = parseInt($routeParams.initialGroup) || '1';
         $scope.chapterId = chapterId;
         var fullChapters = $scope.fullChapters = combinedData.getChaptersExtendedWithUserData();
