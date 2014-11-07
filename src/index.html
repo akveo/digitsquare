@@ -23,21 +23,7 @@
                 ><br/><div class="square-item"></div><div class="square-item cbcb44"></div>
             </div>
         </div>
-        <script>
-            //This value replaced when installing into a phonegap built app.
-            var phonegapEnv = 'web';
-            (function () {
-                var match,
-                    envRegExp = /env=([\w\d\\.-_]+)/,
-                    match = envRegExp.exec((typeof location !== 'undefined' && location.href.split('?')[1]) || '');
-
-                if (match && match[1]) {
-                    phonegapEnv = match[1];
-                }
-
-                document.write('<script src="js/lib/' + phonegapEnv + '/cordova.js">\<\/script>');
-            }());
-        </script>
+        <script src="cordova.js"></script>
         <script data-main="js/app" src="lib/js/require.js"></script>
     </body>
 </html>
