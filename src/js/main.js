@@ -35,12 +35,21 @@ define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/d
                 };
             });
         }
-    ]).run(function($rootScope, $location, $timeout) {
+    ]).run(function($rootScope, $location, $timeout, panelModal) {
         $rootScope.goToPath = function(url, search) {
             $location.path(url);
             search && $location.search(search);
         };
         $rootScope.screenWidth = document.documentElement.clientWidth || screen.width;
+        $rootScope.panelModal = function() {
+            var modalInstance = panelModal.apply(null, [].slice.call(arguments));
+            this.$on('$destroy', function() {
+                if (!modalInstance.isDestroyed()) {
+                    modalInstance.destroy();
+                }
+            });
+            return modalInstance;
+        };
     });
 
 

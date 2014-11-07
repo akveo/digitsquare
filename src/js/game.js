@@ -32,7 +32,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
     }
 
     main.register
-            .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location, panelModal, $rootScope) {
+            .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location, $rootScope, $window) {
                 var levelId = $routeParams.levelId,
                     chapterId = levelId.split('-')[0],
                     levelIndex = levelId.split('-')[1],
@@ -149,7 +149,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                             nextLevel: nextLevelId,
                             repeatClicked: function() { $scope.reloadGame(); }
                         });
-                        var modal = panelModal('views/game/nextLevelModal.html', childScope);
+                        var modal = $scope.panelModal('views/game/nextLevelModal.html', childScope);
                         modal.show();
                     }
                 }
@@ -161,7 +161,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                             textAbove: angular.extend({}, s, { height: null, width: null, top: s.top, bottom: null, left: 0, right: 0 }),
                             textUnder: angular.extend({}, s, { height: null, width: null, top: s.bottom, bottom: null, left: 0, right: 0 })
                         };
-                    panelModal('views/game/startGameTutorial.html', angular.extend($rootScope.$new(), scope))
+                    $scope.panelModal('views/game/startGameTutorial.html', angular.extend($rootScope.$new(), scope))
                         .show();
                 }
 
