@@ -35,12 +35,12 @@ define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/d
                 };
             });
         }
-    ]).run(function($rootScope, $location) {
+    ]).run(function($rootScope, $location, $timeout) {
         $rootScope.goToPath = function(url, search) {
             $location.path(url);
             search && $location.search(search);
         };
-        $rootScope.screenWidth = screen.availWidth;
+        $rootScope.screenWidth = document.documentElement.clientWidth || screen.width;
     });
 
 

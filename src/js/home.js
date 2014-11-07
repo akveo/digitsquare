@@ -51,7 +51,7 @@ define(['module', 'app/main'], function(module, main) {
         };
         $scope.swipeEnd = function(delta) {
             $scope.$apply(function() {
-                var newIndex = Math.round((screen.availWidth * $scope.currentIndex - delta) / screen.availWidth);
+                var newIndex = Math.round(($scope.screenWidth * $scope.currentIndex - delta) / $scope.screenWidth);
                 $scope.deltaOffset = 0;
                 tryChangeChapter(newIndex, true);
             });
