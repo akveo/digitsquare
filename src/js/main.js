@@ -50,6 +50,22 @@ define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/d
             });
             return modalInstance;
         };
+        $rootScope.watchBack = function(listener) {
+            document.addEventListener("backbutton", listener, false);
+            this.$on('$destroy', function() {
+                document.removeEventListener("backbutton", listener);
+            });
+        };
+        $rootScope.navBack = function(where, search) {
+            function onBackKeyDown(evt) {
+                evt.preventDefault();
+                $rootScope.$apply(function() {
+                    $rootScope.goToPath(where, search);
+                });
+            }
+
+            $rootScope.watchBack(onBackKeyDown);
+        };
     });
 
 

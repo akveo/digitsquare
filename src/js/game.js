@@ -56,7 +56,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                         currentState: currentState,
                         movesCount: movesCount
                     };
-
+                $scope.navBack('/levels', 'initialGroup=' + chapterId);
                 $scope.chapterId = parseInt(chapterId);
                 $scope.levelId = $routeParams.levelId;
                 $scope.movesCount = currentStateObj.movesCount;
