@@ -6,6 +6,10 @@ $matrixColor: #a2c64c;
         text-align: center;
         background-color: $matrixColor;
         color: white;
+        z-index: 10;
+        &.transferred {
+            z-index: 5;
+        }
         @include transitionTransform(0.1s, ease-out);
         @for $i from 0 through $sideSize - 1 {
             @for $j from 0 through $sideSize - 1 {

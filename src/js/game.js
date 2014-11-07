@@ -107,25 +107,29 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                 $scope.whenMoveEnd = function(row, column, direction) {
                     var moveFunctions = {
                         u: function(el) {
+                            if (el.row - 1 < 0) el.animClass = 'transferred';
                             el.row = (el.row - 1 + sideSize) % sideSize;
                         },
                         d: function(el) {
+                            if (el.row + 1 >= sideSize) el.animClass = 'transferred';
                             el.row = (el.row + 1 + sideSize) % sideSize;
                         },
                         l: function(el) {
+                            if (el.column - 1 < 0) el.animClass = 'transferred';
                             el.column = (el.column - 1 + sideSize) % sideSize;
                         },
                         r: function(el) {
+                            if (el.column + 1 >= sideSize) el.animClass = 'transferred';
                             el.column = (el.column + 1 + sideSize) % sideSize;
                         }
                     };
                     if (direction) {
                         $scope.$apply(function() {
                             initialStateMatrix.forEach(function(el) {
+                                delete el.animClass;
                                 if (matchesState(el, row, column, direction)) {
                                     moveFunctions[direction](el);
                                 }
-                                delete el.animClass;
                             });
                             $scope.movesCount++;
                             currentState = stateMatrixToStateArray(initialStateMatrix, sideSize);
