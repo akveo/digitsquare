@@ -27,6 +27,9 @@ define(['angular'], function(angular) {
                         },
                         destroy: function() {
                             element.remove();
+                        },
+                        isDestroyed: function() {
+                            return !!element.parentNode;
                         }
                     };
                 };
