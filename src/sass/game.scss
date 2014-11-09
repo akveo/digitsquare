@@ -61,14 +61,32 @@ $matrixColor: #a2c64c;
     }
     
     .nav-controls {
+        .controls-cell {
+            width: $iconWidth + 20px;
+            .control-icon+.control-icon {
+                margin-top: 20px;
+            }
+        }
         .level-cell {
-            font-size: 62px;
+            font-size: 42px;
             color: $watColor;
+            vertical-align: top;
+            .level-id {
+                height: $iconWidth;
+                line-height: $iconWidth;
+                margin-left: -3px;
+            }
             .moves {
                 font-size: 20px;
+                height: $iconWidth;
+                line-height: $iconWidth;
+                margin-top: 20px;
             }
         }
         .game-goal-cell {
+            .game-goal-container {
+                float: right;
+            }
             .goal-label {
                 width: 100%;
                 text-align: center;
