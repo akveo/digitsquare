@@ -2,17 +2,17 @@
     <div class="nav-controls table">
         <div class="t-row">
             <div class="t-cell controls-cell">
-                <span class="control-icon el-icon-lines" ng-click="goToPath('/levels/' + chapterId)"></span>
+                <span class="control-icon el-icon-lines" ng-click="goToPath('/levels', 'initialGroup=' + chapterId)"></span>
                 <span class="control-icon el-icon-repeat" ng-click="reloadGame()"></span>
             </div>
             <div class="level-cell t-cell">
                 <div class="level-id">{{levelId}}</div>
-                <div class="moves">Moves: {{movesCount}}</div>
+                <div class="moves"><span class="moves-cont">Moves: {{movesCount}}</span></div>
             </div>
             <div class="game-goal-cell t-cell">
-                <div class="game-goal-container" ng-style="{ width: sideSize * 30 + 'px' }">
+                <div class="game-goal-container" ng-style="{ width: sideSize * 25 + 'px' }">
                     <div class="goal-label">Goal:</div>
-                    <div class="table goal-table" ng-style="{ width: sideSize * 30 + 'px', height: sideSize * 30 + 'px' }">
+                    <div class="table goal-table" ng-style="{ width: sideSize * 25 + 'px', height: sideSize * 25 + 'px' }">
                         <div class="t-row" ng-repeat="row in [] | range:sideSize">
                             <div class="t-cell" ng-repeat="column in [] | range:sideSize">{{goalArray[sideSize*row+column] || '&nbsp;'}}</div>
                         </div>
@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="game-field">
-        <div class="game-matrix s3x3" tutorial-attach="enableNewGameTutorial" node-position="displayTutorialWindow(attachNodeParams)" ng-style="{ width: fieldWidth + 'px' }">
+        <div class="game-matrix" tutorial-attach="enableNewGameTutorial" node-position="displayTutorialWindow(attachNodeParams)" ng-style="{ width: fieldWidth + 'px' }">
             <div class="matrix-cell" data-row="{{value.row}}" data-col="{{value.column}}" ng-style="{ width: sidePixels + 'px', height: sidePixels + 'px', 'line-height': sideLine + 'px', 'font-size': cellFont + 'px' }" ng-repeat="(index, value) in initialStateMatrix" swipe-cell="whenMoveEnd(value.row, value.column, direction)" swipe-cell-on-move="whenMoved(value.row, value.column, direction)" swipe-cell-animation-end="whenAnimationEnd()" ng-class="value.animClass">{{value.label}}</div>
         </div>
     </div>
