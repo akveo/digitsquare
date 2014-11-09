@@ -68,6 +68,9 @@ define(['module', 'app/main'], function(module, main) {
             document.addEventListener('onDismissInterstitialAd', function(){ 
                 navigator.app.exitApp();
             });
+            document.addEventListener('onLeaveToAd', function(){
+                navigator.app.exitApp();
+            });
         }
     ]);
     main.register.directive('addASpaceBetween', [function () {
