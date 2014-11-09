@@ -32,7 +32,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
     }
 
     main.register
-            .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location, $rootScope, $window) {
+            .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location, $rootScope, $window, $timeout) {
                 var levelId = $routeParams.levelId,
                     chapterId = levelId.split('-')[0],
                     levelIndex = levelId.split('-')[1],
@@ -154,18 +154,11 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                     }
                 }
 
-                $scope.displayTutorialWindow = function(tutorialAttachParams) {
-                    var s = tutorialAttachParams.styleObj,
-                        scope = {
-                            icons: s,
-                            textAbove: angular.extend({}, s, { height: null, width: null, top: s.top, bottom: null, left: 0, right: 0 }),
-                            textUnder: angular.extend({}, s, { height: null, width: null, top: s.bottom, bottom: null, left: 0, right: 0 })
-                        };
-                    $scope.panelModal('views/game/startGameTutorial.html', angular.extend($rootScope.$new(), scope))
-                        .show();
-                }
-
                 playerData.updateGameState(currentStateObj);
+                $timeout(function() {
+                    $scope.panelModal('views/game/startGameTutorial.html', $rootScope.$new())
+                        .show();
+                }, 0)
 
             });
     main.register.directive('swipeCell', function() {
@@ -239,38 +232,5 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                     }
                 }
             });
-
-    main.register.directive('tutorialAttach', function($timeout) {
-        return {
-            restrict: 'A',
-            scope: {
-                enabled: '&tutorialAttach',
-                nodePosition: '&nodePosition',
-            },
-            controller: function ($scope, $element, $attrs) {
-                if ($scope.enabled()) {
-                    $scope.enabled(false);
-                    $timeout(function() {
-                        var childs = $element.find('div'),
-                            centralChild = childs[Math.floor(childs.length / 2)],
-                            pos = centralChild.getBoundingClientRect(),
-                            computedStyle = window.getComputedStyle(centralChild),
-                            pxPos = {};
-
-                        Object.keys(pos).forEach(function(key) {
-                            pxPos[key] = Math.floor(pos[key]) + 'px';
-                        });
-
-                        $scope.nodePosition({
-                            attachNodeParams: {
-                                styleObj: pxPos,
-                                html: centralChild.innerHTML
-                            }
-                        });
-                    }, 0);
-                }
-            }
-        }
-    });
 
 });
