@@ -1,19 +1,21 @@
 <div class="game-container">
     <div class="nav-controls table">
         <div class="t-row">
-            <div class="t-cell">
-                <span class="control-icon el-icon-lines" ng-click="goToPath('/levels/' + chapterId)"></span><br /><br />
+            <div class="t-cell controls-cell">
+                <span class="control-icon el-icon-lines" ng-click="goToPath('/levels/' + chapterId)"></span>
                 <span class="control-icon el-icon-repeat" ng-click="reloadGame()"></span>
             </div>
             <div class="level-cell t-cell">
-                <div>{{levelId}}</div>
+                <div class="level-id">{{levelId}}</div>
                 <div class="moves">Moves: {{movesCount}}</div>
             </div>
             <div class="game-goal-cell t-cell">
-                <div class="goal-label">Goal:</div>
-                <div class="table goal-table">
-                    <div class="t-row" ng-repeat="row in [] | range:sideSize">
-                        <div class="t-cell" ng-repeat="column in [] | range:sideSize">{{goalArray[sideSize*row+column] || '&nbsp;'}}</div>
+                <div class="game-goal-container" ng-style="{ width: sideSize * 30 + 'px' }">
+                    <div class="goal-label">Goal:</div>
+                    <div class="table goal-table" ng-style="{ width: sideSize * 30 + 'px', height: sideSize * 30 + 'px' }">
+                        <div class="t-row" ng-repeat="row in [] | range:sideSize">
+                            <div class="t-cell" ng-repeat="column in [] | range:sideSize">{{goalArray[sideSize*row+column] || '&nbsp;'}}</div>
+                        </div>
                     </div>
                 </div>
             </div>
