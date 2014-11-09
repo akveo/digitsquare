@@ -2,9 +2,7 @@
 
 define(['module', 'app/main'], function(module, main) {
     main.register.controller(ngCName(module, 'menuController'), ['$scope', 'levelsData', 'playerData', function($scope, levelsData, playerData) {
-        $scope.watchBack(function() {
-            navigator.app.exitApp();
-        });
+        $scope.navBack('/exitInterstitial');
         var savedGameState = $scope.savedGameState = playerData.getGameState();
         $scope.fullOpacityClass = true;
         $scope.savedGameUrl = savedGameState && ('/game/' + savedGameState.levelId);
@@ -61,6 +59,17 @@ define(['module', 'app/main'], function(module, main) {
             });
         };
     }]);
+    main.register.controller(ngCName(module, 'exitInterstitialController'), ['$scope', '$routeParams', 
+        function($scope, $routeParams) {
+            window.plugins.AdMob.createInterstitialView();
+            $scope.watchBack(function() {
+                navigator.app.exitApp();
+            });
+            document.addEventListener('onDismissInterstitialAd', function(){ 
+                navigator.app.exitApp();
+            });
+        }
+    ]);
     main.register.directive('addASpaceBetween', [function () {
             return function (scope, element) {
                 if(!scope.$last){
