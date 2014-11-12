@@ -1,7 +1,6 @@
 'use strict';
 
 define(['app/config'], function(config) {
-    console.log(config);
 
     var rv = {
         tryShowInterstitialAd: function() {}
@@ -78,7 +77,6 @@ define(['app/config'], function(config) {
                 interstitialShowTimerAllowed = false;
                 interstitialReady = false;
             }
-
             loadInterstitial();
 
             // Inject the method

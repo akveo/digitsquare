@@ -81,7 +81,7 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
                 });
 
                 $scope.reloadGame = function() {
-                    if (Object.keys($routeParams).length) {
+                    if ($routeParams.skipAd || $routeParams.savedGame) {
                         $location.search('');
                     } else {
                         $route.reload();
