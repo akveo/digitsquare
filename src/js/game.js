@@ -49,9 +49,6 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
                     movesCount = savedGameState && savedGameState.movesCount || 0;
                 }
 
-                $scope.enableNewGameTutorial = levelId == '1-1';
-
-
                 var sideSize = Math.sqrt(currentState.length),
                     initialStateMatrix = prepareStateMatrix(currentState, sideSize),
                     currentStateObj = { 
@@ -158,10 +155,12 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
                 }
 
                 playerData.updateGameState(currentStateObj);
-                $timeout(function() {
-                    $scope.panelModal('views/game/startGameTutorial.html', $rootScope.$new())
-                        .show();
-                }, 0)
+                if (levelId == '1-1') {
+                    $timeout(function() {
+                        $scope.panelModal('views/game/startGameTutorial.html', $rootScope.$new())
+                            .show();
+                    }, 0);
+                }
 
             });
     main.register.directive('swipeCell', function() {
