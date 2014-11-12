@@ -14,7 +14,7 @@
             <div class="levels-links" ng-repeat="chapter in groupedChapters" ng-style="{ width: screenWidth + 'px' }">
                 <div class="level-item-row" ng-repeat="levelGroup in chapter">
                     <div class="nav-link level-item" ng-repeat="level in levelGroup" ng-class="{locked: level.enabled}" data-add-a-space-between>
-                        <span class="inline-block" ng-if="level.enabled" ng-click="goToPath('/game/' + level.id)">
+                        <span class="inline-block" ng-if="level.enabled" ng-click="goToPath('/game/' + level.id, 'skipAd=true')">
                             <span class="level-item-icon">{{level.label}}</span><br />
                             <span class="level-icon-rating"><span ng-if="level.isCompleted"><i class="el-icon-star" ng-repeat="index in [1,2,3]" ng-class="{rewarded: index <= level.score}"></i></span>&nbsp;</span>
                         </span>

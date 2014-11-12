@@ -1,6 +1,6 @@
 'use strict';
 
-define(['module', 'app/main', 'angular'], function(module, main, angular) {
+define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angular, ads) {
 
     function prepareStateMatrix(stateArray, sideSize) {
         return stateArray.map(function(label, index) {
@@ -33,6 +33,9 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
 
     main.register
             .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location, $rootScope, $window, $timeout) {
+                if (!$routeParams.skipAd) {
+                    ads.tryShowInterstitialAd();
+                }
                 var levelId = $routeParams.levelId,
                     chapterId = levelId.split('-')[0],
                     levelIndex = levelId.split('-')[1],
@@ -78,7 +81,7 @@ define(['module', 'app/main', 'angular'], function(module, main, angular) {
                 });
 
                 $scope.reloadGame = function() {
-                    if ($routeParams.savedGame) {
+                    if (Object.keys($routeParams).length) {
                         $location.search('');
                     } else {
                         $route.reload();

@@ -1,7 +1,7 @@
 <div class="home"> 
     <div class="app-title">Digit<sup>2</sup></div>
     <div class="menu">
-        <span class="nav-link menu-item" ng-click="goToPath(savedGameUrl, 'savedGame=true')" ng-if="savedGameState">Continue</span>
+        <span class="nav-link menu-item" ng-click="goToPath(savedGameUrl, 'savedGame=true&skipAd=true')" ng-if="savedGameState">Continue</span>
         <span class="nav-link menu-item disabled" ng-if="!savedGameState">Continue</span>
         <span class="nav-link menu-item" ng-click="goToPath('/levels')">New Game</span>
         <span class="nav-link menu-item" ng-click="goToPath('/settings')">Settings</span>

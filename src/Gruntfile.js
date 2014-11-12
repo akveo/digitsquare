@@ -63,6 +63,14 @@ module.exports = function(grunt) {
                 cwd: 'target/',
                 src: '**',
                 dest: '../app/www'
+            },
+            config_prod: {
+                src: 'js/config/config.prod.template.js',
+                dest: 'js/config.js'
+            },
+            config_local: {
+                src: 'js/config/config.local.template.js',
+                dest: 'js/config.js'
             }
         },
         exec: {
@@ -79,7 +87,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-exec');
 
-    grunt.registerTask('buildAssets', ['bower:install', 'sass:build', 'copy:templates', 'copy:scripts', 'copy:fonts']);
+    var envo = grunt.option('envo') || 'prod';
+    grunt.registerTask('copyConfig', ['copy:config_' + envo]);
+
+    grunt.registerTask('buildAssets', ['copyConfig', 'bower:install', 'sass:build', 'copy:templates', 'copy:scripts', 'copy:fonts']);
 
     grunt.registerTask('src-watch',['buildAssets', 'watch']);
     grunt.registerTask('dist-src', ['buildAssets', 'copy:dist']);

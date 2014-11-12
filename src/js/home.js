@@ -2,7 +2,9 @@
 
 define(['module', 'app/main'], function(module, main) {
     main.register.controller(ngCName(module, 'menuController'), ['$scope', 'levelsData', 'playerData', function($scope, levelsData, playerData) {
-        $scope.navBack('/exitInterstitial');
+        $scope.watchBack(function() {
+            navigator.app.exitApp();
+        });
         var savedGameState = $scope.savedGameState = playerData.getGameState();
         $scope.fullOpacityClass = true;
         $scope.savedGameUrl = savedGameState && ('/game/' + savedGameState.levelId);

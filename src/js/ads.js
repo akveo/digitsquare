@@ -1,22 +1,14 @@
 'use strict';
 
-define([], function() {
+define(['app/config'], function(config) {
+    console.log(config);
+
+    var rv = {
+        tryShowInterstitialAd: function() {}
+    };
 
     function setupAds() {
-       var ad_units = {
-            ios : {
-                banner: 'ca-app-pub-4675194603106574/1411325040',
-                interstitial: 'ca-app-pub-4675194603106574/1575788641'
-            },
-            android : {
-                banner: 'ca-app-pub-4675194603106574/6522522247',
-                interstitial: 'ca-app-pub-4675194603106574/9099055449'
-            },
-            wp8 : {
-                banner: 'ca-app-pub-xxx/9375997559',
-                interstitial: 'ca-app-pub-xxx/9099055449'
-            }
-        };
+        var ad_units = config.ads.units;
         var admobid = "";
         if( /(android)/i.test(navigator.userAgent) ) {
             admobid = ad_units.android;
@@ -32,12 +24,71 @@ define([], function() {
             bannerAtTop: false, // set to true, to put banner at top
             overlap: false, // set to true, to allow banner overlap webview
             offsetTopBar: false, // set to true to avoid ios7 status bar overlap
-            isTesting: true, // receiving test ad
-            autoShow: true // auto show interstitial ad when loaded
+            isTesting: config.ads.isTesting, // receiving test ad
+            autoShow: false // auto show interstitial ad when loaded
         });
 
-        // display a banner at startup
-        window.plugins.AdMob.createBannerView(); 
+        if (config.ads.showBanner) {
+            // display a banner at startup
+            window.plugins.AdMob.createBannerView();
+        }
+
+        (function initializeIntrstitialAd() {
+
+            var interstitialReady = false,
+                interstitialShowTimerAllowed = true;
+
+            function createInterstitial(cb) {
+                window.plugins.AdMob.createInterstitialView({ publisherId: admobid.interstitial}, cb, function() {
+                    setTimeout(function() {
+                        createInterstitial(cb);
+                    }, config.ads.timeouts.interstitialRequestTimeout);
+                });
+            }
+            function loadInterstitialInBackground(successCallback) {
+                window.plugins.AdMob.createInterstitialView({ isTesting: true }, successCallback, function() {
+                    setTimeout(function() {
+                        loadInterstitialInBackground(successCallback);
+                    }, config.ads.timeouts.interstitialRequestTimeout);
+                }); 
+            }
+            function loadInterstitial() {
+                interstitialReady = false;
+                createInterstitial(function() {
+                    loadInterstitialInBackground(function() {
+                        interstitialReady = true;
+                    });
+                });
+            }
+            function resetInterstitialTimerAllowance() {
+                interstitialShowTimerAllowed = false;
+                setTimeout(function() { interstitialShowTimerAllowed = true }, config.ads.timeouts.delayBetweenInterstitials);
+            }
+            function showInterstitialAd() {
+                function interstitialClosedListener() {
+                    document.removeEventListener('onDismissInterstitialAd', interstitialClosedListener);
+                    setTimeout(function() {
+                        resetInterstitialTimerAllowance();
+                        loadInterstitial();
+                    }, 1000);
+                }
+                
+                document.addEventListener('onDismissInterstitialAd', interstitialClosedListener); 
+                window.plugins.AdMob.showInterstitialAd();
+                interstitialShowTimerAllowed = false;
+                interstitialReady = false;
+            }
+
+            loadInterstitial();
+
+            // Inject the method
+            rv.tryShowInterstitialAd = function() {
+                if (isPhoneGap() && interstitialReady && interstitialShowTimerAllowed) {
+                    showInterstitialAd();
+                }
+            }
+        })();
+
     }
 
     if (isPhoneGap()) {
@@ -48,4 +99,5 @@ define([], function() {
         }
     }
 
+    return rv;
 });
