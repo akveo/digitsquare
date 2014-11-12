@@ -77,6 +77,10 @@ module.exports = function(grunt) {
             buildAndroid: {
                 cwd: '../app/',
                 command: 'phonegap build android --release'
+            },
+            buildIos: {
+                cwd: '../app/',
+                command: 'phonegap build ios --release'
             }
         }
     });
@@ -95,5 +99,6 @@ module.exports = function(grunt) {
     grunt.registerTask('src-watch',['buildAssets', 'watch']);
     grunt.registerTask('dist-src', ['buildAssets', 'copy:dist']);
     grunt.registerTask('build-android', ['dist-src', 'exec:buildAndroid']);
+    grunt.registerTask('build-ios', ['dist-src', 'exec:buildIos']);
 
 };
