@@ -23,6 +23,15 @@ define([], function() {
                 interstitialRequestTimeout: 10000,
                 delayBetweenInterstitials: 150000
             }
+        },
+        analytics: {
+            enabled: true,
+            gaId: {
+                ios: 'UA-56704032-2',
+                android: 'UA-56704032-3',
+                wp8: 'UA-56704032-4',
+                desktop: 'UA-56704032-2'
+            }
         }
     };
 });
