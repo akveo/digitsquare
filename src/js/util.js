@@ -1,6 +1,6 @@
 'use strict';
 
-define([], function() {
+define(['angular'], function(angular) {
     return {
         deepExtend: function deepExtend(dst) {
             angular.forEach(arguments, function(obj) {

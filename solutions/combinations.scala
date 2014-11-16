@@ -84,8 +84,8 @@ case class RubyState(state: List[List[Char]]) {
   lazy val length = state.length
 }
 
-val goal = RubyState("123456789abcdefg")
-val initial= RubyState("5ea1d32f7g9cb648")
+val goal = RubyState("--121-2--")
+val initial= RubyState("1-2--1--2")
 val rubyDigitSize = initial.length
 val rubyDigitSizeOneLess = rubyDigitSize - 1
 val rubydigitShiftsPerDirection = rubyDigitSize
@@ -123,7 +123,6 @@ def makeShifts(state: ShiftState) {
 }
 
 def shift(state: ShiftState, index: Int, newStamp: RubyState, shiftCode: Char) {
-  if ( !usedStamps.contains(newStamp) && newStamp != goal ) {
     if (newStamp != goal) {
       usedStamps.add(newStamp)
       priorityStates.enqueue(ShiftState(newStamp, state.shiftsNum + 1, index, shiftCode, state))
@@ -132,7 +131,6 @@ def shift(state: ShiftState, index: Int, newStamp: RubyState, shiftCode: Char) {
       println("Solution: " + getSolution(state) + " " + index + shiftCode)
       sys.exit()
     }
-  }
 }
 
 def getSolution(state: ShiftState): String = {
