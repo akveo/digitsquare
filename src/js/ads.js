@@ -1,6 +1,6 @@
 'use strict';
 
-define(['app/config'], function(config) {
+define(['app/config', 'app/util'], function(config, u) {
 
     var rv = {
         tryShowInterstitialAd: function() {}
@@ -8,14 +8,7 @@ define(['app/config'], function(config) {
 
     function setupAds() {
         var ad_units = config.ads.units;
-        var admobid = "";
-        if( /(android)/i.test(navigator.userAgent) ) {
-            admobid = ad_units.android;
-        } else if(/(iphone|ipad)/i.test(navigator.userAgent)) {
-            admobid = ad_units.ios;
-        } else {
-            admobid = ad_units.wp8;
-        }
+        var admobid = u.getConfigSettingForPlatform(config.ads.units);
 
         window.plugins.AdMob.setOptions( {
             publisherId: admobid.banner,

@@ -15,6 +15,18 @@ define([], function() {
                 }
             });
             return dst;
+        },
+        getConfigSettingForPlatform: function(obj) {
+            if( /(android)/i.test(navigator.userAgent) ) {
+                return obj.android;
+            } else if(/(iphone|ipad)/i.test(navigator.userAgent)) {
+                return obj.ios;
+            } else if (/(iemobile)/i.test(navigator.userAgent)) {
+                return obj.wp8;
+            } else {
+                return obj.desktop;
+            }
+            return '';
         }
     };
 });

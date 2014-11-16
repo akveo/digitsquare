@@ -1,7 +1,8 @@
 'use strict';
 
-define(['module', 'app/main'], function(module, main) {
+define(['module', 'app/main', 'app/analytics'], function(module, main, analytics) {
     main.register.controller(ngCName(module, 'menuController'), ['$scope', 'levelsData', 'playerData', function($scope, levelsData, playerData) {
+        analytics.pageViewed('/home');
         $scope.watchBack(function() {
             navigator.app.exitApp();
         });

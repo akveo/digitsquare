@@ -9,7 +9,8 @@ requirejs.config({
         'angular' : {'exports' : 'angular'},
         'angular-touch': ['angular'],
         'angular-route': ['angular'],
-        'localstorage-schema': { 'exports': 'localStorageSchema' }
+        'localstorage-schema': { 'exports': 'localStorageSchema' },
+        'app/lib/ga': { 'exports': '_gaq'}
     },
     //Allow dynamic reloading within the app
     urlArgs: (/cacheBust=\d+/.exec(location.href) || [])[0]
