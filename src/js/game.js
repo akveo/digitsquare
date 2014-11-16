@@ -104,7 +104,7 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
                     });
                 };
 
-                $scope.whenMoveEnd = function(row, column, direction) {
+                function doMove(row, column, direction) {
                     var moveFunctions = {
                         u: function(el) {
                             if (el.row - 1 < 0) el.animClass = 'transferred';
@@ -124,21 +124,37 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
                         }
                     };
                     if (direction) {
-                        $scope.$apply(function() {
-                            initialStateMatrix.forEach(function(el) {
-                                delete el.animClass;
-                                if (matchesState(el, row, column, direction)) {
-                                    moveFunctions[direction](el);
-                                }
-                            });
-                            $scope.movesCount++;
-                            currentState = stateMatrixToStateArray(initialStateMatrix, sideSize);
-                            currentStateObj.currentState = currentState;
-                            currentStateObj.movesCount = $scope.movesCount;
-                            playerData.updateGameState(currentStateObj);
+                        initialStateMatrix.forEach(function(el) {
+                            delete el.animClass;
+                            if (matchesState(el, row, column, direction)) {
+                                moveFunctions[direction](el);
+                            }
                         });
+                        $scope.movesCount++;
+                        currentState = stateMatrixToStateArray(initialStateMatrix, sideSize);
+                        currentStateObj.currentState = currentState;
+                        currentStateObj.movesCount = $scope.movesCount;
+                        playerData.updateGameState(currentStateObj);
                     }
+                }
+
+                $scope.whenMoveEnd = function(row, column, direction) {
+                    $scope.$apply(function() {
+                        doMove(row, column, direction);
+                    });
                 };
+
+                $scope.randomNShifts = function() {
+                    var shifts = 50;
+                    for (var i =0; i < shifts; i++) {
+                        var col = Math.ceil(Math.random() * 3) - 1,
+                            row = Math.ceil(Math.random() * 3) - 1,
+                            direction = (['u', 'd', 'l', 'r'])[Math.ceil(Math.random() * 4 ) - 1];
+                        doMove(row, col, direction);
+                    }
+                    console.log(currentState);
+                    console.log(currentState.map(function(el) { return el || '-'}).join(''));
+                }
 
                 $scope.whenAnimationEnd = function() {
                     if (validateStateArray(currentState, levelData.goal)) {
