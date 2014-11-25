@@ -9,7 +9,7 @@ module.exports = function(grunt) {
         sass: {
             build: {
                 files: {
-                    'target/css/style.css': 'sass/index.scss'
+                    'www/css/style.css': 'sass/index.scss'
                 }
             }
         },
@@ -17,25 +17,12 @@ module.exports = function(grunt) {
             scss: {
                 files: ['sass/**/*.scss'],
                 tasks: ['sass:build']
-            },
-            templates: {
-                files: templatesDirs,
-                tasks: ['copy:templates']
-            },
-            scripts: {
-                files: jsDirs,
-                tasks: ['copy:scripts']
-            },
-            fonts: {
-                files: fontsDir,
-                tasks: ['copy:fonts']
             }
-
         },
         bower: {
             install: {
                 options: {
-                    targetDir: './target/lib',
+                    targetDir: './www/lib',
                     layout: function(type, pkg) { return type; },
                     install: true,
                     verbose: false,
@@ -46,40 +33,20 @@ module.exports = function(grunt) {
             }
         },
         copy: {
-            templates: {
-                src: templatesDirs,
-                dest: 'target/'
-            },
-            scripts: {
-                src: 'js/**/*js',
-                dest: 'target/'
-            },
-            fonts: {
-                src: fontsDir,
-                dest: 'target/'
-            },
-            dist: {
-                expand: true,
-                cwd: 'target/',
-                src: '**',
-                dest: '../app/www'
-            },
             config_prod: {
-                src: 'js/config/config.prod.template.js',
-                dest: 'js/config.js'
+                src: 'www/js/config/config.prod.template.js',
+                dest: 'www/js/config.js'
             },
             config_local: {
-                src: 'js/config/config.local.template.js',
-                dest: 'js/config.js'
+                src: 'www/js/config/config.local.template.js',
+                dest: 'www/js/config.js'
             }
         },
         exec: {
             buildAndroid: {
-                cwd: '../app/',
                 command: 'phonegap build android --release'
             },
             buildIos: {
-                cwd: '../app/',
                 command: 'phonegap build ios --release'
             }
         }
@@ -94,11 +61,10 @@ module.exports = function(grunt) {
     var envo = grunt.option('envo') || 'prod';
     grunt.registerTask('copyConfig', ['copy:config_' + envo]);
 
-    grunt.registerTask('buildAssets', ['copyConfig', 'bower:install', 'sass:build', 'copy:templates', 'copy:scripts', 'copy:fonts']);
+    grunt.registerTask('buildAssets', ['copyConfig', 'bower:install', 'sass:build']);
 
     grunt.registerTask('src-watch',['buildAssets', 'watch']);
-    grunt.registerTask('dist-src', ['buildAssets', 'copy:dist']);
-    grunt.registerTask('build-android', ['dist-src', 'exec:buildAndroid']);
-    grunt.registerTask('build-ios', ['dist-src', 'exec:buildIos']);
+    grunt.registerTask('build-android', ['buildAssets', 'exec:buildAndroid']);
+    grunt.registerTask('build-ios', ['buildAssets', 'exec:buildIos']);
 
 };
