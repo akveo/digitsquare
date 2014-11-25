@@ -46,6 +46,9 @@
         }
     },
     "installed_plugins": {
+        "com.google.admobsdk-googleplay": {
+            "PACKAGE_NAME": "com.flatlogic.digitsquare"
+        },
         "com.rjfun.cordova.plugin.admob": {
             "PACKAGE_NAME": "com.flatlogic.digitsquare"
         },
@@ -53,9 +56,5 @@
             "PACKAGE_NAME": "com.flatlogic.digitsquare"
         }
     },
-    "dependent_plugins": {
-        "com.google.admobsdk-googleplay": {
-            "PACKAGE_NAME": "com.flatlogic.digitsquare"
-        }
-    }
+    "dependent_plugins": {}
 }
