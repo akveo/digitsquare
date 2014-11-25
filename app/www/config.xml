@@ -5,7 +5,7 @@
         Digit Square brain puzzle game.
     </description>
     <author email="contact@flatlogic.com" href="http://flatlogic.com">
-        Flatlogic team
+        Flatlogic Inc.
     </author>
     <preference name="permissions" value="none" />
     <preference name="phonegap-version" value="3.5.0" />
