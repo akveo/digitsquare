@@ -4,13 +4,18 @@ define(['app/config'], function(config) {
 
     var db;
     function checkDatabase() {
-        var db = window.sqlitePlugin.openDatabase({ name: config.db.name });
-        db.transaction(function(tx) {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS game_state (id integer primary key, data text)');
-            tx.executeSql('CREATE TABLE IF NOT EXISTS levels_data (id text primary key, data text)');
-        }, function(e) {
-            console.log("ERROR: " + e.message);
-        });
+        function _doInit() {
+            db = window.sqlitePlugin.openDatabase({ name: config.db.name });
+            db.transaction(function(tx) {
+                tx.executeSql('CREATE TABLE IF NOT EXISTS game_state (id integer primary key, data text)');
+                tx.executeSql('CREATE TABLE IF NOT EXISTS levels_data (id text primary key, data text)');
+            }, function(e) {
+                console.log("ERROR: " + e.message);
+            }); 
+        }
+
+        // window.sqlitePlugin.deleteDatabase(config.db.name, _doInit);
+        _doInit();
     }
     if (!window.sqlitePlugin) {
         document.addEventListener("deviceready", checkDatabase, false);
@@ -20,32 +25,80 @@ define(['app/config'], function(config) {
 
     return function(dataModule) {
         dataModule.factory('playerData', function($q) {
+
+            function transactionPromise(cb) {
+                
+                var result = null;
+                function valueResolver(value) {
+                    result = value;
+                }
+
+                return $q(function(resolve, reject) {
+                    db.transaction(function(tx) {
+                        cb(tx, valueResolver);
+                    }, function(err) {
+                        reject(err);
+                    }, function() {
+                        resolve(result);
+                    });
+                });
+            }
+
             return {
                 getGameState: function() {
-                    return gameState.read();
+                    return transactionPromise(function(tx, resolve) {
+                        tx.executeSql("SELECT data FROM game_state WHERE id=?", [1], function(tx,res) {
+                            resolve(res.rows.length ? JSON.parse(res.rows.item(0).data) : null);
+                        });  
+                    });
                 },
                 updateGameState: function(stateObject) {
-                    return gameState.persist(stateObject);
-                },
-                moveToLevel: function(levelId) {
-                    var state = this.getGameState();
-                    state.level = levelId;
-                    return this.updateGameState(state);
-                },
-                updateCurrentLevelCubeState: function(cubeState) {
-                    var state = this.getGameState();
-                    state.cubeState = cubeState;
-                    return this.updateGameState(state);
+                    return transactionPromise(function(tx, resolve) {
+                        tx.executeSql("SELECT data FROM game_state WHERE id=?", [1], function(tx, res) {
+                            function cb() {
+                                resolve(stateObject);
+                            }
+
+                            if (!res.rows.length) {
+                                tx.executeSql('INSERT INTO game_state (id, data) VALUES (?,?)', [1, JSON.stringify(stateObject)], cb);
+                            } else {
+                                tx.executeSql('UPDATE game_state SET data=? WHERE id=?', [JSON.stringify(stateObject), 1], cb);
+                            }
+                        });
+                    });
                 },
                 setLevelScore: function(levelId, scoreObj) {
-                    return levelsScores.object(levelId).persist(scoreObj);
+                    return transactionPromise(function(tx, resolve) {
+                        tx.executeSql("SELECT data FROM levels_data WHERE id=?", [levelId], function(tx, res) {
+                            function cb() {
+                                resolve(scoreObj);
+                            }
+                            if (res.rows.length) {
+                                tx.executeSql("UPDATE levels_data SET data=? WHERE id=?", [JSON.stringify(scoreObj), levelId], cb);
+                            } else {
+                                tx.executeSql('INSERT INTO levels_data (id, data) VALUES (?,?)', [levelId, JSON.stringify(scoreObj)], cb);
+                            }
+                        });
+                    });
                 },
                 getLevelScore: function(levelId) {
-                    return levelsScores.get(levelId) || {};
+                    return transactionPromise(function(tx, resolve) {
+                        tx.executeSql("SELECT data FROM levels_data WHERE id=?", [levelId], function(tx, res) {
+                            resolve(res.rows.length ? JSON.parse(res.rows.item(0).data) : {});
+                        });
+                    });
                 },
-                getScoresForLevels: function(levelsIdsArray) {
-                    var scoresLevels = levelsScores.keys();
-                    return levelsIdsArray.filter(function(id) { return scoresLevels.indexOf(id) != -1; }).map(function(id) { return levelsScores.get(id); })
+                getFullLevelScores: function() {
+                    return transactionPromise(function(tx, resolve) {
+                        tx.executeSql("SELECT * FROM levels_data", [], function(tx, res) {
+                            var result = {};
+                            for(var i = 0; i < res.rows.length; i++) {
+                                var item = res.rows.item(i);
+                                result[item.id] = JSON.parse(item.data);
+                            }
+                            resolve(result);
+                        });
+                    });
                 }
             };
         });
