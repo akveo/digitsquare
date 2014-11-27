@@ -20,7 +20,12 @@ define(['localstorage-schema'], function(lsSchema) {
                 },
                 setLevelScore: function(levelId, scoreObj) {
                     return $q(function(resolve) {
-                        resolve(levelsScores.insert(scoreObj, levelId));
+                        if (!levelsScores.get(levelId)) {
+                            resolve(levelsScores.insert(scoreObj, levelId));
+                        } else {
+                            resolve(levelsScores.object(levelId).persist(scoreObj));
+                        }
+                        
                     });
                 },
                 getLevelScore: function(levelId) {
