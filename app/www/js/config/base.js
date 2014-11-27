@@ -32,6 +32,9 @@ define([], function() {
                 wp8: 'UA-56704032-4',
                 desktop: 'UA-56704032-2'
             }
+        },
+        db: {
+            name: 'DigitSquare.db'
         }
     };
 });

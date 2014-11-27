@@ -41,12 +41,13 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
                     levelIndex = levelId.split('-')[1],
                     levelData = levelsData.getLevel(levelId),
                     currentState = levelData.initial,
-                    savedGameState = playerData.getGameState(),
                     movesCount = 0;
 
                 if ($routeParams.savedGame) {
-                    currentState = savedGameState.currentState;
-                    movesCount = savedGameState && savedGameState.movesCount || 0;
+                    playerData.getGameState().then(function(savedGameState) {
+                        initialStateMatrix = prepareStateMatrix(savedGameState.currentState, sideSize);
+                        $scope.movesCount = savedGameState.movesCount || 0;
+                    });
                 }
 
                 var sideSize = Math.sqrt(currentState.length),
@@ -56,6 +57,9 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
                         currentState: currentState,
                         movesCount: movesCount
                     };
+                if (!$routeParams.savedGame) {
+                    playerData.updateGameState(currentStateObj);
+                }
                 $scope.navBack('/levels', 'initialGroup=' + chapterId);
                 $scope.chapterId = parseInt(chapterId);
                 $scope.levelId = $routeParams.levelId;
@@ -152,25 +156,23 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
                             direction = (['u', 'd', 'l', 'r'])[Math.ceil(Math.random() * 4 ) - 1];
                         doMove(row, col, direction);
                     }
-                    console.log(currentState);
-                    console.log(currentState.map(function(el) { return el || '-'}).join(''));
                 }
 
                 $scope.whenAnimationEnd = function() {
                     if (validateStateArray(currentState, levelData.goal)) {
-                        var nextLevelId = combinedData.completeLevel(levelId, $scope.movesCount);
-                        var childScope = angular.extend($rootScope.$new(), {
-                            stars: levelsData.getLevelStars(levelData, $scope.movesCount),
-                            currentChapter: chapterId,
-                            nextLevel: nextLevelId,
-                            repeatClicked: function() { $scope.reloadGame(); }
+                        combinedData.completeLevel(levelId, $scope.movesCount).then(function(nextLevelId) {
+                            var childScope = angular.extend($rootScope.$new(), {
+                                stars: levelsData.getLevelStars(levelData, $scope.movesCount),
+                                currentChapter: chapterId,
+                                nextLevel: nextLevelId,
+                                repeatClicked: function() { $scope.reloadGame(); }
+                            });
+                            var modal = $scope.panelModal('views/game/nextLevelModal.html', childScope);
+                            modal.show();
                         });
-                        var modal = $scope.panelModal('views/game/nextLevelModal.html', childScope);
-                        modal.show();
                     }
                 }
 
-                playerData.updateGameState(currentStateObj);
                 if (levelId == '1-1') {
                     $timeout(function() {
                         $scope.panelModal('views/game/startGameTutorial.html', $rootScope.$new())
