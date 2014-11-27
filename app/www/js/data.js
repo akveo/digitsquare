@@ -13,16 +13,6 @@ define([ isPhoneGap() ? 'app/storage/sqlite' : 'app/storage/localstorage', 'angu
                 updateGameState: function(stateObject) {
                     return gameState.persist(stateObject);
                 },
-                moveToLevel: function(levelId) {
-                    var state = this.getGameState();
-                    state.level = levelId;
-                    return this.updateGameState(state);
-                },
-                updateCurrentLevelCubeState: function(cubeState) {
-                    var state = this.getGameState();
-                    state.cubeState = cubeState;
-                    return this.updateGameState(state);
-                },
                 setLevelScore: function(levelId, scoreObj) {
                     return levelsScores.object(levelId).persist(scoreObj);
                 },

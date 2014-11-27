@@ -18,21 +18,9 @@ define(['localstorage-schema'], function(lsSchema) {
                         resolve(gameState.persist(stateObject));
                     });
                 },
-                moveToLevel: function(levelId) {
-                    return this.getGameState().then(function(state) {
-                        state.level = levelId;
-                        return this.updateGameState(state);
-                    }.bind(this));
-                },
-                updateCurrentLevelCubeState: function(cubeState) {
-                    return this.getGameState().then(function(state) {
-                        state.cubeState = cubeState;
-                        return this.updateGameState(state);
-                    }.bind(this));
-                },
                 setLevelScore: function(levelId, scoreObj) {
                     return $q(function(resolve) {
-                        resolve(levelsScores.object(levelId).persist(scoreObj));
+                        resolve(levelsScores.insert(scoreObj, levelId));
                     });
                 },
                 getLevelScore: function(levelId) {
