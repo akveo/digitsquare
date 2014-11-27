@@ -44,9 +44,10 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
                     movesCount = 0;
 
                 if ($routeParams.savedGame) {
+                            console.log($scope.initialStateMatrix);
                     playerData.getGameState().then(function(savedGameState) {
-                        initialStateMatrix = prepareStateMatrix(savedGameState.currentState, sideSize);
-                        $scope.movesCount = savedGameState.movesCount || 0;
+                        $scope.initialStateMatrix = initialStateMatrix = prepareStateMatrix(savedGameState.currentState, sideSize);
+                        $scope.movesCount = savedGameState.movesCount || 0;    
                     });
                 }
 
