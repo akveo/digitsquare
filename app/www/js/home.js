@@ -1,35 +1,39 @@
 'use strict';
 
 define(['module', 'app/main', 'app/analytics'], function(module, main, analytics) {
-    main.register.controller(ngCName(module, 'menuController'), ['$scope', 'levelsData', 'playerData', function($scope, levelsData, playerData) {
+    main.register.controller(ngCName(module, 'menuController'), ['$scope', 'playerData', function($scope, playerData) {
         analytics.pageViewed('/home');
         $scope.watchBack(function() {
             navigator.app.exitApp();
         });
-        var savedGameState = $scope.savedGameState = playerData.getGameState();
         $scope.fullOpacityClass = true;
-        $scope.savedGameUrl = savedGameState && ('/game/' + savedGameState.levelId);
+        playerData.getGameState().then(function(savedGameState) {
+            $scope.savedGameState = savedGameState;
+            $scope.savedGameUrl = savedGameState && ('/game/' + savedGameState.levelId);
+        });
     }]);
-    main.register.controller(ngCName(module, 'levelsController'), ['$scope', '$routeParams', 'levelsData', 'playerData', 'combinedData', '$timeout', function($scope, $routeParams, levelsData, playerData, combinedData, $timeout) {
+    main.register.controller(ngCName(module, 'levelsController'), ['$scope', '$routeParams', 'combinedData', '$timeout', function($scope, $routeParams, combinedData, $timeout) {
         $scope.navBack('/home');
         var chapterId = parseInt($routeParams.initialGroup) || '1';
         $scope.chapterId = chapterId;
-        var fullChapters = $scope.fullChapters = combinedData.getChaptersExtendedWithUserData();
-        $scope.groupedChapters = fullChapters.map(function(chapter) {
-            return chapter.chapterLevels.reduce(function(acc, val, i) {
-                var index = Math.floor(i / 5);
-                if (!acc[index]) acc[index] = [];
-                acc[index].push(val);
-                return acc;
-            } , []); 
+        combinedData.getChaptersExtendedWithUserData().then(function(fullChapters) {
+            $scope.fullChapters = fullChapters;
+            $scope.groupedChapters = fullChapters.map(function(chapter) {
+                return chapter.chapterLevels.reduce(function(acc, val, i) {
+                    var index = Math.floor(i / 5);
+                    if (!acc[index]) acc[index] = [];
+                    acc[index].push(val);
+                    return acc;
+                } , []); 
+            });
+            var selectedChapterIndex = 0;
+            fullChapters.forEach(function(c, i) { 
+                if (c.id == chapterId) {
+                    selectedChapterIndex = i;
+                }
+            });
+            $scope.currentIndex = selectedChapterIndex;
         });
-        var selectedChapterIndex = 0;
-        fullChapters.forEach(function(c, i) { 
-            if (c.id == chapterId) {
-                selectedChapterIndex = i;
-            }
-        });
-        $scope.currentIndex = selectedChapterIndex;
         $scope.deltaOffset = 0;
 
         function includeTransitionClass() {
@@ -39,7 +43,7 @@ define(['module', 'app/main', 'app/analytics'], function(module, main, analytics
             }, 200);
         }
         function tryChangeChapter(newChapterIndex, returnToBase) {
-            if (fullChapters[newChapterIndex]) {
+            if ($scope.fullChapters[newChapterIndex]) {
                 $scope.currentIndex = newChapterIndex;
             } else if (returnToBase) {
                 $scope.currentIndex = $scope.currentIndex;

@@ -1,8 +1,8 @@
 'use strict';
 
-define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema, angular, levelsList) {
-    angular.module('digitsData', [])
-        .factory('playerData', function() {
+define([ isPhoneGap() ? 'app/storage/sqlite' : 'app/storage/localstorage', 'angular', 'app/levelsList' ], function(storageFactory, angular, levelsList) {
+    var digitsData = angular.module('digitsData', [])
+/*        .factory('playerData', function() {
             var schema = lsSchema(),
                 gameState = schema.object('gameState'),
                 levelsScores = schema.collection('levelsScores');
@@ -34,7 +34,7 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                     return levelsIdsArray.filter(function(id) { return scoresLevels.indexOf(id) != -1; }).map(function(id) { return levelsScores.get(id); })
                 }
             };
-        })
+        })*/
         .factory('levelsData', function() {
             var levelsDao = {};
 
@@ -46,7 +46,7 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                 getChapters: function() {
                     return levelsList.chapters;
                 },
-                getChaperIds: function() {
+                getChapterIds: function() {
                     return Object.keys(this.getChapters());
                 },
                 getChaptersArray: function() {
@@ -103,54 +103,64 @@ define([ 'localstorage-schema', 'angular', 'app/levelsList' ], function(lsSchema
                     };
                 }
             };
-        }).factory('combinedData', function(playerData, levelsData) {
+        }).factory('combinedData', function(playerData, levelsData, $q) {
             return {
-                getChapterExtendedWithUserData: function(chapterId) {
-                    var chapter = levelsData.getChapter(chapterId);
-                    var extendedLevels = levelsData.getFullChapter(chapterId).levels.map(function(level) {
-                        var levelScore = playerData.getLevelScore(level.id);
-                        return {
-                            id: level.id,
-                            label: level.data.label,
-                            enabled: level.data.preEnabled || (levelScore && levelScore.enabled),
-                            isCompleted: levelScore.isCompleted,
-                            score: levelScore.score || 0
-                        };
-                    });
-                    return {
-                        id: chapterId,
-                        chapterLabel: chapter.label,
-                        chapterLevels: extendedLevels
-                    };
-                },
                 getChaptersExtendedWithUserData: function() {
-                    return levelsData.getChaperIds().map(this.getChapterExtendedWithUserData.bind(this));
+                    return playerData.getFullLevelScores().then(function(scores) {
+                        return levelsData.getChapterIds().map(function(chapterId) {
+                            var chapter = levelsData.getChapter(chapterId);
+                            var extendedLevels = levelsData.getFullChapter(chapterId).levels.map(function(level) {
+                                var levelScore = scores[level.id] || {};
+                                return {
+                                    id: level.id,
+                                    label: level.data.label,
+                                    enabled: level.data.preEnabled || (levelScore && levelScore.enabled),
+                                    isCompleted: levelScore.isCompleted,
+                                    score: levelScore.score || 0
+                                };
+                            });
+                            return {
+                                id: chapterId,
+                                chapterLabel: chapter.label,
+                                chapterLevels: extendedLevels
+                            };
+                        });
+                    }.bind(this));
                 },
                 unlockNextLevel: function(levelId) {
-                    var nextLevelId = levelsData.getNextLevelId(levelId),
-                        levelScore = playerData.getLevelScore(nextLevelId);
+                    var nextLevelId = levelsData.getNextLevelId(levelId);
 
-                    levelScore.enabled = true;
-
-                    playerData.setLevelScore(nextLevelId, levelScore);
-                    return nextLevelId;
+                    return playerData.getLevelScore(nextLevelId).then(function(levelScore) {
+                        levelScore.enabled = true;
+                        return playerData.setLevelScore(nextLevelId, levelScore).then(function() {
+                            return nextLevelId;
+                        });
+                    });
                 },
+
                 completeLevel: function(levelId, movesCount) {
-                    var nextLevelId = this.unlockNextLevel(levelId);
-                    playerData.updateGameState(levelsData.getInitialLevelDataForLevel(nextLevelId));
+                    return this.unlockNextLevel(levelId).then(function(nextLevelId) {
+                        return $q.all({
+                                    levelScore: playerData.getLevelScore(levelId),
+                                    updateResult: playerData.updateGameState(levelsData.getInitialLevelDataForLevel(nextLevelId))
+                                }).then(function(res) {
+                                    var levelScore = res.levelScore,
+                                        levelData = levelsData.getLevel(levelId);
 
-                    var levelScore = playerData.getLevelScore(levelId),
-                        levelData = levelsData.getLevel(levelId);
+                                    levelScore.isCompleted = true;
+                                    if (!levelScore.movesCount || movesCount < levelScore.movesCount) {
+                                        levelScore.movesCount = movesCount;
+                                        levelScore.score = levelsData.getLevelStars(levelData, movesCount);
+                                    }
+                                    return playerData.setLevelScore(levelId, levelScore).then(function() {
+                                        return nextLevelId;
+                                    });
 
-                    levelScore.isCompleted = true;
-                    if (!levelScore.movesCount || movesCount < levelScore.movesCount) {
-                        levelScore.movesCount = movesCount;
-                        levelScore.score = levelsData.getLevelStars(levelData, movesCount);
-                    }
-
-                    playerData.setLevelScore(levelId, levelScore);
-                    return nextLevelId;
+                                });
+                    });
                 }
             };
         });
+
+    storageFactory(digitsData);
 });
