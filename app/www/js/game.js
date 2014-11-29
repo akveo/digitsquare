@@ -1,6 +1,6 @@
 'use strict';
 
-define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angular, ads) {
+define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(module, main, angular, ads, analytics) {
 
     function prepareStateMatrix(stateArray, sideSize) {
         return stateArray.map(function(label, index) {
@@ -35,6 +35,8 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
             .controller(ngCName(module, 'gameController'), function($scope, $route, $routeParams, levelsData, playerData, combinedData, $location, $rootScope, $window, $timeout) {
                 if (!$routeParams.skipAd) {
                     ads.tryShowInterstitialAd();
+                } else {
+                    analytics.pageViewed('Game');
                 }
                 var levelId = $routeParams.levelId,
                     chapterId = levelId.split('-')[0],
@@ -83,6 +85,7 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
                 });
 
                 $scope.reloadGame = function() {
+                    analytics.trackEvent('Level Status', 'Retry', levelId, $scope.movesCount);
                     if ($routeParams.skipAd || $routeParams.savedGame) {
                         $location.search('');
                     } else {
@@ -171,6 +174,7 @@ define(['module', 'app/main', 'angular', 'app/ads'], function(module, main, angu
                             var modal = $scope.panelModal('views/game/nextLevelModal.html', childScope);
                             modal.show();
                         });
+                        analytics.trackEvent('Level Status', 'Completed', levelId, $scope.movesCount);
                     }
                 }
 

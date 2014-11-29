@@ -2,7 +2,7 @@
 
 define(['module', 'app/main', 'app/analytics'], function(module, main, analytics) {
     main.register.controller(ngCName(module, 'menuController'), ['$scope', 'playerData', function($scope, playerData) {
-        analytics.pageViewed('/home');
+        analytics.pageViewed('Home');
         $scope.watchBack(function() {
             navigator.app.exitApp();
         });
@@ -13,6 +13,7 @@ define(['module', 'app/main', 'app/analytics'], function(module, main, analytics
         });
     }]);
     main.register.controller(ngCName(module, 'levelsController'), ['$scope', '$routeParams', 'combinedData', '$timeout', function($scope, $routeParams, combinedData, $timeout) {
+        analytics.pageViewed('Levels');
         $scope.navBack('/home');
         var chapterId = parseInt($routeParams.initialGroup) || '1';
         $scope.chapterId = chapterId;

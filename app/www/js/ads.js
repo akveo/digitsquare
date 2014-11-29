@@ -83,11 +83,7 @@ define(['app/config', 'app/util'], function(config, u) {
     }
 
     if (isPhoneGap()) {
-        if (window.plugins && window.plugins.AdMob) {
-            setupAds();
-        } else {
-            window.addEventListener('deviceready', setupAds);
-        }
+        document.addEventListener('deviceready', setupAds, false);
     }
 
     return rv;
