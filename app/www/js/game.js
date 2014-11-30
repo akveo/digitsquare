@@ -160,6 +160,8 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                             direction = (['u', 'd', 'l', 'r'])[Math.ceil(Math.random() * 4 ) - 1];
                         doMove(row, col, direction);
                     }
+                    console.log(currentState);
+                    console.log(currentState.map(function(el) { return el || '-'}).join(''));
                 }
 
                 $scope.whenAnimationEnd = function() {
