@@ -137,3 +137,28 @@
         }
     }
 }
+
+@media only screen and (min-width:500px) {
+    /* styles for tablets and desktops */
+    .home {
+        .app-title {
+            font-size: 63px;
+        }
+        .menu  {
+            margin-top: 15px;
+            .menu-item {
+                max-width: 500px;
+                font-size: 38px;
+                min-height: 68px;
+                padding: 15px 0;
+                &+.menu-item {
+                    margin-top: 15px;
+                }
+            }
+        }
+    }
+    .levels {
+        margin: 0 auto;
+        width: 500px;
+    }
+}
