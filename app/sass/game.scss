@@ -46,6 +46,7 @@ $matrixColor: #a2c64c;
             display: inline-block;
             background-color: white;
             .matrix-cell {
+                cursor: pointer;
                 font-family: UbuntuBold;
                 position: absolute;
                 left: 0;

@@ -150,6 +150,21 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                     $scope.$apply(function() {
                         doMove(row, column, direction);
                     });
+                    if (validateStateArray(currentState, levelData.goal)) {
+                        $timeout(function() {
+                            combinedData.completeLevel(levelId, $scope.movesCount).then(function(nextLevelId) {
+                                var childScope = angular.extend($rootScope.$new(), {
+                                    stars: levelsData.getLevelStars(levelData, $scope.movesCount),
+                                    currentChapter: chapterId,
+                                    nextLevel: nextLevelId,
+                                    repeatClicked: function() { $scope.reloadGame(); }
+                                });
+                                var modal = $scope.panelModal('views/game/nextLevelModal.html', childScope);
+                                modal.show();
+                            });    
+                            analytics.trackEvent('Level Status', 'Completed', levelId, $scope.movesCount);
+                        }, 100);
+                    }
                 };
 
                 $scope.randomNShifts = function() {
@@ -162,22 +177,6 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                     }
                     console.log(currentState);
                     console.log(currentState.map(function(el) { return el || '-'}).join(''));
-                }
-
-                $scope.whenAnimationEnd = function() {
-                    if (validateStateArray(currentState, levelData.goal)) {
-                        combinedData.completeLevel(levelId, $scope.movesCount).then(function(nextLevelId) {
-                            var childScope = angular.extend($rootScope.$new(), {
-                                stars: levelsData.getLevelStars(levelData, $scope.movesCount),
-                                currentChapter: chapterId,
-                                nextLevel: nextLevelId,
-                                repeatClicked: function() { $scope.reloadGame(); }
-                            });
-                            var modal = $scope.panelModal('views/game/nextLevelModal.html', childScope);
-                            modal.show();
-                        });
-                        analytics.trackEvent('Level Status', 'Completed', levelId, $scope.movesCount);
-                    }
                 }
 
                 if (levelId == '1-1') {
@@ -193,32 +192,38 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                     restrict: 'A',
                     scope: {
                         onMoveEnd: '&swipeCell',
-                        onMoveNode: '&swipeCellOnMove',
-                        onAnimationEnd: '&swipeCellAnimationEnd'
+                        onMoveNode: '&swipeCellOnMove'
                     },
-                    controller: function ($scope, $element, $attrs) {
+                    controller: function ($scope, $element, $attrs, $document) {
                         $element.bind('touchstart', onTouchStart);
-
+                        $element.bind('mousedown', onMouseDown);
                         var firstMove;
 
+                        function _onDown(x, y) {
+                            $scope.startX = x;
+                            $scope.startY = y;
+                        }
                         function onTouchStart(event) {
-                            $scope.startX = event.touches[0].pageX;
-                            $scope.startY = event.touches[0].pageY;
+                            _onDown(event.touches[0].pageX, event.touches[0].pageY);
                             $scope.boundingRect = $element[0].getBoundingClientRect();
-                            $scope.parent = $element.parent()[0];
                             $element.bind('touchmove', onTouchMove);
                             $element.bind('touchend', onTouchEnd);
                             firstMove = true;
                         }
+                        function onMouseDown(event) {
+                            var x = event.screenX,
+                                y = event.screenY;
+                            _onDown(x, y);
+                            $scope.boundingRect = { left: x - 30, right: x + 30, top: y - 30, bottom: y + 30 };
+                            $document.bind('mousemove', onMouseMove);
+                            $document.bind('mouseup', onMouseUp);
+                        }
 
-                        function onTouchMove(event) {
-                            if (firstMove) {
-                                firstMove = false;
-                                event.preventDefault();
-                            }
+
+                        function _onMove(x, y) {
                             var direction = '',
-                                posX = event.changedTouches[0].pageX,
-                                posY = event.changedTouches[0].pageY,
+                                posX = x,
+                                posY = y,
                                 deltaX = posX - $scope.startX,
                                 deltaY = posY - $scope.startY,
                                 absDeltaX = Math.abs(deltaX),
@@ -242,19 +247,32 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                             }
                             $scope.direction = direction;
                         }
-
-                        function onTransitionEnd(event) {
-                            $element.unbind('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', onTransitionEnd);
-                            $scope.onAnimationEnd();
+                        function onTouchMove(event) {
+                            if (firstMove) {
+                                firstMove = false;
+                                event.preventDefault();
+                            }
+                            _onMove(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
+                        }
+                        function onMouseMove(event) {
+                            _onMove(event.screenX, event.screenY);
                         }
 
+
                         // Unbinds methods when touch interaction ends
+                        function _onEnd() {
+                            $scope.onMoveEnd({ direction: $scope.direction });
+                        }
                         function onTouchEnd(event) {
                             firstMove = false;
                             $element.unbind('touchmove', onTouchMove);
                             $element.unbind('touchend', onTouchEnd);
-                            $element.bind('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', onTransitionEnd);
-                            $scope.onMoveEnd({ direction: $scope.direction });
+                            _onEnd();
+                        }
+                        function onMouseUp(event) {
+                            $document.unbind('mousemove', onMouseMove);
+                            $document.unbind('mouseup', onMouseUp);
+                            _onEnd();
                         }
                     }
                 }
