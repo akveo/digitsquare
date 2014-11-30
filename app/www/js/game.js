@@ -94,6 +94,9 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                 }
 
                 $scope.whenMoved = function(row, column, direction) {
+                    if ($scope.levelFinished) 
+                        return;
+
                     var moveClasses = {
                         u: 'moveUp',
                         d: 'moveDown',
@@ -113,6 +116,8 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                 };
 
                 function doMove(row, column, direction) {
+                    if ($scope.levelFinished) 
+                        return;
                     var moveFunctions = {
                         u: function(el) {
                             if (el.row - 1 < 0) el.animClass = 'transferred';
@@ -151,8 +156,10 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                         doMove(row, column, direction);
                     });
                     if (validateStateArray(currentState, levelData.goal)) {
+                        $scope.levelFinished = true;
+                        var saveResult = combinedData.completeLevel(levelId, $scope.movesCount);
                         $timeout(function() {
-                            combinedData.completeLevel(levelId, $scope.movesCount).then(function(nextLevelId) {
+                            saveResult.then(function(nextLevelId) {
                                 var childScope = angular.extend($rootScope.$new(), {
                                     stars: levelsData.getLevelStars(levelData, $scope.movesCount),
                                     currentChapter: chapterId,
