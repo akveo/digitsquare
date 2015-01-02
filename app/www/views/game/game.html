@@ -26,7 +26,7 @@
             <div class="matrix-cell" data-row="{{value.row}}" data-col="{{value.column}}" ng-style="{ width: sidePixels + 'px', height: sidePixels + 'px', 'line-height': sideLine + 'px', 'font-size': cellFont + 'px' }" ng-repeat="(index, value) in initialStateMatrix" swipe-cell="whenMoveEnd(value.row, value.column, direction)" swipe-cell-on-move="whenMoved(value.row, value.column, direction)" ng-class="value.animClass">{{value.label}}</div>
         </div>
     </div>
-<!--     <div class="nav-controls">
+    <div class="nav-controls">
         <span class="control-icon el-icon-repeat" ng-click="randomNShifts()"></span>
-    </div> -->
+    </div>
 </div>

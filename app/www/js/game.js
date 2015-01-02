@@ -42,7 +42,7 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                     chapterId = levelId.split('-')[0],
                     levelIndex = levelId.split('-')[1],
                     levelData = levelsData.getLevel(levelId),
-                    currentState = levelData.initial,
+                    currentState = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g'],
                     movesCount = 0;
 
                 if ($routeParams.savedGame) {
