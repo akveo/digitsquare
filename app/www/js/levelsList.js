@@ -59,9 +59,9 @@ define([], function() {
         },
         '1-10': {
             label: '10',
-            initial: ['', '1' , '1', '', '1', '1', '1', '', ''],
+            initial: ['', '' , '1', '', '', '1', '1', '1', '1'],
             goal: ['1', '' , '1', '', '1', '', '1', '', '1'],
-            movesCountForStars: [2, 4, 6]
+            movesCountForStars: [3, 5, 7]
         },
         '1-11': {
             label: '11',
