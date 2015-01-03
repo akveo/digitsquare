@@ -176,8 +176,8 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                 $scope.randomNShifts = function() {
                     var shifts = 50;
                     for (var i =0; i < shifts; i++) {
-                        var col = Math.ceil(Math.random() * 3) - 1,
-                            row = Math.ceil(Math.random() * 3) - 1,
+                        var col = Math.ceil(Math.random() * sideSize) - 1,
+                            row = Math.ceil(Math.random() * sideSize) - 1,
                             direction = (['u', 'd', 'l', 'r'])[Math.ceil(Math.random() * 4 ) - 1];
                         doMove(row, col, direction);
                     }
