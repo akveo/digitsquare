@@ -81,6 +81,8 @@ define(['module', 'app/main', 'app/analytics'], function(module, main, analytics
             });
         }
     ]);
+    main.register.controller(ngCName(module, 'helpController'), function(){});
+    main.register.controller(ngCName(module, 'aboutController'), function(){});
     main.register.directive('addASpaceBetween', [function () {
             return function (scope, element) {
                 if(!scope.$last){

@@ -23,6 +23,8 @@ define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/d
             $routeProvider
                 .when('/home', route.resolve('home/menu'))
                 .when('/levels', route.resolve('home/levels'))
+                .when('/help', route.resolve('home/help'))
+                .when('/about', route.resolve('home/about'))
                 .when('/exitInterstitial', route.resolve('home/exitInterstitial'))
                 .when('/game/:levelId', route.resolve('game/game'))
                 .otherwise({ redirectTo: '/home' });
