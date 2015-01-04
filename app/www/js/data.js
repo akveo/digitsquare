@@ -2,29 +2,6 @@
 
 define([ isPhoneGap() ? 'app/storage/sqlite' : 'app/storage/localstorage', 'angular', 'app/levelsList' ], function(storageFactory, angular, levelsList) {
     var digitsData = angular.module('digitsData', [])
-/*        .factory('playerData', function() {
-            var schema = lsSchema(),
-                gameState = schema.object('gameState'),
-                levelsScores = schema.collection('levelsScores');
-            return {
-                getGameState: function() {
-                    return gameState.read();
-                },
-                updateGameState: function(stateObject) {
-                    return gameState.persist(stateObject);
-                },
-                setLevelScore: function(levelId, scoreObj) {
-                    return levelsScores.object(levelId).persist(scoreObj);
-                },
-                getLevelScore: function(levelId) {
-                    return levelsScores.get(levelId) || {};
-                },
-                getScoresForLevels: function(levelsIdsArray) {
-                    var scoresLevels = levelsScores.keys();
-                    return levelsIdsArray.filter(function(id) { return scoresLevels.indexOf(id) != -1; }).map(function(id) { return levelsScores.get(id); })
-                }
-            };
-        })*/
         .factory('levelsData', function() {
             var levelsDao = {};
 
@@ -78,7 +55,7 @@ define([ isPhoneGap() ? 'app/storage/sqlite' : 'app/storage/localstorage', 'angu
                         nextLevel = chapter.levels[chapter.levels.indexOf(levelId) + 1];
 
                     if (!nextLevel) {
-                        var nextChapter = this.getNextChapter(chapterId);
+                        var nextChapter = this.getNextChapter(splittedLevel[0]);
                         nextLevel = nextChapter && nextChapter.levels[0];
                     }
 
