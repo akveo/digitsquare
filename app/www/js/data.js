@@ -97,7 +97,7 @@ define([ isPhoneGap() ? 'app/storage/sqlite' : 'app/storage/localstorage', 'angu
                 unlockNextLevel: function(levelId) {
                     var nextLevelId = levelsData.getNextLevelId(levelId);
 
-                    return playerData.getLevelScore(nextLevelId).then(function(levelScore) {
+                    return nextLevelId && playerData.getLevelScore(nextLevelId).then(function(levelScore) {
                         levelScore.enabled = true;
                         return playerData.setLevelScore(nextLevelId, levelScore).then(function() {
                             return nextLevelId;
@@ -106,10 +106,10 @@ define([ isPhoneGap() ? 'app/storage/sqlite' : 'app/storage/localstorage', 'angu
                 },
 
                 completeLevel: function(levelId, movesCount) {
-                    return this.unlockNextLevel(levelId).then(function(nextLevelId) {
+                    return $q.when(this.unlockNextLevel(levelId)).then(function(nextLevelId) {
                         return $q.all({
                                     levelScore: playerData.getLevelScore(levelId),
-                                    updateResult: playerData.updateGameState(levelsData.getInitialLevelDataForLevel(nextLevelId))
+                                    updateResult: nextLevelId && playerData.updateGameState(levelsData.getInitialLevelDataForLevel(nextLevelId))
                                 }).then(function(res) {
                                     var levelScore = res.levelScore,
                                         levelData = levelsData.getLevel(levelId);

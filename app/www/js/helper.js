@@ -9,9 +9,9 @@ define(['angular'], function(angular) {
                     var element = angular.element('<div class="panel-modal-container"><include-replace src="' + tpl + '"/></div>'),
                         currentScope = scope || $rootScope.$new();
 
-                    currentScope.closeAndNavigate = function(link) {
+                    currentScope.closeAndNavigate = function(link, params) {
                         element.remove();
-                        currentScope.goToPath(link);
+                        currentScope.goToPath(link, params);
                     };
                     currentScope.closePanel = function(cb) {
                         element.remove();
