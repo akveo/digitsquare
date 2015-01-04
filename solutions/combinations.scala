@@ -95,8 +95,8 @@ case class RubyState(state: List[List[Char]]) extends mutable.Traversable[(Char,
 
 object Main {
 
-  val initial = RubyState("--1--1111")
-  val goal = RubyState("1-1-1-1-1")
+  val initial = RubyState("51214-4-4-324355")
+  val goal = RubyState("-4-3245541354-12")
   val rubyDigitSize = initial.length
   val rubyDigitSizeOneLess = rubyDigitSize - 1
   val rubydigitShiftsPerDirection = rubyDigitSize
