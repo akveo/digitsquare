@@ -136,6 +136,14 @@
             }
         }
     }
+
+    .game-description {
+        padding: 0 20px;
+        font-family: Arial;
+        p {
+            text-align: justify;
+        }
+    }
 }
 
 @media only screen and (min-width:500px) {
