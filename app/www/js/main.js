@@ -45,6 +45,7 @@ define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/d
         };
         var sWidth = document.documentElement.clientWidth || screen.width;
         $rootScope.screenWidth = sWidth > 500 ? 500 : sWidth;
+        $rootScope.screenHeight = document.documentElement.clientHeight || screen.height;
         $rootScope.panelModal = function() {
             var modalInstance = panelModal.apply(null, [].slice.call(arguments));
             this.$on('$destroy', function() {
