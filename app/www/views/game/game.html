@@ -10,9 +10,9 @@
                 <div class="moves"><span class="moves-cont">Moves: {{movesCount}}</span></div>
             </div>
             <div class="game-goal-cell t-cell">
-                <div class="game-goal-container" ng-style="{ width: sideSize * 25 + 'px' }">
+                <div class="game-goal-container" ng-style="{ width: sideSize * 25 * sizeK + 'px' }">
                     <div class="goal-label">Goal:</div>
-                    <div class="table goal-table" ng-style="{ width: sideSize * 25 + 'px', height: sideSize * 25 + 'px' }">
+                    <div class="table goal-table" ng-style="{ width: sideSize * 25 * sizeK + 'px', height: sideSize * 25 + 'px' }">
                         <div class="t-row" ng-repeat="row in [] | range:sideSize">
                             <div class="t-cell" ng-repeat="column in [] | range:sideSize">{{goalArray[sideSize*row+column] || '&nbsp;'}}</div>
                         </div>

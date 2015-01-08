@@ -78,6 +78,8 @@ html, body {
     position: relative;
     background-color: transparent;  
     font-family: Tahoma;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .nav-link {
@@ -124,9 +126,9 @@ html, body {
 .text-center { text-align: center; }
 .inline-block { display: inline-block; }
 
-@media only screen and (min-width:500px) {
+@media only screen and (min-width:768px) {
     .layout {
-        max-width: 500px;
+        max-width: 768px;
         margin: 0 auto;    
     }
 }
