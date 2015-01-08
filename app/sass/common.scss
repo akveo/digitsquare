@@ -62,7 +62,6 @@ $iconWidth: 50px;
 }
 
 .nav-controls {
-    padding: 20px;
     box-sizing: border-box;
     width: 100%;
     font-family: UbuntuBold;
@@ -137,5 +136,21 @@ i.el-icon-star {
     color: #999;
     &.rewarded {
         color: #f3d231;
+    }
+}
+
+@media only screen and (min-width:768px) {
+    .nav-controls {
+        .control-icon {
+            width: $iconWidth * 1.5;
+            height: $iconWidth * 1.5;
+            line-height: $iconWidth * 1.5;
+            &[class*="el-icon-"] {
+                font-size: 38px;
+            }
+            &.fa {
+                font-size: 60px;
+            }
+        }
     }
 }

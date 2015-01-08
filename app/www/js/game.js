@@ -77,7 +77,7 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                 }
 
                 $scope.$watch('screenWidth', function(newValue, oldValue) {
-                    $scope.fieldWidth = newValue - 36; // Minus padding
+                    $scope.fieldWidth = newValue - ($scope.paddingValue - 2) * 2; // Minus padding
                     $scope.sidePixels = $scope.fieldWidth / sideSize;
                     $scope.sideLine = $scope.sidePixels - 4;
                     $scope.cellFont = $scope.sideLine / 3 * 2;

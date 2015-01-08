@@ -60,7 +60,7 @@
     .levels-links {
         float: left;
         width: 100%;
-        padding: 0 20px;
+        padding: 0 2px;
         box-sizing: border-box;
     }
     .level-item-row {
@@ -165,8 +165,23 @@
             }
         }
     }
-    .levels {
-        margin: 0 auto;
-        width: 500px;
+
+    .levels { 
+        .level-item {
+            .level-item-icon {
+                width: $iconWidth * 1.5;
+                height: $iconWidth * 1.5;
+                line-height: $iconWidth * 1.5;
+                font-size: 38px;
+            }
+            .level-icon-rating {
+                width: $iconWidth * 1.5;
+                height: $iconWidth / 2 * 1.5;
+                line-height: 35px * 1.5;
+                i {
+                    font-size: 14px * 1.5;
+                }
+            }
+        }
     }
 }

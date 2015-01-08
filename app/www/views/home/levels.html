@@ -10,8 +10,8 @@
         </div>
     </div>
     <div class="chapters-body">
-        <div class="chapters-container" ng-style="{ transform: 'translate3d(' + -(screenWidth * currentIndex + deltaOffset) + 'px,0,0)', '-webkit-transform': 'translate3d(' + -(screenWidth * currentIndex + deltaOffset) + 'px,0,0)', width: screenWidth * fullChapters.length + 'px' }" swipe-panel="swipeProcess(delta)" swipe-end="swipeEnd(delta)" ng-class="{ 'include-transition': includeTransitionClass }">
-            <div class="levels-links" ng-repeat="chapter in groupedChapters" ng-style="{ width: screenWidth + 'px' }">
+        <div class="chapters-container" ng-style="{ transform: 'translate3d(' + -(normalScreenWidth * currentIndex + deltaOffset) + 'px,0,0)', '-webkit-transform': 'translate3d(' + -(normalScreenWidth * currentIndex + deltaOffset) + 'px,0,0)', width: normalScreenWidth * fullChapters.length + 'px' }" swipe-panel="swipeProcess(delta)" swipe-end="swipeEnd(delta)" ng-class="{ 'include-transition': includeTransitionClass }">
+            <div class="levels-links" ng-repeat="chapter in groupedChapters" ng-style="{ width: normalScreenWidth + 'px' }">
                 <div class="level-item-row" ng-repeat="levelGroup in chapter">
                     <div class="nav-link level-item" ng-repeat="level in levelGroup" ng-class="{locked: level.enabled}" data-add-a-space-between>
                         <span class="inline-block" ng-if="level.enabled" ng-click="goToPath('/game/' + level.id, 'skipAd=true')">

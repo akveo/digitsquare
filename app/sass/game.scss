@@ -34,10 +34,66 @@ $matrixColor: #a2c64c;
     }
 }
 
+@mixin game-controls($coeff)  {
+    .nav-controls {
+        .controls-cell {
+            width: ($iconWidth + 20px) * $coeff;
+            .control-icon+.control-icon {
+                margin-top: 20px * $coeff;
+            }
+        }
+        .level-cell {
+            font-size: 42px * $coeff;
+            color: $watColor;
+            .level-id {
+                height: $iconWidth * $coeff;
+                line-height: $iconWidth * $coeff;
+                margin-left: -3px * $coeff;
+            }
+            .moves {
+                font-size: 20px * $coeff;
+                height: $iconWidth * $coeff;
+                line-height: $iconWidth * $coeff;
+                margin-top: 20px * $coeff;
+                .moves-cont {
+                    line-height: 25px * $coeff;
+                    display: inline-block;
+                }
+            }
+        }
+        .game-goal-cell {
+            .game-goal-container {
+                float: right;
+            }
+            .goal-label {
+                width: 100%;
+                text-align: center;
+                color: $watColor;
+                margin-bottom: 10px * $coeff;
+                display: inline-block;
+            }
+            .goal-table {
+                width: 100%;
+                border: solid 1px white;
+                font-size: 20px * $coeff;
+                color: white;
+                background-color: $matrixColor;
+                .t-row {
+                    text-align: center;
+                    .t-cell {
+                        width: 15px * $coeff;
+                        vertical-align: middle;
+                        border: solid 1px white;
+                    }
+                }
+            }
+        }
+    }
+}
+
 .game-container {
     
     .game-field {
-        padding: 0 18px;
         box-sizing: border-box;
         width: 100%;
         text-align: center;
@@ -58,60 +114,7 @@ $matrixColor: #a2c64c;
         }
     }
     
-    .nav-controls {
-        .controls-cell {
-            width: $iconWidth + 20px;
-            .control-icon+.control-icon {
-                margin-top: 20px;
-            }
-        }
-        .level-cell {
-            font-size: 42px;
-            color: $watColor;
-            .level-id {
-                height: $iconWidth;
-                line-height: $iconWidth;
-                margin-left: -3px;
-            }
-            .moves {
-                font-size: 20px;
-                height: $iconWidth;
-                line-height: $iconWidth;
-                margin-top: 20px;
-                .moves-cont {
-                    line-height: 25px;
-                    display: inline-block;
-                }
-            }
-        }
-        .game-goal-cell {
-            .game-goal-container {
-                float: right;
-            }
-            .goal-label {
-                width: 100%;
-                text-align: center;
-                color: $watColor;
-                margin-bottom: 10px;
-                display: inline-block;
-            }
-            .goal-table {
-                width: 100%;
-                border: solid 1px white;
-                font-size: 20px;
-                color: white;
-                background-color: $matrixColor;
-                .t-row {
-                    text-align: center;
-                    .t-cell {
-                        width: 15px;
-                        vertical-align: middle;
-                        border: solid 1px white;
-                    }
-                }
-            }
-        }
-    }
+    @include game-controls(1);
     
 }
 
@@ -181,5 +184,8 @@ $matrixColor: #a2c64c;
         max-width: 500px;
         margin: 0 auto;
         cursor: pointer;
+    }
+    .game-container {
+        @include game-controls(1.5);
     }
 }
