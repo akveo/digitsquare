@@ -103,13 +103,15 @@ define(['module', 'app/main', 'app/analytics'], function(module, main, analytics
 
                 var firstMove,
                     startX = 0,
-                    lastDelta = 0;
+                    lastDelta = 0,
+                    touchJustStarted = false;
 
                 function onTouchStart(event) {
                     startX = event.touches[0].pageX;
                     $element.bind('touchmove', onTouchMove);
                     $element.bind('touchend', onTouchEnd);
                     firstMove = true;
+                    touchJustStarted = true;
                 }
 
 
@@ -119,12 +121,17 @@ define(['module', 'app/main', 'app/analytics'], function(module, main, analytics
                         event.preventDefault();
                     }
                     lastDelta = event.changedTouches[0].pageX - startX;
+                    if (touchJustStarted && Math.abs(lastDelta) < 4) {
+                        return;
+                    }
+                    touchJustStarted = false;
                     $scope.onSwipeProcess({ delta: lastDelta });
                 }
 
                 // Unbinds methods when touch interaction ends
                 function onTouchEnd(event) {
                     firstMove = false;
+                    touchJustStarted = false;
                     $element.unbind('touchmove', onTouchMove);
                     $element.unbind('touchend', onTouchEnd);
                     $scope.onSwipeEnd({ delta: lastDelta });
