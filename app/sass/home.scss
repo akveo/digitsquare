@@ -12,7 +12,7 @@
     .menu {
         $width: 100%;
         padding: 0 40px;
-        margin-top: 10px;
+        margin-top: 20px;
         .menu-item {
             display: inline-block;
             box-sizing: border-box;
@@ -48,6 +48,31 @@
         display: inline-block;
         &.include-transition {
             @include transitionTransform(0.2s, ease-out);
+        }
+    }
+}
+
+@mixin nav-controls-levels($coeff) {
+    .nav-controls {
+        .chapter-label {
+            text-align: right;
+            h1 {
+                color: $labelsColor;
+                font-family: UbuntuBold;
+                font-size: 35px * $coeff;
+                line-height: 50px * $coeff;
+                margin: 0;
+            }
+        }
+        .level-breadcrumb {
+            .fa {
+                display: inline-block;
+                color: #9acb40;
+                font-size: 16px * $coeff;
+                &.active {
+                    color: #f3d231;
+                }
+            }
         }
     }
 }
@@ -115,27 +140,7 @@
         }
     }
 
-    .nav-controls {
-        .chapter-label {
-            text-align: right;
-            h1 {
-                color: $labelsColor;
-                font-family: UbuntuBold;
-                font-size: 35px;
-                line-height: 50px;
-                margin: 0;
-            }
-        }
-        .level-breadcrumb {
-            .fa {
-                display: inline-block;
-                color: #9acb40;
-                &.active {
-                    color: #f3d231;
-                }
-            }
-        }
-    }
+    @include nav-controls-levels(1);
 
     .game-description {
         padding: 0 20px;
@@ -153,7 +158,7 @@
             font-size: 63px;
         }
         .menu  {
-            margin-top: 15px;
+            margin-top: 40px;
             .menu-item {
                 max-width: 500px;
                 font-size: 38px;
@@ -183,5 +188,6 @@
                 }
             }
         }
+        @include nav-controls-levels(1.5);
     }
 }
