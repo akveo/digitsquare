@@ -45,34 +45,57 @@ var filestocopy = [{
 }, {
     "config/android/res/drawable-xhdpi/splash.png": 
     "platforms/android/res/drawable-xhdpi/splash.png"
+}, { //--------------------------------------
+    "res/icon/ios/icon-40.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-40.png"
 }, {
-    "config/ios/Resources/icons/icon-72.png": 
-    "platforms/ios/YourAppName/Resources/icons/icon-72.png"
+    "res/icon/ios/icon-40@2x.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-40@2x.png"
 }, {
-    "config/ios/Resources/icons/icon.png": 
-    "platforms/ios/YourAppName/Resources/icons/icon.png"
+    "res/icon/ios/icon-60.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-60.png"
 }, {
-    "config/ios/Resources/icons/icon@2x.png": 
-    "platforms/ios/YourAppName/Resources/icons/icon@2x.png"
+    "res/icon/ios/icon-60@2x.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-60@2x.png"
 }, {
-    "config/ios/Resources/icons/icon-72@2x.png": 
-    "platforms/ios/YourAppName/Resources/icons/icon-72@2x.png"
+    "res/icon/ios/icon-76.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-76.png"
 }, {
-    "config/ios/Resources/splash/Default@2x~iphone.png": 
-    "platforms/ios/YourAppName/Resources/splash/Default@2x~iphone.png"
+    "res/icon/ios/icon-76@2x.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-76@2x.png"
 }, {
-    "config/ios/Resources/splash/Default-568h@2x~iphone.png": 
-    "platforms/ios/YourAppName/Resources/splash/Default-568h@2x~iphone.png"
+    "res/icon/ios/icon-small.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-small.png"
 }, {
-    "config/ios/Resources/splash/Default~iphone.png":
-    "platforms/ios/YourAppName/Resources/splash/Default~iphone.png"
+    "res/icon/ios/icon-small@2x.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-small@2x.png"
+}, 
+//------------------------
+{
+    "res/screen/ios/screen-iphone5-2x.png": 
+    "platforms/ios/Digit Square/Resources/splash/Default-568h@2x~iphone.png"
 }, {
-    "config/ios/Resources/splash/Default-Portrait~ipad.png": 
-     "platforms/ios/YourAppName/Resources/splash/Default-Portrait~ipad.png"
+    "res/screen/ios/ipad2x-portrait.png": 
+    "platforms/ios/Digit Square/Resources/splash/Default-Landscape@2x~ipad.png"
 }, {
-    "config/ios/Resources/splash/Default-Portrait@2x~ipad.png": 
-    "platforms/ios/YourAppName/Resources/splash/Default-Portrait@2x~ipad.png"
-}, ];
+    "res/screen/ios/ipad1x-portrait.png": 
+    "platforms/ios/Digit Square/Resources/splash/Default-Landscape~ipad.png"
+}, {
+    "res/screen/ios/ipad2x.png": 
+    "platforms/ios/Digit Square/Resources/splash/Default-Portrait@2x~ipad.png"
+}, {
+    "res/screen/ios/ipad1x.png": 
+    "platforms/ios/Digit Square/Resources/splash/Default-Portrait~ipad.png"
+}, {
+    "res/screen/ios/screen-iphone-portrait-2x.png": 
+    "platforms/ios/Digit Square/Resources/splash/Default@2x~iphone.png"
+}, {
+    "res/screen/ios/screen-iphone-portrait.png": 
+    "platforms/ios/Digit Square/Resources/splash/Default~iphone.png"
+},
+
+
+ ];
  
 var fs = require('fs');
 var path = require('path');
