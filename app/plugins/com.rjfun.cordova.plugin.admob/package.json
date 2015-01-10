@@ -1,0 +1,30 @@
+{
+    "version": "2.1.7",
+    "name": "com.rjfun.cordova.plugin.admob",
+    "cordova_name": "AdMob",
+    "description": "The most popular AdMob plugin for Cordova/PhoneGap, Intel XDK compatible. Support latest Google Play Services for Android, iOS and Windows Phone SDK. ",
+    "license": "MIT",
+    "repo": "https://github.com/floatinghotpot/cordova-plugin-admob.git",
+    "issue": "https://github.com/floatinghotpot/cordova-plugin-admob/issues",
+    "keywords": [
+        "ad",
+        "admob",
+        "google",
+        "play",
+        "services",
+        "iad",
+        "flurry"
+    ],
+    "platforms": [
+        "android",
+        "ios",
+        "wp8",
+        "windows"
+    ],
+    "engines": [
+        {
+            "name": "cordova",
+            "version": ">=3.0"
+        }
+    ]
+}

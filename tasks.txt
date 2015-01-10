@@ -1,0 +1,5 @@
+1) Tutorial screen
+2) Levels screen, swipe + chapters
+3) Add levels
+4) Add admob
+5) Ninja and arcade modes

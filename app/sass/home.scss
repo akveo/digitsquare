@@ -1,0 +1,193 @@
+.home {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding-top: 100px;
+    text-align: center;
+    .app-title {
+        font-family: DeusEx;
+        font-size: 42px;
+        color: #9bcb41;
+    }
+    .menu {
+        $width: 100%;
+        padding: 0 40px;
+        margin-top: 20px;
+        .menu-item {
+            display: inline-block;
+            box-sizing: border-box;
+            width: 100%;
+            min-height: 45px;
+            padding: 10px 0;
+
+            background-color: #9bcb41;
+            
+            text-align: center;
+            font-size: 25px;
+            font-family: UbuntuBold;
+            color: white;
+
+            &.disabled {
+                background-color: #c6c7c9;
+            }
+
+            &.ng-click-active {
+                background-color: #d9df3f;
+            }
+
+            &+.menu-item {
+                margin-top: 10px;
+            }
+        }
+    }
+}
+
+.chapters-body {
+    overflow: hidden;
+    .chapters-container {
+        display: inline-block;
+        &.include-transition {
+            @include transitionTransform(0.2s, ease-out);
+        }
+    }
+}
+
+@mixin nav-controls-levels($coeff) {
+    .nav-controls {
+        .chapter-label {
+            text-align: right;
+            h1 {
+                color: $labelsColor;
+                font-family: UbuntuBold;
+                font-size: 35px * $coeff;
+                line-height: 50px * $coeff;
+                margin: 0;
+            }
+        }
+        .level-breadcrumb {
+            .fa {
+                display: inline-block;
+                color: #9acb40;
+                font-size: 16px * $coeff;
+                &.active {
+                    color: #f3d231;
+                }
+            }
+        }
+    }
+}
+
+
+.levels {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    .levels-links {
+        float: left;
+        width: 100%;
+        padding: 0 2px;
+        box-sizing: border-box;
+    }
+    .level-item-row {
+        text-align: justify;
+        font-size: 0.1px;
+        margin-bottom: 10px;
+        &:after {
+            content: '';
+            display: inline-block;
+            width: 100%;
+        }
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
+    .level-item {
+        display: inline-block;
+        text-align: center;
+        box-sizing: border-box;
+
+        .ng-click-active .level-item-icon {
+            background-color: #d9df3f;
+        }
+
+        .level-item-icon {
+            display: inline-block;
+            width: $iconWidth;
+            height: $iconWidth;
+            font-size: 25px;
+            line-height: $iconWidth;
+            background-color: $labelsColor;
+            color: #fff;
+            font-family: UbuntuBold;
+            &.disabled {
+                background-color: #b6b6b6;
+                color: #505050;
+            }
+        }
+        .level-icon-rating {
+            width: $iconWidth;
+            height: $iconWidth / 2;
+            line-height: 35px;
+            display: inline-block;
+            i {
+                font-size: 14px;
+                text-align: center;
+                color: #999;
+                &.rewarded {
+                    color: #f3d231;
+                }
+            }
+        }
+    }
+
+    @include nav-controls-levels(1);
+
+    .game-description {
+        padding: 0 20px;
+        font-family: Arial;
+        p {
+            text-align: justify;
+        }
+    }
+}
+
+@media only screen and (min-width:500px) {
+    /* styles for tablets and desktops */
+    .home {
+        .app-title {
+            font-size: 63px;
+        }
+        .menu  {
+            margin-top: 40px;
+            .menu-item {
+                max-width: 500px;
+                font-size: 38px;
+                min-height: 68px;
+                padding: 15px 0;
+                &+.menu-item {
+                    margin-top: 15px;
+                }
+            }
+        }
+    }
+
+    .levels { 
+        .level-item {
+            .level-item-icon {
+                width: $iconWidth * 1.5;
+                height: $iconWidth * 1.5;
+                line-height: $iconWidth * 1.5;
+                font-size: 38px;
+            }
+            .level-icon-rating {
+                width: $iconWidth * 1.5;
+                height: $iconWidth / 2 * 1.5;
+                line-height: 35px * 1.5;
+                i {
+                    font-size: 14px * 1.5;
+                }
+            }
+        }
+        @include nav-controls-levels(1.5);
+    }
+}

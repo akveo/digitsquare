@@ -1,0 +1,16 @@
+<div class="panel-modal-body game-completed-modal">
+    <div class="modal-title">Level Completed!</div>
+    <div class="modal-title score-stars">
+        <i class="el-icon-star" ng-repeat="index in [1,2,3]" ng-class="{rewarded: index <= stars}"></i>
+    </div>
+    <div class="modal-title">
+        <span ng-if="stars == 0">Not Bad!</span>
+        <span ng-if="stars == 1">Good!</span>
+        <span ng-if="stars == 2">Cool!</span>
+        <span ng-if="stars == 3">Awesome!</span>
+    </div>
+    <div class="nav-controls">
+        <span class="control-icon el-icon-lines" ng-click="closeAndNavigate('/levels', 'initialGroup=' + currentChapter)"></span><span class="control-icon el-icon-repeat" ng-click="closePanel(repeatClicked)"></span><span class="control-icon el-icon-play" ng-click="nextLevel ? closeAndNavigate('/game/' + nextLevel) : closeAndNavigate('/levels', 'initialGroup=' + currentChapter)"></span>
+    </div>
+    
+</div>

@@ -1,0 +1,191 @@
+$matrixColor: #a2c64c;
+@mixin percent-matrix($sideSize) {
+    box-sizing: border-box;
+    .matrix-cell {
+        box-sizing: border-box;
+        text-align: center;
+        background-color: $matrixColor;
+        color: white;
+        z-index: 10;
+        &.transferred {
+            z-index: 5;
+        }
+        @include transitionTransform(0.1s, ease-out);
+        @for $i from 0 through $sideSize - 1 {
+            @for $j from 0 through $sideSize - 1 {
+                &[data-row="#{$i}"][data-col="#{$j}"] {
+                    @include translate($j * 100%, $i * 100%);
+                    $moveOffset: 100% / 4;
+                    &.moveUp {
+                        @include translate($j * 100%, $i * 100% - $moveOffset);
+                    }
+                    &.moveDown {
+                        @include translate($j * 100%, $i * 100% + $moveOffset);
+                    }
+                    &.moveLeft {
+                        @include translate($j * 100% - $moveOffset, $i * 100%);
+                    }
+                    &.moveRight {
+                        @include translate($j * 100% + $moveOffset, $i * 100%);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@mixin game-controls($coeff)  {
+    .nav-controls {
+        .controls-cell {
+            width: ($iconWidth + 20px) * $coeff;
+            .control-icon+.control-icon {
+                margin-top: 20px * $coeff;
+            }
+        }
+        .level-cell {
+            font-size: 42px * $coeff;
+            color: $watColor;
+            .level-id {
+                height: $iconWidth * $coeff;
+                line-height: $iconWidth * $coeff;
+                margin-left: -3px * $coeff;
+            }
+            .moves {
+                font-size: 20px * $coeff;
+                height: $iconWidth * $coeff;
+                line-height: $iconWidth * $coeff;
+                margin-top: 20px * $coeff;
+                .moves-cont {
+                    line-height: 25px * $coeff;
+                    display: inline-block;
+                }
+            }
+        }
+        .game-goal-cell {
+            .game-goal-container {
+                float: right;
+            }
+            .goal-label {
+                width: 100%;
+                text-align: center;
+                color: $watColor;
+                margin-bottom: 10px * $coeff;
+                display: inline-block;
+            }
+            .goal-table {
+                width: 100%;
+                border: solid 1px white;
+                font-size: 20px * $coeff;
+                color: white;
+                background-color: $matrixColor;
+                .t-row {
+                    text-align: center;
+                    .t-cell {
+                        width: 15px * $coeff;
+                        vertical-align: middle;
+                        border: solid 1px white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.game-container {
+    
+    .game-field {
+        box-sizing: border-box;
+        width: 100%;
+        text-align: center;
+        .game-matrix {
+            position: relative;
+            display: inline-block;
+            background-color: white;
+            .matrix-cell {
+                cursor: pointer;
+                font-family: UbuntuBold;
+                position: absolute;
+                left: 0;
+                top: 0;
+                border: 2px solid white;
+                @include translate(0, 0);
+            }
+            @include percent-matrix(4);
+        }
+    }
+    
+    @include game-controls(1);
+    
+}
+
+.game-completed-modal {
+    padding-top: 130px!important;
+    .score-stars {
+        i {
+            display: inline-block;
+            &+i {
+                margin-left: 5px;
+            }
+            &:not(.rewarded) {
+                color: #B9B9B9;
+            }    
+        }
+    }
+    .nav-controls {
+        text-align: center;
+        .control-icon+.control-icon {
+            margin-left: 20px;
+        }
+    }
+}
+
+.tutorial-container {
+    width: 100%;
+    height: 100%;
+    padding: 90px 20px 0;
+    box-sizing: border-box;
+    .pseudo-matrix-cell {
+        position: absolute;
+        text-align: center;
+    }
+
+    color: white;
+    .hint-actions {
+        margin-bottom: 20px;
+        i {
+            width: 100%;
+            text-align: right;
+            display: block;
+            font-size: 37px;
+
+            &+i {
+                margin-top: 10px;
+            }
+        }
+    }
+
+    .text-above {
+        text-align: center;
+        font-size: 20px;
+        font-family: Ubuntu;
+        margin-bottom: 40px;
+        height: 50px;
+    }
+
+    .text-below {
+        text-align: center;
+        font-size: 12px;
+        font-family: Ubuntu;
+    }
+}
+
+@media only screen and (min-width:500px) {
+    .tutorial-container {
+        max-width: 500px;
+        margin: 0 auto;
+        cursor: pointer;
+    }
+    .game-container {
+        @include game-controls(1.5);
+    }
+}
