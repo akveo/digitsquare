@@ -58,6 +58,9 @@ var filestocopy = [{
     "res/icon/ios/icon-60@2x.png": 
     "platforms/ios/Digit Square/Resources/icons/icon-60@2x.png"
 }, {
+    "res/icon/ios/icon-60@3x.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-60@3x.png"
+}, {
     "res/icon/ios/icon-76.png": 
     "platforms/ios/Digit Square/Resources/icons/icon-76.png"
 }, {
@@ -69,7 +72,28 @@ var filestocopy = [{
 }, {
     "res/icon/ios/icon-small@2x.png": 
     "platforms/ios/Digit Square/Resources/icons/icon-small@2x.png"
-}, 
+}, {
+    "res/icon/ios/icon-small@3x.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-small@3x.png"
+}, {
+    "res/icon/ios/icon.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon.png"
+}, {
+    "res/icon/ios/icon@2x.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon@2x.png"
+}, {
+    "res/icon/ios/icon-72.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-72.png"
+}, {
+    "res/icon/ios/icon-72@2x.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-72@2x.png"
+}, {
+    "res/icon/ios/icon-50.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-50.png"
+}, {
+    "res/icon/ios/icon-50@2x.png": 
+    "platforms/ios/Digit Square/Resources/icons/icon-50@2x.png"
+},   
 //------------------------
 {
     "res/screen/ios/screen-iphone5-2x.png": 
