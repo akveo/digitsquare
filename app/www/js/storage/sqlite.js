@@ -26,6 +26,12 @@ define(['app/config'], function(config) {
     return function(dataModule) {
         dataModule.factory('playerData', function($q) {
 
+            var levelsScoresCache = null;
+
+            function _clone(obj) {
+                return JSON.parse(JSON.stringify(obj));
+            }
+
             function transactionPromise(cb) {
                 
                 var result = null;
@@ -44,7 +50,7 @@ define(['app/config'], function(config) {
                 });
             }
 
-            return {
+            var API = {
                 getGameState: function() {
                     return transactionPromise(function(tx, resolve) {
                         tx.executeSql("SELECT data FROM game_state WHERE id=?", [1], function(tx,res) {
@@ -68,6 +74,7 @@ define(['app/config'], function(config) {
                     });
                 },
                 setLevelScore: function(levelId, scoreObj) {
+                    levelsScoresCache[levelId] = _clone(scoreObj);
                     return transactionPromise(function(tx, resolve) {
                         tx.executeSql("SELECT data FROM levels_data WHERE id=?", [levelId], function(tx, res) {
                             function cb() {
@@ -83,24 +90,35 @@ define(['app/config'], function(config) {
                 },
                 getLevelScore: function(levelId) {
                     return transactionPromise(function(tx, resolve) {
-                        tx.executeSql("SELECT data FROM levels_data WHERE id=?", [levelId], function(tx, res) {
-                            resolve(res.rows.length ? JSON.parse(res.rows.item(0).data) : {});
-                        });
+                        if (levelsScoresCache) {
+                            resolve( _clone(levelsScoresCache[levelId]) );
+                        } else {
+                            tx.executeSql("SELECT data FROM levels_data WHERE id=?", [levelId], function(tx, res) {
+                                resolve(res.rows.length ? JSON.parse(res.rows.item(0).data) : {});
+                            });
+                        }
                     });
                 },
                 getFullLevelScores: function() {
                     return transactionPromise(function(tx, resolve) {
-                        tx.executeSql("SELECT * FROM levels_data", [], function(tx, res) {
-                            var result = {};
-                            for(var i = 0; i < res.rows.length; i++) {
-                                var item = res.rows.item(i);
-                                result[item.id] = JSON.parse(item.data);
-                            }
-                            resolve(result);
-                        });
+                        if (levelsScoresCache) {
+                            resolve( _clone(levelsScoresCache) );
+                        } else {
+                            tx.executeSql("SELECT * FROM levels_data", [], function(tx, res) {
+                                var result = {};
+                                for(var i = 0; i < res.rows.length; i++) {
+                                    var item = res.rows.item(i);
+                                    result[item.id] = JSON.parse(item.data);
+                                }
+                                levelsScoresCache = result;
+                                resolve(result);
+                            });
+                        }
                     });
                 }
             };
+            API.getFullLevelScores();
+            return API;
         });
     };
 });
