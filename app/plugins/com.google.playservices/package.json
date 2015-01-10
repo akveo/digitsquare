@@ -1,5 +1,5 @@
 {
-    "version": "21.0.0",
+    "version": "19.0.0",
     "name": "com.google.playservices",
     "cordova_name": "Google Play Services for Android",
     "platforms": [
