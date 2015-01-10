@@ -14,6 +14,8 @@
     <preference name="fullscreen" value="true" />
     <preference name="Orientation" value="portrait" />
     <preference name="webviewbounce" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="webviewbounce" value="false" />
     <preference name="prerendered-icon" value="true" />
     <preference name="stay-in-webview" value="false" />
     <preference name="ios-statusbarstyle" value="black-opaque" />
