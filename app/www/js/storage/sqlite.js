@@ -89,32 +89,41 @@ define(['app/config'], function(config) {
                     });
                 },
                 getLevelScore: function(levelId) {
-                    return transactionPromise(function(tx, resolve) {
+                    function _doGetScore() {
                         if (levelsScoresCache) {
-                            resolve( _clone(levelsScoresCache[levelId]) );
+                            return _clone(levelsScoresCache[levelId]);
                         } else {
-                            tx.executeSql("SELECT data FROM levels_data WHERE id=?", [levelId], function(tx, res) {
-                                resolve(res.rows.length ? JSON.parse(res.rows.item(0).data) : {});
+                            return transactionPromise(function(tx, resolve) {
+                                tx.executeSql("SELECT data FROM levels_data WHERE id=?", [levelId], function(tx, res) {
+                                    resolve(res.rows.length ? JSON.parse(res.rows.item(0).data) : {});
+                                });
                             });
                         }
-                    });
+                    }
+                    return $q.when(_doGetScore());
                 },
                 getFullLevelScores: function() {
-                    return transactionPromise(function(tx, resolve) {
+
+                    function _doGetLevelScores() {
                         if (levelsScoresCache) {
-                            resolve( _clone(levelsScoresCache) );
+                            return _clone(levelsScoresCache);
                         } else {
-                            tx.executeSql("SELECT * FROM levels_data", [], function(tx, res) {
-                                var result = {};
-                                for(var i = 0; i < res.rows.length; i++) {
-                                    var item = res.rows.item(i);
-                                    result[item.id] = JSON.parse(item.data);
-                                }
-                                levelsScoresCache = result;
-                                resolve(result);
+                            return transactionPromise(function(tx, resolve) {
+                                tx.executeSql("SELECT * FROM levels_data", [], function(tx, res) {
+                                    var result = {};
+                                    for(var i = 0; i < res.rows.length; i++) {
+                                        var item = res.rows.item(i);
+                                        result[item.id] = JSON.parse(item.data);
+                                    }
+                                    levelsScoresCache = result;
+                                    resolve(result);
+                                });
                             });
-                        }
-                    });
+                        }    
+                    }
+
+                    return $q.when(_doGetLevelScores());
+                    
                 }
             };
             API.getFullLevelScores();
