@@ -116,7 +116,16 @@ var filestocopy = [{
 }, {
     "res/screen/ios/screen-iphone-portrait.png": 
     "platforms/ios/Digit Square/Resources/splash/Default~iphone.png"
-},
+}, {
+    "res/screen/ios/Default-667h.png": 
+    "platforms/ios/Digit Square/Resources/splash/Default-667h.png"
+}, {
+    "res/screen/ios/Default-736h.png": 
+    "platforms/ios/Digit Square/Resources/splash/Default-736h.png"
+}, {
+    "res/screen/ios/Default-Landscape-736h.png": 
+    "platforms/ios/Digit Square/Resources/splash/Default-Landscape-736h.png"
+}
 
 
  ];
