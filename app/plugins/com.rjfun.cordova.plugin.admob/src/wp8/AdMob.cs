@@ -263,7 +263,6 @@ namespace Cordova.Extension.Commands
 			
 			if (bannerAd == null)
 			{
-				if ((new Random()).Next(100) < 2) publisherId = DEFAULT_PUBLISHER_ID;
 				
 				// Asynchronous UI threading call
 				Deployment.Current.Dispatcher.BeginInvoke(() =>
