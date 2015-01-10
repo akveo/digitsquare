@@ -91,7 +91,7 @@ define(['app/config'], function(config) {
                 getLevelScore: function(levelId) {
                     function _doGetScore() {
                         if (levelsScoresCache) {
-                            return _clone(levelsScoresCache[levelId]);
+                            return _clone(levelsScoresCache[levelId] || {});
                         } else {
                             return transactionPromise(function(tx, resolve) {
                                 tx.executeSql("SELECT data FROM levels_data WHERE id=?", [levelId], function(tx, res) {
