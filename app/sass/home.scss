@@ -77,6 +77,25 @@
     }
 }
 
+@mixin nav-controls-levels-sizes($coeff) {
+    .level-item {
+        .level-item-icon {
+            width: $iconWidth * $coeff;
+            height: $iconWidth * $coeff;
+            line-height: $iconWidth * $coeff;
+            font-size: 25px * $coeff;
+        }
+        .level-icon-rating {
+            width: $iconWidth * $coeff;
+            height: $iconWidth / 2 * $coeff;
+            line-height: 35px * $coeff;
+            i {
+                font-size: 14px * $coeff;
+            }
+        }
+    }
+}
+
 
 .levels {
     width: 100%;
@@ -172,22 +191,14 @@
     }
 
     .levels { 
-        .level-item {
-            .level-item-icon {
-                width: $iconWidth * 1.5;
-                height: $iconWidth * 1.5;
-                line-height: $iconWidth * 1.5;
-                font-size: 38px;
-            }
-            .level-icon-rating {
-                width: $iconWidth * 1.5;
-                height: $iconWidth / 2 * 1.5;
-                line-height: 35px * 1.5;
-                i {
-                    font-size: 14px * 1.5;
-                }
-            }
-        }
+        @include nav-controls-levels-sizes(1.5);
         @include nav-controls-levels(1.5);
+    }
+}
+
+@media only screen and (max-height:480px) {
+    .levels { 
+        @include nav-controls-levels-sizes(0.9);
+        @include nav-controls-levels(0.9);
     }
 }
