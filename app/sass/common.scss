@@ -61,6 +61,23 @@ $iconWidth: 50px;
           transform-origin: $origin;
 }
 
+
+@mixin nav-controls-factored($factor) {
+    .nav-controls {
+        .control-icon {
+            width: $iconWidth * $factor;
+            height: $iconWidth * $factor;
+            line-height: $iconWidth * $factor;
+            &[class*="el-icon-"] {
+                font-size: 25px * $factor;
+            }
+            &.fa {
+                font-size: 40px * $factor;
+            }
+        }
+    }
+}
+
 .nav-controls {
     box-sizing: border-box;
     width: 100%;
@@ -140,17 +157,9 @@ i.el-icon-star {
 }
 
 @media only screen and (min-width:768px) {
-    .nav-controls {
-        .control-icon {
-            width: $iconWidth * 1.5;
-            height: $iconWidth * 1.5;
-            line-height: $iconWidth * 1.5;
-            &[class*="el-icon-"] {
-                font-size: 38px;
-            }
-            &.fa {
-                font-size: 60px;
-            }
-        }
-    }
+    @include nav-controls-factored(1.5);
+}
+
+@media only screen and (max-height:480px) {
+    @include nav-controls-factored(0.9);
 }

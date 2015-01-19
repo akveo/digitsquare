@@ -189,3 +189,9 @@ $matrixColor: #a2c64c;
         @include game-controls(1.5);
     }
 }
+
+@media only screen and (max-height:480px) {
+    .game-container {
+        @include game-controls(0.9);
+    }
+}
