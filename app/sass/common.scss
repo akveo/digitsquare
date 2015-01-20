@@ -124,6 +124,18 @@ $iconWidth: 50px;
     }
 }
 
+@mixin panel-modal-body($factor) {
+    .panel-modal-body {
+        padding: 60px*$factor 20px*$factor 0 20px*$factor;
+        .modal-title {
+            font-size: 30px * $factor;
+            &+.modal-title {
+                margin-top: 10px * $factor;
+            }
+        }
+    }
+}
+
 .panel-modal-container {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     position: fixed;
@@ -157,9 +169,15 @@ i.el-icon-star {
 }
 
 @media only screen and (min-width:500px) {
+    .panel-modal-container {
+        @include panel-modal-body(1.5);
+    }
     @include nav-controls-factored(1.5);
 }
 
 @media only screen and (max-height:480px) {
+    .panel-modal-container {
+        @include panel-modal-body(0.9);
+    }
     @include nav-controls-factored(0.9);
 }
