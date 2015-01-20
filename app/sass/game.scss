@@ -66,9 +66,9 @@ $matrixColor: #a2c64c;
             $colorActionRequired: #FFB200;
             .game-goal-container {
                 float: right;
+                position: relative;
                 &.zindexOver {
                     z-index: 110;
-                    position: relative;
                 }
             }
             .goal-label {
@@ -81,8 +81,8 @@ $matrixColor: #a2c64c;
             }
             .goal-table {
                 width: 100%;
-                margin-bottom: -4px;
-                border: solid 3px white;
+                border: solid 1px white;
+                margin-bottom: -2px;
                 font-size: 20px * $coeff;
                 color: white;
                 background-color: $matrixColor;
@@ -96,6 +96,9 @@ $matrixColor: #a2c64c;
                 }
 
                 &.requireUserFocus {
+                    border: solid 3px white;
+                    margin-bottom: -4px;
+                    margin-left: -2px;
                     -webkit-animation: pulsateBorder 3s linear infinite;
                     -moz-animation: pulsateBorder 3s linear infinite;
                     animation: pulsateBorder 3s linear infinite;

@@ -5,16 +5,30 @@ define(['angular'], function(angular) {
     var module = angular.module('helper', [])
             .service('panelModal', function($compile, $rootScope) {
 
-                return function(tpl, scope) {
+                return function(tpl, scope, options) {
                     var element = angular.element('<div class="panel-modal-container"><include-replace src="' + tpl + '"/></div>'),
                         currentScope = scope || $rootScope.$new();
 
-                    currentScope.closeAndNavigate = function(link, params) {
+                    options = options || {};
+                    var optCallback = options.callback;
+                    var cssClass = options.cssClass;
+
+                    if (cssClass) {
+                        element.addClass(cssClass);
+                    }
+
+                    function doDestroy() {
                         element.remove();
+                        currentScope.$destroy();
+                        optCallback && optCallback();
+                    }
+
+                    currentScope.closeAndNavigate = function(link, params) {
+                        doDestroy();
                         currentScope.goToPath(link, params);
                     };
                     currentScope.closePanel = function(cb) {
-                        element.remove();
+                        doDestroy();
                         cb && cb();
                     };
 
@@ -22,15 +36,11 @@ define(['angular'], function(angular) {
                     $compile(element)(scope || $rootScope);
 
                     return {
-                        show: function(options) {
-                            options = options || {};
-                            if (options.cssClass) {
-                                element.addClass(options.cssClass);
-                            }
+                        show: function() {
                             element.css('display', 'block');
                         },
                         destroy: function() {
-                            element.remove();
+                            doDestroy();
                         },
                         isDestroyed: function() {
                             return !!element.parentNode;
