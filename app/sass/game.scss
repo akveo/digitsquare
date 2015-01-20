@@ -62,6 +62,7 @@ $matrixColor: #a2c64c;
             }
         }
         .game-goal-cell {
+            vertical-align: bottom;
             $colorActionRequired: #FFB200;
             .game-goal-container {
                 float: right;
