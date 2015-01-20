@@ -22,7 +22,11 @@ define(['angular'], function(angular) {
                     $compile(element)(scope || $rootScope);
 
                     return {
-                        show: function() {
+                        show: function(options) {
+                            options = options || {};
+                            if (options.cssClass) {
+                                element.addClass(options.cssClass);
+                            }
                             element.css('display', 'block');
                         },
                         destroy: function() {

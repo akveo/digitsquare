@@ -166,7 +166,7 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                                     repeatClicked: function() { $scope.reloadGame(); }
                                 });
                                 var modal = $scope.panelModal('views/game/nextLevelModal.html', childScope);
-                                modal.show();
+                                modal.show({ cssClass: 'z200' });
                             });    
                             analytics.trackEvent('Level Status', 'Completed', levelId, $scope.movesCount);
                         }, 100);
