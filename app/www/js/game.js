@@ -165,8 +165,7 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                                     nextLevel: nextLevelId,
                                     repeatClicked: function() { $scope.reloadGame(); }
                                 });
-                                var modal = $scope.panelModal('views/game/nextLevelModal.html', childScope);
-                                modal.show({ cssClass: 'z200' });
+                                var modal = $scope.panelModal('views/game/nextLevelModal.html', childScope).show();
                             });    
                             analytics.trackEvent('Level Status', 'Completed', levelId, $scope.movesCount);
                         }, 100);
@@ -185,9 +184,15 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                     console.log(currentState.map(function(el) { return el || '-'}).join(''));
                 }
 
+                $scope.showGoalThroughModal = levelId == '1-1';
                 if (levelId == '1-1') {
                     $timeout(function() {
-                        $scope.panelModal('views/game/startGameTutorial.html', $rootScope.$new())
+                        function modalCloseCallback() {
+                            $scope.showGoalThroughModal = false;
+                        }
+
+                        var options = { callback: modalCloseCallback };
+                        $scope.panelModal('views/game/startGameTutorial.html', $rootScope.$new(), options)
                             .show();
                     }, 0);
                 }
