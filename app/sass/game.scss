@@ -81,7 +81,8 @@ $matrixColor: #a2c64c;
             }
             .goal-table {
                 width: 100%;
-                border: solid 1px white;
+                margin-bottom: -3px;
+                border: solid 3px white;
                 font-size: 20px * $coeff;
                 color: white;
                 background-color: $matrixColor;
@@ -95,7 +96,6 @@ $matrixColor: #a2c64c;
                 }
 
                 &.requireUserFocus {
-                    border: solid 3px white;
                     -webkit-animation: pulsateBorder 3s linear infinite;
                     -moz-animation: pulsateBorder 3s linear infinite;
                     animation: pulsateBorder 3s linear infinite;
