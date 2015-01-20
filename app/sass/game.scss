@@ -62,11 +62,17 @@ $matrixColor: #a2c64c;
             }
         }
         .game-goal-cell {
+            $colorActionRequired: #FFB200;
             .game-goal-container {
                 float: right;
+                &.zindexOver {
+                    z-index: 110;
+                    position: relative;
+                }
             }
             .goal-label {
                 width: 100%;
+                font-size: 16px * $coeff;
                 text-align: center;
                 color: $watColor;
                 margin-bottom: 10px * $coeff;
@@ -86,7 +92,73 @@ $matrixColor: #a2c64c;
                         border: solid 1px white;
                     }
                 }
+
+                &.requireUserFocus {
+                    border: solid 3px white;
+                    -webkit-animation: pulsateBorder 3s linear infinite;
+                    -moz-animation: pulsateBorder 3s linear infinite;
+                    animation: pulsateBorder 3s linear infinite;
+
+                    @-webkit-keyframes pulsateBorder {
+                        0% { border-color: white; }
+                        50% { border-color: $colorActionRequired; }
+                        100% { border-color: white; }
+                    }
+
+                    @-moz-keyframes pulsateBorder {
+                        0% { border-color: white; }
+                        50% { border-color: $colorActionRequired; }
+                        100% { border-color: white; }
+                    }
+
+                    @keyframes pulsateBorder {
+                        0% { border-color: white; }
+                        50% { border-color: $colorActionRequired; }
+                        100% { border-color: white; }
+                    }
+                }
+
+
             }
+            .goal-hint-arrow-outer {
+                width: 100%;
+                position: relative;
+                height: 0;
+            }
+            .goal-hint-arrow {
+                color: $colorActionRequired;
+                font-size: 20px * $coeff;
+                $topValue: -20px * $coeff;
+                top: $topValue;
+                left: 50%;
+                margin-left: -10px * $coeff;
+                display: inline-block;
+                position: absolute;
+
+                -webkit-animation: pulsate 3s linear infinite;
+                -moz-animation: pulsate 3s linear infinite;
+                animation: pulsate 3s linear infinite;
+
+                @-webkit-keyframes pulsate {
+                    0% { -webkit-transform: translate3d(0,0,0) }
+                    50% { -webkit-transform: translate3d(0,$topValue*0.5,0) }
+                    100% { -webkit-transform: translate3d(0,0,0) }
+                }
+
+                @-moz-keyframes pulsate {
+                    0% { -moz-transform: translate3d(0,0,0) }
+                    50% { -moz-transform: translate3d(0,$topValue*0.5,0) }
+                    100% { -moz-transform: translate3d(0,0,0) }
+                }
+
+                @keyframes pulsate {
+                    0% { transform: translate3d(0,0,0) }
+                    50% { transform: translate3d(0,$topValue*0.5,0) }
+                    100% { transform: translate3d(0,0,0) }
+                }
+
+            }
+
         }
     }
 }
