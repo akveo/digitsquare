@@ -118,6 +118,22 @@ $matrixColor: #a2c64c;
     
 }
 
+@mixin game-completed-modal($factor) {
+    padding-top: 130px*$factor !important;
+    .score-stars {
+        i {
+            &+i {
+                margin-left: 5px * $factor;
+            }
+        }
+    }
+    .nav-controls {
+        .control-icon+.control-icon {
+            margin-left: 20px * $factor;
+        }
+    }
+}
+
 .game-completed-modal {
     padding-top: 130px!important;
     .score-stars {
@@ -136,6 +152,26 @@ $matrixColor: #a2c64c;
         .control-icon+.control-icon {
             margin-left: 20px;
         }
+    }
+}
+
+@mixin tutorial-container-controls($factor) {
+    .hint-actions {
+        margin-bottom: 20px * $factor;
+        font-size: 37px * $factor;
+        &+i {
+            margin-top: 10px * $factor;
+        }
+    }
+
+    .text-above { 
+        font-size: 20px * $factor;
+        margin-bottom: 40px * $factor;
+        height: 50px * $factor;
+    }
+
+    .text-below {
+        font-size: 12px * $factor;
     }
 }
 
@@ -185,13 +221,29 @@ $matrixColor: #a2c64c;
         margin: 0 auto;
         cursor: pointer;
     }
+    .game-completed-modal {
+        @include game-completed-modal(1.5);
+    }
     .game-container {
         @include game-controls(1.5);
     }
+    .tutorial-container {
+        @include tutorial-container-controls(1.5);
+    }
+
 }
 
 @media only screen and (max-height:480px) {
+    .game-completed-modal {
+        @include game-completed-modal(0.9);
+    }
     .game-container {
         @include game-controls(0.9);
+    }
+    .tutorial-container {
+        @include tutorial-container-controls(0.9);
+        .hint-actions {
+            margin-bottom: 5px;
+        }
     }
 }
