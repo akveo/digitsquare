@@ -37,12 +37,14 @@ $matrixColor: #a2c64c;
 @mixin game-controls($coeff)  {
     .nav-controls {
         .controls-cell {
+            vertical-align: bottom;
             width: ($iconWidth + 20px) * $coeff;
             .control-icon+.control-icon {
                 margin-top: 20px * $coeff;
             }
         }
         .level-cell {
+            vertical-align: bottom;
             font-size: 42px * $coeff;
             color: $watColor;
             .level-id {
