@@ -38,7 +38,7 @@ define(['app/config', 'app/util'], function(config, u) {
                 });
             }
             function loadInterstitialInBackground(successCallback) {
-                window.plugins.AdMob.createInterstitialView({ isTesting: true }, successCallback, function() {
+                window.plugins.AdMob.createInterstitialView({ isTesting: config.ads.isTesting }, successCallback, function() {
                     setTimeout(function() {
                         loadInterstitialInBackground(successCallback);
                     }, config.ads.timeouts.interstitialRequestTimeout);
