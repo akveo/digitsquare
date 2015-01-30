@@ -14,6 +14,7 @@
         padding: 0 40px;
         margin-top: 20px;
         .menu-item {
+            @include no-user-select();
             display: inline-block;
             box-sizing: border-box;
             width: 100%;
