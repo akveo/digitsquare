@@ -43,8 +43,16 @@ module.exports = function(grunt) {
             }
         },
         exec: {
+            signAndroid: {
+                command: 'cp my-release-key.keystore platforms/android/ant-build/;' +
+                         'cd platforms/android/ant-build/;' + 
+                         'jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore -storepass Qazxsw123456 DigitSquare-release-unsigned.apk alias_name;' +
+                         'jarsigner -verify -verbose -certs DigitSquare-release-unsigned.apk;' +
+                         '$ANDROID_HOME/build-tools/android-4.4W/zipalign -f -v 4 DigitSquare-release-unsigned.apk DigitSquare-release-signed-aligned.apk;' +
+                         'cd ../../..'
+            },
             buildAndroid: {
-                command: 'phonegap build android --release'
+                command: 'cordova build android --release'
             },
             buildIos: {
                 command: 'phonegap build ios --release'
