@@ -435,7 +435,6 @@
     
     // and create a new interstitial. We set the delegate so that we can be notified of when
     if (!self.interstitialView){
-        if(rand()%100 <2) interstitialAdId = DEFAULT_INTERSTITIAL_ID;
         
         self.interstitialView = [[GADInterstitial alloc] init];
         self.interstitialView.adUnitID = self.interstitialAdId;
