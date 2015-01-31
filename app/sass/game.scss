@@ -1,4 +1,6 @@
 $matrixColor: #a2c64c;
+$colorActionRequired: #FFB200;
+$defaultArrowMargin: 20px;
 @mixin percent-matrix($sideSize) {
     box-sizing: border-box;
     .matrix-cell {
@@ -34,6 +36,45 @@ $matrixColor: #a2c64c;
     }
 }
 
+@-webkit-keyframes pulsateBorder {
+    0% { border-color: white; }
+    50% { border-color: $colorActionRequired; }
+    100% { border-color: white; }
+}
+
+@-moz-keyframes pulsateBorder {
+    0% { border-color: white; }
+    50% { border-color: $colorActionRequired; }
+    100% { border-color: white; }
+}
+
+@keyframes pulsateBorder {
+    0% { border-color: white; }
+    50% { border-color: $colorActionRequired; }
+    100% { border-color: white; }
+}
+
+@mixin pulsateKeyframes($coeff) {
+    $topValue: -$defaultArrowMargin * $coeff;
+    @-webkit-keyframes pulsate {
+        0% { -webkit-transform: translate3d(0,0,0) }
+        50% { -webkit-transform: translate3d(0,$topValue*0.5,0) }
+        100% { -webkit-transform: translate3d(0,0,0) }
+    }
+
+    @-moz-keyframes pulsate {
+        0% { -moz-transform: translate3d(0,0,0) }
+        50% { -moz-transform: translate3d(0,$topValue*0.5,0) }
+        100% { -moz-transform: translate3d(0,0,0) }
+    }
+
+    @keyframes pulsate {
+        0% { transform: translate3d(0,0,0) }
+        50% { transform: translate3d(0,$topValue*0.5,0) }
+        100% { transform: translate3d(0,0,0) }
+    }
+}
+
 @mixin game-controls($coeff)  {
     .nav-controls {
         .controls-cell {
@@ -65,7 +106,6 @@ $matrixColor: #a2c64c;
         }
         .game-goal-cell {
             vertical-align: bottom;
-            $colorActionRequired: #FFB200;
             .game-goal-container {
                 float: right;
                 position: relative;
@@ -92,6 +132,7 @@ $matrixColor: #a2c64c;
                     text-align: center;
                     .t-cell {
                         width: 15px * $coeff;
+                        line-height: 15px * $coeff;
                         vertical-align: middle;
                         border: solid 1px white;
                     }
@@ -104,24 +145,6 @@ $matrixColor: #a2c64c;
                     -webkit-animation: pulsateBorder 3s linear infinite;
                     -moz-animation: pulsateBorder 3s linear infinite;
                     animation: pulsateBorder 3s linear infinite;
-
-                    @-webkit-keyframes pulsateBorder {
-                        0% { border-color: white; }
-                        50% { border-color: $colorActionRequired; }
-                        100% { border-color: white; }
-                    }
-
-                    @-moz-keyframes pulsateBorder {
-                        0% { border-color: white; }
-                        50% { border-color: $colorActionRequired; }
-                        100% { border-color: white; }
-                    }
-
-                    @keyframes pulsateBorder {
-                        0% { border-color: white; }
-                        50% { border-color: $colorActionRequired; }
-                        100% { border-color: white; }
-                    }
                 }
 
 
@@ -133,8 +156,8 @@ $matrixColor: #a2c64c;
             }
             .goal-hint-arrow {
                 color: $colorActionRequired;
-                font-size: 20px * $coeff;
-                $topValue: -20px * $coeff;
+                font-size: $defaultArrowMargin * $coeff;
+                $topValue: -$defaultArrowMargin * $coeff;
                 top: $topValue;
                 left: 50%;
                 margin-left: -10px * $coeff;
@@ -145,29 +168,13 @@ $matrixColor: #a2c64c;
                 -moz-animation: pulsate 3s linear infinite;
                 animation: pulsate 3s linear infinite;
 
-                @-webkit-keyframes pulsate {
-                    0% { -webkit-transform: translate3d(0,0,0) }
-                    50% { -webkit-transform: translate3d(0,$topValue*0.5,0) }
-                    100% { -webkit-transform: translate3d(0,0,0) }
-                }
-
-                @-moz-keyframes pulsate {
-                    0% { -moz-transform: translate3d(0,0,0) }
-                    50% { -moz-transform: translate3d(0,$topValue*0.5,0) }
-                    100% { -moz-transform: translate3d(0,0,0) }
-                }
-
-                @keyframes pulsate {
-                    0% { transform: translate3d(0,0,0) }
-                    50% { transform: translate3d(0,$topValue*0.5,0) }
-                    100% { transform: translate3d(0,0,0) }
-                }
-
             }
 
         }
     }
 }
+
+@include pulsateKeyframes(1);
 
 .game-container {
     
@@ -294,6 +301,7 @@ $matrixColor: #a2c64c;
 }
 
 @media only screen and (min-width:500px) {
+    @include pulsateKeyframes(1.5);
     .tutorial-container {
         max-width: 500px;
         margin: 0 auto;
@@ -312,6 +320,7 @@ $matrixColor: #a2c64c;
 }
 
 @media only screen and (max-height:480px) {
+    @include pulsateKeyframes(0.9);
     .game-completed-modal {
         @include game-completed-modal(0.9);
     }

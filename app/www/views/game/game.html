@@ -13,7 +13,7 @@
                 <div class="game-goal-container" ng-style="{ width: sideSize * 25 * sizeK + 'px' }" ng-class="{ zindexOver: showGoalThroughModal }">
                     <div class="goal-hint-arrow-outer" ng-if="levelId == '1-1'"><div class="goal-hint-arrow el-icon-arrow-down" ng-style="{ left: (sideSize * 25 * sizeK / 2) + 'px' }"></div></div>
                     <div class="goal-label">Goal:</div>
-                    <div class="table goal-table" ng-style="{ width: sideSize * 25 * sizeK + 'px', height: sideSize * 25 + 'px' }" ng-class="{ requireUserFocus: levelId == '1-1' }">
+                    <div class="table goal-table" ng-style="{ width: sideSize * 25 * sizeK + 'px', height: sideSize * sizeK * 25 + 'px' }" ng-class="{ requireUserFocus: levelId == '1-1' }">
                         <div class="t-row" ng-repeat="row in [] | range:sideSize">
                             <div class="t-cell" ng-repeat="column in [] | range:sideSize">{{goalArray[sideSize*row+column] || '&nbsp;'}}</div>
                         </div>
