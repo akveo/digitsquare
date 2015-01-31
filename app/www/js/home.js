@@ -1,15 +1,18 @@
 'use strict';
 
 define(['module', 'app/main', 'app/analytics'], function(module, main, analytics) {
-    main.register.controller(ngCName(module, 'menuController'), ['$scope', 'playerData', function($scope, playerData) {
+    main.register.controller(ngCName(module, 'menuController'), ['$scope', 'playerData', '$rootScope', function($scope, playerData, $rootScope) {
         analytics.pageViewed('Home');
         $scope.watchBack(function() {
             navigator.app.exitApp();
         });
-        $scope.fullOpacityClass = true;
+        $rootScope.fullOpacityClass = true;
         playerData.getGameState().then(function(savedGameState) {
             $scope.savedGameState = savedGameState;
             $scope.savedGameUrl = savedGameState && ('/game/' + savedGameState.levelId);
+        });
+        $scope.$on('$destroy', function() {
+            $rootScope.fullOpacityClass = false;
         });
     }]);
     main.register.controller(ngCName(module, 'levelsController'), ['$scope', '$routeParams', 'combinedData', '$timeout', function($scope, $routeParams, combinedData, $timeout) {
