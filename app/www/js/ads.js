@@ -27,8 +27,9 @@ define(['app/config', 'app/util'], function(config, u) {
 
         (function initializeIntrstitialAd() {
 
-            var interstitialReady = false,
-                interstitialShowTimerAllowed = true;
+            var interstitialReady = false;
+            var interstitialShowTimerAllowed = true;
+            var firstTimeShowRequest = true;
 
             function createInterstitial(cb) {
                 window.plugins.AdMob.createInterstitialView({ publisherId: admobid.interstitial}, cb, function() {
@@ -74,6 +75,10 @@ define(['app/config', 'app/util'], function(config, u) {
 
             // Inject the method
             rv.tryShowInterstitialAd = function() {
+                if (firstTimeShowRequest) {
+                    firstTimeShowRequest = false;
+                    resetInterstitialTimerAllowance();
+                }
                 if (isPhoneGap() && interstitialReady && interstitialShowTimerAllowed) {
                     showInterstitialAd();
                 }
