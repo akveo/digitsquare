@@ -98,29 +98,35 @@ define(['module', 'app/main', 'app/analytics'], function(module, main, analytics
                 onSwipeProcess: '&swipePanel',
                 onSwipeEnd: '&swipeEnd'
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: function ($scope, $element, $attrs, $document) {
                 $element.bind('touchstart', onTouchStart);
+                $element.bind('mousedown', onMouseDown);
 
                 var firstMove,
                     startX = 0,
                     lastDelta = 0,
                     touchJustStarted = false;
 
-                function onTouchStart(event) {
-                    startX = event.touches[0].pageX;
-                    $element.bind('touchmove', onTouchMove);
-                    $element.bind('touchend', onTouchEnd);
+                function onStart(xPos) {
+                    startX = xPos;
                     firstMove = true;
                     touchJustStarted = true;
                 }
 
+                function onTouchStart(event) {
+                    onStart(event.touches[0].pageX);
+                    $element.bind('touchmove', onTouchMove);
+                    $element.bind('touchend', onTouchEnd);
+                }
 
-                function onTouchMove(event) {
-                    if (firstMove) {
-                        firstMove = false;
-                        event.preventDefault();
-                    }
-                    lastDelta = event.changedTouches[0].pageX - startX;
+                function onMouseDown(event) {
+                    onStart(event.screenX);
+                    $document.bind('mousemove', onMouseMove);
+                    $document.bind('mouseup', onMouseUp);
+        }
+
+                function onMove(xPos) {
+                    lastDelta = xPos - startX;
                     if (touchJustStarted && Math.abs(lastDelta) < 4) {
                         return;
                     }
@@ -128,13 +134,35 @@ define(['module', 'app/main', 'app/analytics'], function(module, main, analytics
                     $scope.onSwipeProcess({ delta: lastDelta });
                 }
 
-                // Unbinds methods when touch interaction ends
-                function onTouchEnd(event) {
+                function onTouchMove(event) {
+                    if (firstMove) {
+                        firstMove = false;
+                        event.preventDefault();
+                    }
+                    onMove(event.changedTouches[0].pageX);
+                }
+
+                function onMouseMove(event) {
+                    onMove(event.screenX);
+                }
+
+                function onEnd() {
                     firstMove = false;
                     touchJustStarted = false;
+                    $scope.onSwipeEnd({ delta: lastDelta });
+                }
+
+                // Unbinds methods when touch interaction ends
+                function onTouchEnd(event) {
                     $element.unbind('touchmove', onTouchMove);
                     $element.unbind('touchend', onTouchEnd);
-                    $scope.onSwipeEnd({ delta: lastDelta });
+                    onEnd();
+                }
+
+                function onMouseUp() {
+                    $document.unbind('mousemove', onMouseMove);
+                    $document.unbind('mouseup', onMouseUp);
+                    onEnd();
                 }
             }
         };
