@@ -110,6 +110,7 @@
     }
     .level-item-row {
         text-align: justify;
+        text-justify: distribute-all-lines;
         font-size: 0.1px;
         margin-bottom: 10px;
         &:after {
