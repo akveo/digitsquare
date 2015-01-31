@@ -151,6 +151,8 @@ define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(m
                 }
 
                 $scope.whenMoveEnd = function(row, column, direction) {
+                    if ($scope.levelFinished) 
+                        return;
                     $scope.$apply(function() {
                         doMove(row, column, direction);
                     });
