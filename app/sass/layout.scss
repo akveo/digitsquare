@@ -10,13 +10,10 @@ html, body {
     @include no-user-select();
 }
 
-.fullOpacity+.app-background {
-    opacity: 1;
-}
-
 .app-background {
     @include transition(opacity, 0.1s, linear);
     opacity: 0.1;
+    &.fullOpacity { opacity: 1; }
     position: absolute;
     left: 0;
     right: 100%;
