@@ -1,6 +1,6 @@
 'use strict';
 
-define(['module', 'app/main', 'angular', 'app/ads', 'app/analytics'], function(module, main, angular, ads, analytics) {
+define(['module', 'app/main', 'angular', 'app/monetize', 'app/analytics'], function(module, main, angular, ads, analytics) {
 
     function prepareStateMatrix(stateArray, sideSize) {
         return stateArray.map(function(label, index) {

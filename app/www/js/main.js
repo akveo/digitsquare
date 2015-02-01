@@ -1,6 +1,6 @@
 'use strict';
 
-define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/data', 'app/helper', 'app/ads'], function(angular) {
+define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/data', 'app/helper', 'app/monetize'], function(angular) {
     var main = angular.module('rubyDigits', [
             'ngRoute',
             'ngTouch',
