@@ -37,7 +37,19 @@
             }
 
             &+.menu-item {
-                margin-top: 10px;
+                margin-top: 20px;
+            }
+        }
+    }
+    .download-icons {
+        margin-top: 10px;
+        img {
+            width: 129px;
+            height: 45px;
+            padding: 0 10px;
+            &.istore {
+                width: 147px;
+                height: 45px;
             }
         }
     }
@@ -189,6 +201,9 @@
                     margin-top: 15px;
                 }
             }
+        }
+        .download-icons {
+            margin-top: 30px;
         }
     }
 

@@ -50,6 +50,7 @@ define(['angular', 'angular-route', 'angular-touch', 'app/routeResolver', 'app/d
         $rootScope.screenHeight = document.documentElement.clientHeight || screen.height;
         $rootScope.paddingValue = Math.max(20, Math.ceil($rootScope.normalScreenWidth / 20));
         $rootScope.screenWithoutPadding = sWidth - $rootScope.paddingValue * 2;
+        $rootScope.isPhoneGap = isPhoneGap();
         $rootScope.panelModal = function() {
             var modalInstance = panelModal.apply(null, [].slice.call(arguments));
             this.$on('$destroy', function() {
