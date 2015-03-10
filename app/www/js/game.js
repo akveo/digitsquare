@@ -3,8 +3,7 @@ define(['angular', 'app/data'], function(angular, ads, analytics) {
 
     angular.module('app.game', ['app.data'])
             .config(gameConfig)
-            .controller('GameController', GameController)
-            .directive('swipeCell', swipeCell);
+            .controller('GameController', GameController);
 
 
     gameConfig.$inject = ['$routeProvider']
@@ -78,10 +77,11 @@ define(['angular', 'app/data'], function(angular, ads, analytics) {
             }
         }
 
-        $scope.whenMoved = function(row, column, direction) {
+        $scope.whenMoved = function(row, column, direction, x, y) {
             if ($scope.levelFinished) 
                 return;
 
+            direction = adjustDirection(direction, x, y);
             var moveClasses = {
                 u: 'moveUp',
                 d: 'moveDown',
@@ -89,20 +89,19 @@ define(['angular', 'app/data'], function(angular, ads, analytics) {
                 r: 'moveRight'
             };
 
-            $scope.$apply(function() {
-                initialStateMatrix.forEach(function(el) {
-                    if (matchesState(el, row, column, direction)) {
-                        el.animClass = moveClasses[direction];
-                    } else {
-                        delete el.animClass;
-                    }
-                });
+            initialStateMatrix.forEach(function(el) {
+                if (matchesState(el, row, column, direction)) {
+                    el.animClass = moveClasses[direction];
+                } else {
+                    delete el.animClass;
+                }
             });
         };
 
         function doMove(row, column, direction) {
             if ($scope.levelFinished) 
                 return;
+
             var moveFunctions = {
                 u: function(el) {
                     if (el.row - 1 < 0) el.animClass = 'transferred';
@@ -136,12 +135,12 @@ define(['angular', 'app/data'], function(angular, ads, analytics) {
             }
         }
 
-        $scope.whenMoveEnd = function(row, column, direction) {
+        $scope.whenMoveEnd = function(row, column, direction, x, y) {
             if ($scope.levelFinished) 
                 return;
-            $scope.$apply(function() {
-                doMove(row, column, direction);
-            });
+
+            direction = adjustDirection(direction, x, y);
+            doMove(row, column, direction);
             if (validateStateArray(currentState, levelData.goal)) {
                 $scope.levelFinished = true;
                 var saveResult = userLevelsData.completeLevel(levelId, $scope.movesCount);
@@ -163,6 +162,21 @@ define(['angular', 'app/data'], function(angular, ads, analytics) {
                     });
                 }, 100);
             }
+        };
+
+        function adjustDirection(direction, posX, posY) {
+            return isMoved(posX, posY) ? direction : '';
+        }
+
+        function isMoved(posX, posY) {
+            return posX < $scope.boundingRect.left || posX > $scope.boundingRect.right ||
+                                posY < $scope.boundingRect.top || posY > $scope.boundingRect.bottom;
+        }
+
+        $scope.whenMoveStart = function(boundingRect, x, y, triggerType) {
+            $scope.boundingRect = triggerType === 'touch' ?
+                                boundingRect :
+                                { left: x - 30, right: x + 30, top: y - 30, bottom: y + 30 };
         };
 
         $scope.randomNShifts = function() {
@@ -189,97 +203,6 @@ define(['angular', 'app/data'], function(angular, ads, analytics) {
                     .show();
             }, 0);
         }
-    }
-
-    function swipeCell() {
-        return {
-            restrict: 'A',
-            scope: {
-                onMoveEnd: '&swipeCell',
-                onMoveNode: '&swipeCellOnMove'
-            },
-            controller: function ($scope, $element, $attrs, $document) {
-                $element.bind('touchstart', onTouchStart);
-                $element.bind('mousedown', onMouseDown);
-                var firstMove;
-
-                function _onDown(x, y) {
-                    $scope.startX = x;
-                    $scope.startY = y;
-                }
-                function onTouchStart(event) {
-                    _onDown(event.touches[0].pageX, event.touches[0].pageY);
-                    $scope.boundingRect = $element[0].getBoundingClientRect();
-                    $element.bind('touchmove', onTouchMove);
-                    $element.bind('touchend', onTouchEnd);
-                    firstMove = true;
-                }
-                function onMouseDown(event) {
-                    var x = event.screenX,
-                        y = event.screenY;
-                    _onDown(x, y);
-                    $scope.boundingRect = { left: x - 30, right: x + 30, top: y - 30, bottom: y + 30 };
-                    $document.bind('mousemove', onMouseMove);
-                    $document.bind('mouseup', onMouseUp);
-                }
-
-
-                function _onMove(x, y) {
-                    var direction = '',
-                        posX = x,
-                        posY = y,
-                        deltaX = posX - $scope.startX,
-                        deltaY = posY - $scope.startY,
-                        absDeltaX = Math.abs(deltaX),
-                        absDeltaY = Math.abs(deltaY);
-
-                    function isMoved() {
-                        return posX < $scope.boundingRect.left || posX > $scope.boundingRect.right ||
-                                posY < $scope.boundingRect.top || posY > $scope.boundingRect.bottom;
-                    }
-
-                    if (isMoved()) {
-                        if (absDeltaY > absDeltaX) {
-                            direction = deltaY > 0 ? 'd' : 'u';
-                        } else {
-                            direction = deltaX > 0 ? 'r' : 'l';
-                        }
-                    }
-                    
-                    if ($scope.direction != direction) {
-                        $scope.onMoveNode({ direction: direction });
-                    }
-                    $scope.direction = direction;
-                }
-                function onTouchMove(event) {
-                    if (firstMove) {
-                        firstMove = false;
-                        event.preventDefault();
-                    }
-                    _onMove(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
-                }
-                function onMouseMove(event) {
-                    _onMove(event.screenX, event.screenY);
-                }
-
-
-                // Unbinds methods when touch interaction ends
-                function _onEnd() {
-                    $scope.onMoveEnd({ direction: $scope.direction });
-                }
-                function onTouchEnd(event) {
-                    firstMove = false;
-                    $element.unbind('touchmove', onTouchMove);
-                    $element.unbind('touchend', onTouchEnd);
-                    _onEnd();
-                }
-                function onMouseUp(event) {
-                    $document.unbind('mousemove', onMouseMove);
-                    $document.unbind('mouseup', onMouseUp);
-                    _onEnd();
-                }
-            }
-        };
     }
 
     function prepareStateMatrix(stateArray, sideSize) {

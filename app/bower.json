@@ -27,6 +27,9 @@
     "angular-route": {
       "js": "angular-route.js"
     },
+    "angular-swipe-element": {
+      "js": "angular-swipe-element.js"
+    },
     "requirejs": {
       "js": "require.js"
     },

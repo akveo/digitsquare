@@ -1,13 +1,12 @@
-define(['angular', 'app/util', 'app/data'], function(angular) {
+define(['angular', 'angular-swipe-element', 'app/util', 'app/data'], function(angular) {
     'use strict';
 
-    angular.module('app.home', ['app.data', 'app.util'])
+    angular.module('app.home', ['app.data', 'app.util', 'angular-swipe-element'])
             .config(homeConfig)
             .factory('levelsDataAdapter', levelsDataAdapter)
             .controller('MenuController', MenuController)
             .controller('LevelsController', LevelsController)
-            .controller('ExitIntersititalController', ExitInterstitialController)
-            .directive('swipePanel', swipePanel);
+            .controller('ExitIntersititalController', ExitInterstitialController);
 
     homeConfig.$inject = ['$routeProvider'];
     function homeConfig($routeProvider) {
@@ -55,12 +54,10 @@ define(['angular', 'app/util', 'app/data'], function(angular) {
         }
     }
 
-    MenuController.$inject = ['$scope', 'playerData', '$rootScope'];
-    function MenuController($scope, playerData, $rootScope) {
+    MenuController.$inject = ['$scope', 'playerData', '$rootScope', 'exitApp'];
+    function MenuController($scope, playerData, $rootScope, exitApp) {
         $scope.$emit('pageViewed', 'Home');
-        $scope.watchBack(function() {
-            navigator.app.exitApp();
-        });
+        $scope.watchBack(exitApp);
         $rootScope.fullOpacityClass = true;
         playerData.getGameState().then(function(savedGameState) {
             $scope.savedGameState = savedGameState;
@@ -99,16 +96,12 @@ define(['angular', 'app/util', 'app/data'], function(angular) {
             tryChangeChapter(newChapterIndex);
         };
         $scope.swipeProcess = function(delta) {
-            $scope.$apply(function() {
-                $scope.deltaOffset = -delta;
-            });
+            $scope.deltaOffset = -delta;
         };
         $scope.swipeEnd = function(delta) {
-            $scope.$apply(function() {
-                var newIndex = Math.round(($scope.screenWidth * $scope.currentIndex - delta) / $scope.screenWidth);
-                $scope.deltaOffset = 0;
-                tryChangeChapter(newIndex, true);
-            });
+            var newIndex = Math.round(($scope.screenWidth * $scope.currentIndex - delta) / $scope.screenWidth);
+            $scope.deltaOffset = 0;
+            tryChangeChapter(newIndex, true);
         };
     }
 
@@ -119,82 +112,4 @@ define(['angular', 'app/util', 'app/data'], function(angular) {
         $document.on('onDismissInterstitialAd', exitApp);
         $document.on('onLeaveToAd', exitApp);
     }
-
-    function swipePanel() {
-        return {
-            restrict: 'A',
-            scope: {
-                onSwipeProcess: '&swipePanel',
-                onSwipeEnd: '&swipeEnd'
-            },
-            controller: function ($scope, $element, $attrs, $document) {
-                $element.bind('touchstart', onTouchStart);
-                $element.bind('mousedown', onMouseDown);
-
-                var firstMove,
-                    startX = 0,
-                    lastDelta = 0,
-                    touchJustStarted = false;
-
-                function onStart(xPos) {
-                    startX = xPos;
-                    firstMove = true;
-                    touchJustStarted = true;
-                }
-
-                function onTouchStart(event) {
-                    onStart(event.touches[0].pageX);
-                    $element.bind('touchmove', onTouchMove);
-                    $element.bind('touchend', onTouchEnd);
-                }
-
-                function onMouseDown(event) {
-                    onStart(event.screenX);
-                    $document.bind('mousemove', onMouseMove);
-                    $document.bind('mouseup', onMouseUp);
-                }
-
-                function onMove(xPos) {
-                    lastDelta = xPos - startX;
-                    if (touchJustStarted && Math.abs(lastDelta) < 4) {
-                        return;
-                    }
-                    touchJustStarted = false;
-                    $scope.onSwipeProcess({ delta: lastDelta });
-                }
-
-                function onTouchMove(event) {
-                    if (firstMove) {
-                        firstMove = false;
-                        event.preventDefault();
-                    }
-                    onMove(event.changedTouches[0].pageX);
-                }
-
-                function onMouseMove(event) {
-                    onMove(event.screenX);
-                }
-
-                function onEnd() {
-                    firstMove = false;
-                    touchJustStarted = false;
-                    $scope.onSwipeEnd({ delta: lastDelta });
-                }
-
-                // Unbinds methods when touch interaction ends
-                function onTouchEnd(event) {
-                    $element.unbind('touchmove', onTouchMove);
-                    $element.unbind('touchend', onTouchEnd);
-                    onEnd();
-                }
-
-                function onMouseUp() {
-                    $document.unbind('mousemove', onMouseMove);
-                    $document.unbind('mouseup', onMouseUp);
-                    onEnd();
-                }
-            }
-        };
-    }
-
 });

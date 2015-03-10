@@ -8,6 +8,7 @@ requirejs.config({
     shim: {
         'angular' : {'exports' : 'angular'},
         'angular-touch': ['angular'],
+        'angular-swipe-element': ['angular'],
         'angular-route': ['angular'],
         'localstorage-schema': { 'exports': 'localStorageSchema' },
         'app/lib/ga': { 'exports': '_gaq'}
