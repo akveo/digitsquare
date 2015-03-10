@@ -14,7 +14,8 @@
     "angular-touch": "~1.2.20",
     "localstorage-schema": "~0.0.2",
     "elusive-iconfont": "*",
-    "fontawesome": "~4.2.0"
+    "fontawesome": "~4.2.0",
+    "angular-swipe-element": "~0.0.2"
   },
   "exportsOverride": {
     "angular": {

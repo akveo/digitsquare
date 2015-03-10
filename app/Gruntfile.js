@@ -1,4 +1,29 @@
 module.exports = function(grunt) {
+
+    function deepExtend(dst) {
+        var args = [].slice.call(arguments);
+        args.forEach(function(obj) {
+            if (obj !== dst) {
+                for (var key in obj) {
+                    var value = obj[key];
+                    if (dst[key] && dst[key].constructor && dst[key].constructor === Object) {
+                        deepExtend(dst[key], value);
+                    } else {
+                        dst[key] = value;
+                    }
+                }
+            }
+        });
+        return dst;
+    }
+
+    function extendConfigs() {
+        var configs = [].slice.call(arguments).map(function(name) {
+            return grunt.file.readJSON('config/config.' + name + '.json');
+        });
+        return deepExtend.apply(null, configs);
+    }
+
     var templatesDirs = ['index.html', 'views/**/*.html'],
         fontsDir = ['fonts/*'],
         jsDirs = 'js/**/*js';
@@ -32,16 +57,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        copy: {
-            config_prod: {
-                src: 'www/js/config/config.prod.template.js',
-                dest: 'www/js/config.js'
-            },
-            config_local: {
-                src: 'www/js/config/config.local.template.js',
-                dest: 'www/js/config.js'
-            }
-        },
         exec: {
             signAndroid: {
                 command: 'cp my-release-key.keystore platforms/android/ant-build/;' +
@@ -57,17 +72,40 @@ module.exports = function(grunt) {
             buildIos: {
                 command: 'phonegap build ios --release'
             }
+        },
+        ngconstant: {
+            options: {
+                dest: 'www/js/config.js',
+                name: 'app.config',
+
+                wrap: '\'use strict\';\n' +
+                      '\n' +
+                      'define(["angular"], function(angular) {\n' +
+                      '    return {%= __ngModule %}\n' +
+                      '\n});'
+            },
+            dev: {
+                constants: {
+                    'appConfig': extendConfigs('base', 'dev')
+                }
+            },
+            prod: {
+                constants: {
+                    'appConfig': extendConfigs('base', 'prod')
+                }
+            }
+            
         }
     });
 
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-task');
-    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-exec');
+    grunt.loadNpmTasks('grunt-ng-constant');
 
-    var envo = grunt.option('envo') || 'prod';
-    grunt.registerTask('copyConfig', ['copy:config_' + envo]);
+    var envo = grunt.option('envo') || 'dev';
+    grunt.registerTask('copyConfig', ['ngconstant:' + envo]);
 
     grunt.registerTask('buildAssets', ['copyConfig', 'bower:install', 'sass:build']);
 
