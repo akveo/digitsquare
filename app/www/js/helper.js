@@ -1,8 +1,7 @@
-'use strict';
-
 define(['angular'], function(angular) {
+    'use strict';
 
-    var module = angular.module('helper', [])
+    var module = angular.module('app.helper', [])
             .service('panelModal', function($compile, $rootScope) {
 
                 return function(tpl, scope, options) {

@@ -1,95 +1,104 @@
-'use strict';
+define(['angular', 'app/config', 'app/util'], function(angular) {
+    'use strict';
 
-define(['app/config', 'app/util'], function(config, u) {
+    angular.module('app.monetize', ['app.config', 'app.util'])
+            .run(MonetizeRun);
 
-    var rv = {
-        tryShowInterstitialAd: function() {}
-    };
 
-    function setupAds() {
-        var ad_units = config.ads.units;
-        var admobid = u.getConfigSettingForPlatform(config.ads.units);
-
-        window.plugins.AdMob.setOptions( {
-            publisherId: admobid.banner,
-            interstitialAdId: admobid.interstitial,
-            bannerAtTop: false, // set to true, to put banner at top
-            overlap: false, // set to true, to allow banner overlap webview
-            offsetTopBar: false, // set to true to avoid ios7 status bar overlap
-            isTesting: config.ads.isTesting, // receiving test ad
-            autoShow: false // auto show interstitial ad when loaded
-        });
-
-        if (config.ads.showBanner) {
-            // display a banner at startup
-            window.plugins.AdMob.createBannerView();
+    MonetizeRun.$inject = ['appConfig', 'util', '$rootScope', '$routeParams', '$window', '$document'];
+    function MonetizeRun(config, u, $rootScope, $routeParams, $window, $document) {
+        if (config.ads.enabled) {
+            $document.on('deviceready', setupAds);
         }
 
-        (function initializeIntrstitialAd() {
+        function setupAds() {
+            var admobid = u.getConfigSettingForPlatform(config.ads.units);
+            var admobPlugin = $window.plugins.AdMob;
 
-            var interstitialReady = false;
-            var interstitialShowTimerAllowed = true;
-            var firstTimeShowRequest = true;
+            admobPlugin.setOptions( {
+                publisherId: admobid.banner,
+                interstitialAdId: admobid.interstitial,
+                bannerAtTop: false, // set to true, to put banner at top
+                overlap: false, // set to true, to allow banner overlap webview
+                offsetTopBar: false, // set to true to avoid ios7 status bar overlap
+                isTesting: config.ads.isTesting, // receiving test ad
+                autoShow: false // auto show interstitial ad when loaded
+            });
 
-            function createInterstitial(cb) {
-                window.plugins.AdMob.createInterstitialView({ publisherId: admobid.interstitial}, cb, function() {
-                    setTimeout(function() {
-                        createInterstitial(cb);
-                    }, config.ads.timeouts.interstitialRequestTimeout);
-                });
+            if (config.ads.showBanner) {
+                // display a banner at startup
+                admobPlugin.createBannerView();
             }
-            function loadInterstitialInBackground(successCallback) {
-                window.plugins.AdMob.createInterstitialView({ isTesting: config.ads.isTesting }, successCallback, function() {
-                    setTimeout(function() {
-                        loadInterstitialInBackground(successCallback);
-                    }, config.ads.timeouts.interstitialRequestTimeout);
-                }); 
-            }
-            function loadInterstitial() {
-                interstitialReady = false;
-                createInterstitial(function() {
-                    loadInterstitialInBackground(function() {
-                        interstitialReady = true;
+
+            (function initializeInterstitialAd() {
+
+                var interstitialReady = false;
+                var interstitialShowTimerAllowed = true;
+                var firstTimeShowRequest = true;
+
+                function createInterstitial(cb) {
+                    admobPlugin.createInterstitialView({ publisherId: admobid.interstitial}, cb, function() {
+                        setTimeout(function() {
+                            createInterstitial(cb);
+                        }, config.ads.timeouts.interstitialRequestTimeout);
                     });
+                }
+                function loadInterstitialInBackground(successCallback) {
+                    admobPlugin.createInterstitialView({ isTesting: config.ads.isTesting }, successCallback, function() {
+                        setTimeout(function() {
+                            loadInterstitialInBackground(successCallback);
+                        }, config.ads.timeouts.interstitialRequestTimeout);
+                    }); 
+                }
+                function loadInterstitial() {
+                    interstitialReady = false;
+                    createInterstitial(function() {
+                        loadInterstitialInBackground(function() {
+                            interstitialReady = true;
+                        });
+                    });
+                }
+                function resetInterstitialTimerAllowance() {
+                    interstitialShowTimerAllowed = false;
+                    setTimeout(function() { interstitialShowTimerAllowed = true }, config.ads.timeouts.delayBetweenInterstitials);
+                }
+                function showInterstitialAd() {
+                    function interstitialClosedListener() {
+                        document.removeEventListener('onDismissInterstitialAd', interstitialClosedListener);
+                        setTimeout(function() {
+                            resetInterstitialTimerAllowance();
+                            loadInterstitial();
+                        }, 1000);
+                    }
+                    
+                    $document.on('onDismissInterstitialAd', interstitialClosedListener); 
+                    admobPlugin.showInterstitialAd();
+                    interstitialShowTimerAllowed = false;
+                    interstitialReady = false;
+                }
+                loadInterstitial();
+
+                $rootScope.on('pageViewed', function(pageName) {
+                    if (pageName === 'Game') {
+                        if (firstTimeShowRequest) {
+                            firstTimeShowRequest = false;
+                            resetInterstitialTimerAllowance();
+                        }
+                        if (isPhoneGap() && interstitialReady && interstitialShowTimerAllowed && !$routeParams.skipAd) {
+                            showInterstitialAd();
+                        }
+                    }
                 });
-            }
-            function resetInterstitialTimerAllowance() {
-                interstitialShowTimerAllowed = false;
-                setTimeout(function() { interstitialShowTimerAllowed = true }, config.ads.timeouts.delayBetweenInterstitials);
-            }
-            function showInterstitialAd() {
-                function interstitialClosedListener() {
-                    document.removeEventListener('onDismissInterstitialAd', interstitialClosedListener);
-                    setTimeout(function() {
-                        resetInterstitialTimerAllowance();
-                        loadInterstitial();
-                    }, 1000);
-                }
-                
-                document.addEventListener('onDismissInterstitialAd', interstitialClosedListener); 
-                window.plugins.AdMob.showInterstitialAd();
-                interstitialShowTimerAllowed = false;
-                interstitialReady = false;
-            }
-            loadInterstitial();
 
-            // Inject the method
-            rv.tryShowInterstitialAd = function() {
-                if (firstTimeShowRequest) {
-                    firstTimeShowRequest = false;
-                    resetInterstitialTimerAllowance();
-                }
-                if (isPhoneGap() && interstitialReady && interstitialShowTimerAllowed) {
-                    showInterstitialAd();
-                }
-            }
-        })();
+                $rootScope.on('forceInterstitialAdShow', function() {
+                    if (isPhoneGap()) {
+                        showInterstitialAd();
+                    }
+                });
+
+            })();
+        }
 
     }
 
-    if (isPhoneGap()) {
-        document.addEventListener('deviceready', setupAds, false);
-    }
-
-    return rv;
 });

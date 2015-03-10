@@ -1,8 +1,63 @@
-'use strict';
+define(['angular', 'app/util', 'app/data'], function(angular) {
+    'use strict';
 
-define(['module', 'app/main', 'app/analytics'], function(module, main, analytics) {
-    main.register.controller(ngCName(module, 'menuController'), ['$scope', 'playerData', '$rootScope', function($scope, playerData, $rootScope) {
-        analytics.pageViewed('Home');
+    angular.module('app.home', ['app.data', 'app.util'])
+            .config(homeConfig)
+            .factory('levelsDataAdapter', levelsDataAdapter)
+            .controller('MenuController', MenuController)
+            .controller('LevelsController', LevelsController)
+            .controller('ExitIntersititalController', ExitInterstitialController)
+            .directive('swipePanel', swipePanel);
+
+    homeConfig.$inject = ['$routeProvider'];
+    function homeConfig($routeProvider) {
+        $routeProvider.when('/home', {
+            templateUrl: 'views/home/menu.html',
+            controller: 'MenuController'
+        }).when('/levels', {
+            templateUrl: 'views/home/levels.html',
+            controller: 'LevelsController'
+        }).when('/exitInterstitial', {
+            templateUrl: 'views/home/exitInterstitial.html',
+            controller: 'ExitInterstitialController'
+        }).when('/help', {
+            templateUrl: 'views/home/help.html'
+        }).when('/about', {
+            templateUrl: 'views/home/about.html'
+        });
+    }
+
+    levelsDataAdapter.$inject = ['userLevelsData'];
+    function levelsDataAdapter(userLevelsData) {
+        return {
+            getAdapterLevelsObject: function(chapterId) {
+                return userLevelsData.getChaptersExtendedWithUserData().then(function(fullChapters) {
+                    var res = {};
+                    res.fullChapters = fullChapters;
+                    res.groupedChapters = fullChapters.map(function(chapter) {
+                        return chapter.chapterLevels.reduce(function(acc, val, i) {
+                            var index = Math.floor(i / 5);
+                            if (!acc[index]) acc[index] = [];
+                            acc[index].push(val);
+                            return acc;
+                        } , []); 
+                    });
+                    var selectedChapterIndex = 0;
+                    fullChapters.forEach(function(c, i) { 
+                        if (c.id == chapterId) {
+                            selectedChapterIndex = i;
+                        }
+                    });
+                    res.currentIndex = selectedChapterIndex || 0;
+                    return res;
+                });
+            }
+        }
+    }
+
+    MenuController.$inject = ['$scope', 'playerData', '$rootScope'];
+    function MenuController($scope, playerData, $rootScope) {
+        $scope.$emit('pageViewed', 'Home');
         $scope.watchBack(function() {
             navigator.app.exitApp();
         });
@@ -14,29 +69,15 @@ define(['module', 'app/main', 'app/analytics'], function(module, main, analytics
         $scope.$on('$destroy', function() {
             $rootScope.fullOpacityClass = false;
         });
-    }]);
-    main.register.controller(ngCName(module, 'levelsController'), ['$scope', '$routeParams', 'combinedData', '$timeout', function($scope, $routeParams, combinedData, $timeout) {
-        analytics.pageViewed('Levels');
+    }
+
+    LevelsController.$inject = ['$scope', '$routeParams', 'levelsDataAdapter', '$timeout'];
+    function LevelsController($scope, $routeParams, levelsDataAdapter, $timeout) {
+        $scope.$emit('pageViewed', 'Levels');
         $scope.navBack('/home');
-        var chapterId = parseInt($routeParams.initialGroup) || '1';
-        $scope.chapterId = chapterId;
-        combinedData.getChaptersExtendedWithUserData().then(function(fullChapters) {
-            $scope.fullChapters = fullChapters;
-            $scope.groupedChapters = fullChapters.map(function(chapter) {
-                return chapter.chapterLevels.reduce(function(acc, val, i) {
-                    var index = Math.floor(i / 5);
-                    if (!acc[index]) acc[index] = [];
-                    acc[index].push(val);
-                    return acc;
-                } , []); 
-            });
-            var selectedChapterIndex = 0;
-            fullChapters.forEach(function(c, i) { 
-                if (c.id == chapterId) {
-                    selectedChapterIndex = i;
-                }
-            });
-            $scope.currentIndex = selectedChapterIndex;
+        var chapterId = $scope.chapterId = parseInt($routeParams.initialGroup || '1') ;
+        levelsDataAdapter.getAdapterLevelsObject(chapterId).then(function(res) {
+            angular.extend($scope, res);
         });
         $scope.deltaOffset = 0;
 
@@ -69,32 +110,17 @@ define(['module', 'app/main', 'app/analytics'], function(module, main, analytics
                 tryChangeChapter(newIndex, true);
             });
         };
-    }]);
-    main.register.controller(ngCName(module, 'exitInterstitialController'), ['$scope', '$routeParams', 
-        function($scope, $routeParams) {
-            window.plugins.AdMob.createInterstitialView();
-            $scope.watchBack(function() {
-                navigator.app.exitApp();
-            });
-            document.addEventListener('onDismissInterstitialAd', function(){ 
-                navigator.app.exitApp();
-            });
-            document.addEventListener('onLeaveToAd', function(){
-                navigator.app.exitApp();
-            });
-        }
-    ]);
-    main.register.controller(ngCName(module, 'helpController'), function(){});
-    main.register.controller(ngCName(module, 'aboutController'), function(){});
-    main.register.directive('addASpaceBetween', [function () {
-            return function (scope, element) {
-                if(!scope.$last){
-                    element.after('&nbsp;');
-                }
-            }
-        }
-    ]);
-    main.register.directive('swipePanel', function() {
+    }
+
+    ExitInterstitialController.$inject = ['$scope', '$document', 'exitApp'];
+    function ExitInterstitialController($scope, $document, exitApp) {
+        $scope.$emit('forceInterstitialAdShow');
+        $scope.watchBack(exitApp);
+        $document.on('onDismissInterstitialAd', exitApp);
+        $document.on('onLeaveToAd', exitApp);
+    }
+
+    function swipePanel() {
         return {
             restrict: 'A',
             scope: {
@@ -126,7 +152,7 @@ define(['module', 'app/main', 'app/analytics'], function(module, main, analytics
                     onStart(event.screenX);
                     $document.bind('mousemove', onMouseMove);
                     $document.bind('mouseup', onMouseUp);
-        }
+                }
 
                 function onMove(xPos) {
                     lastDelta = xPos - startX;
@@ -169,6 +195,6 @@ define(['module', 'app/main', 'app/analytics'], function(module, main, analytics
                 }
             }
         };
-    });
+    }
 
 });

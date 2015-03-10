@@ -1,14 +1,17 @@
-'use strict';
+define(['angular', 'app/config', 'app/util'], function(angular) {
+    'use strict';
 
-define(['app/config', 'app/util'], function(config, u) {
-    var res = {};
-    ['pageViewed', 'trackEvent'].forEach(function(funcName) {
-        res[funcName] = function() {};
-    });
+    angular.module('app.analytics', ['app.config', 'app.util'])
+            .run($AnalyticsRun);
 
-    if (isPhoneGap() && config.analytics.enabled) {
-        document.addEventListener('deviceready', function() {
-            var analytics = navigator.analytics;
+    $AnalyticsRun.$inject = ['appConfig', 'util', '$document', '$window', '$rootScope'];
+    function $AnalyticsRun(config, u, $document, $window, $rootScope) {
+        if (config.analytics.enabled) {
+            $document.on('deviceready', initializeAnalytics);
+        }
+
+        function initializeAnalytics() {
+            var analytics = $window.navigator.analytics;
             if (!analytics)
                 return;
             var trackerId = u.getConfigSettingForPlatform(config.analytics.gaId);
@@ -20,14 +23,12 @@ define(['app/config', 'app/util'], function(config, u) {
             } catch(e) {
                 // Gotta catch them all
             }
-            res.pageViewed = function(pageName) {
+            $rootScope.on('pageViewed', function(pageName) {
                 analytics.sendAppView(pageName);
-            };
-            res.trackEvent = function(category, action, label, value) {
-                analytics.sendEvent(category, action, label, value);
-            };
-        }, false);
+            });
+            $rootScope.on('analyticsEvent', function(e) {
+                analytics.sendEvent(e.category, e.action, e.label, e.value);
+            });
+        }
     }
-
-    return res;
 });

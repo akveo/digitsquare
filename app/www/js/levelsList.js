@@ -1,6 +1,6 @@
-'use strict';
+define(['angular'], function(angular) {
+    'use strict';
 
-define([], function() {
     var levels = {
         '1-1': {
             label: '1',
@@ -641,8 +641,7 @@ define([], function() {
         }
     };
 
-    return {
-        chapters: chapters,
-        levels: levels
-    };
+    angular.module('app.levelsList', [])
+            .constant('levels', levels)
+            .constant('chapters', chapters);
 });
