@@ -5,8 +5,8 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
             .run(MonetizeRun);
 
 
-    MonetizeRun.$inject = ['appConfig', 'util', '$rootScope', '$routeParams', '$window', '$document'];
-    function MonetizeRun(config, u, $rootScope, $routeParams, $window, $document) {
+    MonetizeRun.$inject = ['appConfig', 'util', '$rootScope', '$stateParams', '$window', '$document'];
+    function MonetizeRun(config, u, $rootScope, $stateParams, $window, $document) {
         if (config.ads.enabled) {
             $document.on('deviceready', setupAds);
         }
@@ -84,7 +84,7 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
                             firstTimeShowRequest = false;
                             resetInterstitialTimerAllowance();
                         }
-                        if (isPhoneGap() && interstitialReady && interstitialShowTimerAllowed && !$routeParams.skipAd) {
+                        if (isPhoneGap() && interstitialReady && interstitialShowTimerAllowed && !$stateParams.skipAd) {
                             showInterstitialAd();
                         }
                     }

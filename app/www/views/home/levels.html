@@ -2,19 +2,19 @@
     <div class="nav-controls table">
         <div class="t-row">
             <div class="t-cell">
-                <span class="control-icon el-icon-chevron-left" ng-click="goToPath('/home')"></span>
+                <span class="control-icon el-icon-chevron-left" ng-click="goToPath('home')"></span>
             </div>
             <div class="t-cell chapter-label">
-                <h1>{{fullChapters[currentIndex].chapterLabel}}</h1>
+                <h1>{{vm.fullChapters[vm.currentIndex].chapterLabel}}</h1>
             </div>
         </div>
     </div>
     <div class="chapters-body">
-        <div class="chapters-container" ng-style="{ transform: 'translate3d(' + -(normalScreenWidth * currentIndex + deltaOffset) + 'px,0,0)', '-webkit-transform': 'translate3d(' + -(normalScreenWidth * currentIndex + deltaOffset) + 'px,0,0)', width: normalScreenWidth * fullChapters.length + 'px' }" swipe-element="swipeEnd(deltaX)" swipe-element-move="swipeProcess(deltaX)" ng-class="{ 'include-transition': includeTransitionClass }">
-            <div class="levels-links" ng-repeat="chapter in groupedChapters" ng-style="{ width: normalScreenWidth + 'px' }">
+        <div class="chapters-container" ng-style="vm.getChaptersContainerStyles()" swipe-element="vm.swipeEnd(deltaX)" swipe-element-move="vm.swipeProcess(deltaX)" ng-class="{ 'include-transition': vm.includeTransitionClass }">
+            <div class="levels-links" ng-repeat="chapter in vm.groupedChapters" ng-style="vm.chapterStyles">
                 <div class="level-item-row" ng-repeat="levelGroup in chapter">
                     <div class="nav-link level-item" ng-repeat="level in levelGroup" ng-class="{locked: level.enabled}" data-add-a-space-between>
-                        <span class="inline-block" ng-if="level.enabled" ng-click="goToPath('/game/' + level.id, 'skipAd=true')">
+                        <span class="inline-block" ng-if="level.enabled" ng-click="goToPath('game', { levelId: level.id, skipAd: true })">
                             <span class="level-item-icon">{{level.label}}</span><br />
                             <span class="level-icon-rating"><span ng-if="level.isCompleted"><i class="el-icon-star" ng-repeat="index in [1,2,3]" ng-class="{rewarded: index <= level.score}"></i></span>&nbsp;</span>
                         </span>
@@ -30,13 +30,13 @@
     <div class="nav-controls table">
         <div class="t-row">
             <div class="t-cell text-left">
-                <div class="control-icon fa fa-angle-double-left" ng-class="{ disabled: !fullChapters[currentIndex - 1] }" ng-click="goToChapter(currentIndex - 1)"></div>
+                <div class="control-icon fa fa-angle-double-left" ng-class="{ disabled: !vm.fullChapters[vm.currentIndex - 1] }" ng-click="vm.goToChapter(vm.currentIndex - 1)"></div>
             </div>
             <div class="t-cell text-center level-breadcrumb">
-                <div class="fa fa-circle" ng-repeat="chapterCircle in [] | range:fullChapters.length" ng-class="{ active: chapterCircle == currentIndex }" data-add-a-space-between></div>
+                <div class="fa fa-circle" ng-repeat="chapterCircle in [] | range:vm.fullChapters.length" ng-class="{ active: chapterCircle == vm.currentIndex }" data-add-a-space-between></div>
             </div>
             <div class="t-cell text-right">
-                <div class="control-icon fa fa-angle-double-right" ng-class="{ disabled: !fullChapters[currentIndex + 1] }" ng-click="goToChapter(currentIndex + 1)"></div>
+                <div class="control-icon fa fa-angle-double-right" ng-class="{ disabled: !vm.fullChapters[vm.currentIndex + 1] }" ng-click="vm.goToChapter(vm.currentIndex + 1)"></div>
             </div>
         </div>
     </div>

@@ -1,11 +1,11 @@
 <div class="home"> 
     <div class="app-title">Digit<sup>2</sup></div>
     <div class="menu">
-        <span class="nav-link menu-item" ng-click="goToPath(savedGameUrl, 'savedGame=true&skipAd=true')" ng-if="savedGameState">Continue</span>
-        <span class="nav-link menu-item disabled" ng-if="!savedGameState">Continue</span>
-        <span class="nav-link menu-item" ng-click="goToPath('/levels')">New Game</span>
-        <span class="nav-link menu-item" ng-click="goToPath('/help')">Help</span>
-        <span class="nav-link menu-item" ng-click="goToPath('/about')">About</span>
+        <span class="nav-link menu-item" ng-click="goToPath('game', { levelId: vm.savedGameLevelId, savedGame: true, skipAd: true })" ng-if="vm.savedGameState">Continue</span>
+        <span class="nav-link menu-item disabled" ng-if="!vm.savedGameState">Continue</span>
+        <span class="nav-link menu-item" ng-click="goToPath('levels')">New Game</span>
+        <span class="nav-link menu-item" ng-click="goToPath('help')">Help</span>
+        <span class="nav-link menu-item" ng-click="goToPath('about')">About</span>
     </div>
     <!--# include file="homeAvailableIcons.html" -->
 </div>

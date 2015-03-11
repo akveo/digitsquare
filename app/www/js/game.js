@@ -1,31 +1,34 @@
-define(['angular', 'app/data'], function(angular, ads, analytics) {
+define(['angular', 'angular-ui-router', 'app/data'], function(angular) {
     'use strict'; 
 
-    angular.module('app.game', ['app.data'])
+    angular.module('app.game', ['app.data', 'angular-swipe-element', 'ui.router'])
             .config(gameConfig)
             .controller('GameController', GameController);
 
 
-    gameConfig.$inject = ['$routeProvider']
-    function gameConfig($routeProvider) {
-        $routeProvider.when('/game/:levelId', {
-            templateUrl: 'views/game/game.html',
-            controller: 'GameController'
-        });
+    gameConfig.$inject = ['$stateProvider']
+    function gameConfig($stateProvider) {
+        $stateProvider
+            .state('game', {
+                url: '/game/:levelId?savedGame&skipAd',
+                templateUrl: 'views/game/game.html',
+                controller: 'GameController',
+                controllerAs: 'vm'
+            });
     }
 
-    GameController.$inject = ['$scope', '$route', '$routeParams', 'levelsData', 'playerData', 'userLevelsData', '$location', '$rootScope', '$window', '$timeout'];
-    function GameController($scope, $route, $routeParams, levelsData, playerData, userLevelsData, $location, $rootScope, $window, $timeout) {
+    GameController.$inject = ['$scope', '$state', '$stateParams', 'levelsData', 'playerData', 'userLevelsData', '$location', '$rootScope', '$window', '$timeout'];
+    function GameController($scope, $state, $stateParams, levelsData, playerData, userLevelsData, $location, $rootScope, $window, $timeout) {
         $scope.$emit('pageViewed');
 
-        var levelId = $routeParams.levelId,
+        var levelId = $stateParams.levelId,
             chapterId = levelId.split('-')[0],
             levelIndex = levelId.split('-')[1],
             levelData = levelsData.getLevel(levelId),
             currentState = levelData.initial,
             movesCount = 0;
 
-        if ($routeParams.savedGame) {
+        if ($stateParams.savedGame) {
             playerData.getGameState().then(function(savedGameState) {
                 $scope.initialStateMatrix = initialStateMatrix = prepareStateMatrix(savedGameState.currentState, sideSize);
                 $scope.movesCount = savedGameState.movesCount || 0;    
@@ -39,12 +42,12 @@ define(['angular', 'app/data'], function(angular, ads, analytics) {
                 currentState: currentState,
                 movesCount: movesCount
             };
-        if (!$routeParams.savedGame) {
+        if (!$stateParams.savedGame) {
             playerData.updateGameState(currentStateObj);
         }
-        $scope.navBack('/levels', 'initialGroup=' + chapterId);
+        $scope.navBack('levels', { initialGroup: chapterId });
         $scope.chapterId = parseInt(chapterId);
-        $scope.levelId = $routeParams.levelId;
+        $scope.levelId = $stateParams.levelId;
         $scope.movesCount = currentStateObj.movesCount;
         $scope.goalArray = levelData.goal;
 
@@ -70,10 +73,10 @@ define(['angular', 'app/data'], function(angular, ads, analytics) {
                 label: levelId,
                 value: $scope.movesCount
             });
-            if ($routeParams.skipAd || $routeParams.savedGame) {
+            if ($stateParams.skipAd || $stateParams.savedGame) {
                 $location.search('');
             } else {
-                $route.reload();
+                $state.reload();
             }
         }
 

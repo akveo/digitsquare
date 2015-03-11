@@ -4,6 +4,8 @@ define(['angular'], function(angular) {
     angular.module('app.util', [])
         .factory('util', $AppUtil)
         .factory('exitApp', exitApp)
+        .factory('screenSettings', screenSettings)
+        .factory('styleBuilder', styleBuilder)
         .filter('range', $RangeFilter)
         .directive('addASpaceBetween', AddSpaceBetween);
 
@@ -51,6 +53,53 @@ define(['angular'], function(angular) {
     function exitApp($window) {
         return function() {
             $window.navigator.app.exit();
+        };
+    }
+
+    screenSettings.$inject = ['$rootScope', '$document', '$window'];
+    function screenSettings($rootScope, $document, $window) {
+        var sWidth = $document[0].documentElement.clientWidth || $window.screen.width;
+        var mainContainerWidth = sWidth > 768 ? 768 : sWidth;
+
+        return {
+            screenWidth: sWidth,
+            mainContainerWidth: mainContainerWidth
+        };
+    }
+
+    function styleBuilder() {
+
+        function _builder(initialStyle, clearInitial) {
+            if (initialStyle && clearInitial) {
+                Object.keys(initialStyle).forEach(function(key) {
+                    delete initialStyle[key];
+                });
+            }
+
+            initialStyle = initialStyle || {};
+            this._result = initialStyle;
+        }
+
+        _builder.prototype.style = function(styleName, value) {
+            this._result[styleName] = value;
+            return this;
+        };
+
+        _builder.prototype.translate3dX = function(value) {
+            value = ('' + value).indexOf('px') == -1 ? value + 'px' : value;
+            var styleVal = 'translate3d(' + value + ', 0, 0)';
+            this._result['-webkit-transform'] = styleVal;
+            this._result['transform'] = styleVal;
+            return this;
+        };
+
+
+        _builder.prototype.build = function() {
+            return this._result;
+        };
+
+        return function(initialStyle, clearInitial) {
+            return new _builder(initialStyle, clearInitial);
         };
     }
 
