@@ -7,15 +7,15 @@
     "**/*.txt"
   ],
   "dependencies": {
-    "angular": "~1.3.2",
+    "angular": "~1.3.14",
     "requirejs": "~2.1.14",
     "normalize-scss": "~3.0.1",
-    "angular-route": "~1.2.20",
-    "angular-touch": "~1.2.20",
+    "angular-touch": "~1.3.14",
     "localstorage-schema": "~0.0.2",
     "elusive-iconfont": "*",
     "fontawesome": "~4.2.0",
-    "angular-swipe-element": "~0.0.2"
+    "angular-swipe-element": "~0.0.2",
+    "angular-ui-router": "~0.2.13"
   },
   "exportsOverride": {
     "angular": {
@@ -24,8 +24,8 @@
     "angular-touch": {
       "js": "angular-touch.js"
     },
-    "angular-route": {
-      "js": "angular-route.js"
+    "angular-ui-router": {
+      "js": "release/angular-ui-router.js"
     },
     "angular-swipe-element": {
       "js": "angular-swipe-element.js"

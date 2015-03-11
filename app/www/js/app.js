@@ -1,8 +1,8 @@
-define(['angular', 'angular-route', 'angular-touch', 'app/home', 'app/game', 'app/helper', 'app/analytics', 'app/monetize'], function(angular) {
+define(['angular', 'angular-ui-router', 'angular-touch', 'app/home', 'app/game', 'app/helper', 'app/analytics', 'app/monetize'], function(angular) {
     'use strict';
     
     angular.module('app', [
-        'ngRoute',
+        'ui.router',
         'ngTouch',
 
         /* Modules that represent pages */
@@ -17,16 +17,15 @@ define(['angular', 'angular-route', 'angular-touch', 'app/home', 'app/game', 'ap
     .config(AppConfig)
     .run(AppRun);
 
-    AppConfig.$inject = ['$routeProvider'];
-    function AppConfig($routeProvider) {
-        $routeProvider.otherwise({ redirectTo: '/home' });
+    AppConfig.$inject = ['$urlRouterProvider'];
+    function AppConfig($urlRouterProvider) {
+        $urlRouterProvider.otherwise('/home');
     }
 
-    AppRun.$inject = ['$rootScope', '$location', '$timeout', 'panelModal', '$document'];
-    function AppRun($rootScope, $location, $timeout, panelModal, $document) {
-        $rootScope.goToPath = function(url, search) {
-            $location.path(url);
-            $location.search(search || '');
+    AppRun.$inject = ['$rootScope', '$timeout', 'panelModal', '$document', '$state'];
+    function AppRun($rootScope, $timeout, panelModal, $document, $state) {
+        $rootScope.goToPath = function(stateName, search) {
+            $state.go(stateName, search);
         };
         var sWidth = document.documentElement.clientWidth || screen.width;
         $rootScope.screenWidth = sWidth > 500 ? 500 : sWidth;
@@ -51,7 +50,7 @@ define(['angular', 'angular-route', 'angular-touch', 'app/home', 'app/game', 'ap
                 $document.off('backbutton', listener);
             });
         };
-        $rootScope.navBack = function(where, search) {
+        $rootScope.navBack = function(state, search) {
             function onBackKeyDown(evt) {
                 evt.preventDefault();
                 $rootScope.$apply(function() {
@@ -59,7 +58,12 @@ define(['angular', 'angular-route', 'angular-touch', 'app/home', 'app/game', 'ap
                 });
             }
 
-            $rootScope.watchBack(onBackKeyDown);
+            this.watchBack(onBackKeyDown);
         };
+
+        var statesWithFullOpacityBg = ['home'];
+        $rootScope.$on('$stateChangeStart', function(event, toState) {
+            $rootScope.fullOpacityClass = statesWithFullOpacityBg.indexOf(toState.name) !== -1;
+        });
     }
 });
