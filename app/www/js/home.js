@@ -18,7 +18,7 @@ define(['angular', 'angular-ui-router', 'angular-swipe-element', 'app/util', 'ap
                 controllerAs: 'vm'
             })
             .state('levels', {
-                url: '/levels',
+                url: '/levels?initialGroup',
                 templateUrl: 'views/home/levels.html',
                 controller: 'LevelsController',
                 controllerAs: 'vm'
