@@ -25,7 +25,7 @@ define(['angular', 'angular-ui-router', 'angular-touch', 'app/home', 'app/game',
     AppRun.$inject = ['$rootScope', '$timeout', 'panelModal', '$document', '$state'];
     function AppRun($rootScope, $timeout, panelModal, $document, $state) {
         $rootScope.goToPath = function(stateName, search) {
-            $state.go(stateName, search);
+            $state.go(stateName, search, { inherit: false, notify: true });
         };
         var sWidth = document.documentElement.clientWidth || screen.width;
         $rootScope.screenWidth = sWidth > 500 ? 500 : sWidth;
