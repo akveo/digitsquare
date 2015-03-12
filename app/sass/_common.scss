@@ -1,7 +1,3 @@
-$watColor: #9acb40;
-$labelsColor: #9bcb41;
-$iconWidth: 50px;
-
 @mixin no-user-select {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -63,18 +59,14 @@ $iconWidth: 50px;
 
 
 @mixin nav-controls-factored($factor) {
-    .nav-controls {
-        .control-icon {
-            width: $iconWidth * $factor;
-            height: $iconWidth * $factor;
-            line-height: $iconWidth * $factor;
-            &[class*="el-icon-"] {
-                font-size: 25px * $factor;
-            }
-            &.fa {
-                font-size: 40px * $factor;
-            }
-        }
+    width: $iconWidth * $factor;
+    height: $iconWidth * $factor;
+    line-height: $iconWidth * $factor;
+    &[class*="el-icon-"] {
+        font-size: 25px * $factor;
+    }
+    &.fa {
+        font-size: 40px * $factor;
     }
 }
 
@@ -91,11 +83,9 @@ $iconWidth: 50px;
         display: inline-block;
     }
     .control-icon {
-        width: $iconWidth;
-        height: $iconWidth;
-        line-height: 50px;
+        @include nav-controls-factored(1);
         text-align: center;
-        background-color: $watColor;
+        background-color: $color-primary;
         color: white;
         cursor: pointer;
         @include no-user-select;
@@ -107,14 +97,7 @@ $iconWidth: 50px;
         }
 
         &.ng-click-active:not(.disabled) {
-            background-color: #d9df3f;
-        }
-
-        &[class*="el-icon-"] {
-            font-size: 25px;
-        }
-        &.fa {
-            font-size: 40px;
+            background-color: $color-hover;
         }
 
         &:focus {
@@ -125,13 +108,11 @@ $iconWidth: 50px;
 }
 
 @mixin panel-modal-body($factor) {
-    .panel-modal-body {
-        padding: 60px*$factor 20px*$factor 0 20px*$factor;
-        .modal-title {
-            font-size: 30px * $factor;
-            &+.modal-title {
-                margin-top: 10px * $factor;
-            }
+    padding: 60px*$factor 20px*$factor 0 20px*$factor;
+    .modal-title {
+        font-size: 30px * $factor;
+        &+.modal-title {
+            margin-top: 10px * $factor;
         }
     }
 }
@@ -150,16 +131,12 @@ $iconWidth: 50px;
         z-index: 200;
     }
     .panel-modal-body {
-        padding: 60px 20px 0 20px;
+        @include panel-modal-body(1);
         color: white;
         box-sizing: border-box;
         .modal-title {
             text-align: center;
-            font-size: 30px;
             width: 100%;
-            &+.modal-title {
-                margin-top: 10px;
-            }
         }
     }
 }
@@ -172,15 +149,19 @@ i.el-icon-star {
 }
 
 @media only screen and (min-width:500px) {
-    .panel-modal-container {
+    .panel-modal-container .panel-modal-body {
         @include panel-modal-body(1.5);
     }
-    @include nav-controls-factored(1.5);
+    .nav-controls .control-icon {
+        @include nav-controls-factored(1.5);
+    }
 }
 
 @media only screen and (max-height:480px) {
-    .panel-modal-container {
+    .panel-modal-container .panel-modal-body {
         @include panel-modal-body(0.9);
     }
-    @include nav-controls-factored(0.9);
+    .nav-controls .control-icon {
+        @include nav-controls-factored(0.9);
+    }
 }

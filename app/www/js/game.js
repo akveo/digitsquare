@@ -166,7 +166,10 @@ define(['angular', 'angular-ui-router', 'app/data'], function(angular) {
                     }
 
                     var options = { callback: modalCloseCallback };
-                    $scope.panelModal('views/game/startGameTutorial.html', $rootScope.$new(), options)
+                    var scope = angular.extend($rootScope.$new(), {
+                        screenWidth: screenSettings.screenWidth
+                    });
+                    $scope.panelModal('views/game/startGameTutorial.html', scope, options)
                         .show();
                 }, 0);
             }
