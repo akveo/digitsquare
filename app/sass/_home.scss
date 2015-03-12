@@ -70,7 +70,7 @@
         .chapter-label {
             text-align: right;
             h1 {
-                color: $labelsColor;
+                color: $color-primary;
                 font-family: UbuntuBold;
                 font-size: 35px * $coeff;
                 line-height: 50px * $coeff;
@@ -149,7 +149,7 @@
             height: $iconWidth;
             font-size: 25px;
             line-height: $iconWidth;
-            background-color: $labelsColor;
+            background-color: $color-primary;
             color: #fff;
             font-family: UbuntuBold;
             &.disabled {
@@ -177,6 +177,8 @@
 
     .game-description {
         padding: 0 20px;
+        height: calc(100% - 90px);
+        overflow-y: auto;
         font-family: Arial;
         p {
             text-align: justify;

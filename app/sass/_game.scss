@@ -78,16 +78,13 @@ $defaultArrowMargin: 20px;
 @mixin game-controls($coeff)  {
     .nav-controls {
         .controls-cell {
-            vertical-align: bottom;
             width: ($iconWidth + 20px) * $coeff;
             .control-icon+.control-icon {
                 margin-top: 20px * $coeff;
             }
         }
         .level-cell {
-            vertical-align: bottom;
             font-size: 42px * $coeff;
-            color: $watColor;
             .level-id {
                 height: $iconWidth * $coeff;
                 line-height: $iconWidth * $coeff;
@@ -100,74 +97,28 @@ $defaultArrowMargin: 20px;
                 margin-top: 20px * $coeff;
                 .moves-cont {
                     line-height: 25px * $coeff;
-                    display: inline-block;
                 }
             }
         }
         .game-goal-cell {
-            vertical-align: bottom;
-            .game-goal-container {
-                float: right;
-                position: relative;
-                &.zindexOver {
-                    z-index: 110;
-                }
-            }
             .goal-label {
-                width: 100%;
                 font-size: 16px * $coeff;
-                text-align: center;
-                color: $watColor;
                 margin-bottom: 10px * $coeff;
-                display: inline-block;
             }
             .goal-table {
-                width: 100%;
-                border: solid 1px white;
-                margin-bottom: -2px;
                 font-size: 20px * $coeff;
-                color: white;
-                background-color: $matrixColor;
                 .t-row {
-                    text-align: center;
                     .t-cell {
                         width: 15px * $coeff;
                         line-height: 15px * $coeff;
-                        vertical-align: middle;
-                        border: solid 1px white;
                     }
                 }
-
-                &.requireUserFocus {
-                    border: solid 3px white;
-                    margin-bottom: -4px;
-                    margin-left: -2px;
-                    -webkit-animation: pulsateBorder 3s linear infinite;
-                    -moz-animation: pulsateBorder 3s linear infinite;
-                    animation: pulsateBorder 3s linear infinite;
-                }
-
-
-            }
-            .goal-hint-arrow-outer {
-                width: 100%;
-                position: relative;
-                height: 0;
             }
             .goal-hint-arrow {
-                color: $colorActionRequired;
                 font-size: $defaultArrowMargin * $coeff;
                 $topValue: -$defaultArrowMargin * $coeff;
                 top: $topValue;
-                left: 50%;
                 margin-left: -10px * $coeff;
-                display: inline-block;
-                position: absolute;
-
-                -webkit-animation: pulsate 3s linear infinite;
-                -moz-animation: pulsate 3s linear infinite;
-                animation: pulsate 3s linear infinite;
-
             }
 
         }
@@ -199,6 +150,76 @@ $defaultArrowMargin: 20px;
         }
     }
     
+    .nav-controls {
+        .controls-cell {
+            vertical-align: bottom;
+        }
+        .level-cell {
+            vertical-align: bottom;
+            color: $color-primary;
+            .moves .moves-cont {
+                display: inline-block;
+            }
+        }
+        .game-goal-cell {
+            vertical-align: bottom;
+            .game-goal-container {
+                float: right;
+                position: relative;
+                &.zindexOver {
+                    z-index: 110;
+                }
+            }
+            .goal-label {
+                width: 100%;
+                text-align: center;
+                color: $color-primary;
+                display: inline-block;
+            }
+            .goal-table {
+                width: 100%;
+                border: solid 1px white;
+                margin-bottom: -2px;
+                color: white;
+                background-color: $matrixColor;
+                .t-row {
+                    text-align: center;
+                    .t-cell {
+                        vertical-align: middle;
+                        border: solid 1px white;
+                    }
+                }
+
+                &.requireUserFocus {
+                    border: solid 3px white;
+                    margin-bottom: -4px;
+                    margin-left: -2px;
+                    -webkit-animation: pulsateBorder 3s linear infinite;
+                    -moz-animation: pulsateBorder 3s linear infinite;
+                    animation: pulsateBorder 3s linear infinite;
+                }
+
+
+            }
+            .goal-hint-arrow-outer {
+                width: 100%;
+                position: relative;
+                height: 0;
+            }
+            .goal-hint-arrow {
+                color: $colorActionRequired;
+                left: 50%;
+                display: inline-block;
+                position: absolute;
+
+                -webkit-animation: pulsate 3s linear infinite;
+                -moz-animation: pulsate 3s linear infinite;
+                animation: pulsate 3s linear infinite;
+
+            }
+
+        }
+    }
     @include game-controls(1);
     
 }
@@ -220,13 +241,9 @@ $defaultArrowMargin: 20px;
 }
 
 .game-completed-modal {
-    padding-top: 130px!important;
     .score-stars {
         i {
             display: inline-block;
-            &+i {
-                margin-left: 5px;
-            }
             &:not(.rewarded) {
                 color: #B9B9B9;
             }    
@@ -234,10 +251,8 @@ $defaultArrowMargin: 20px;
     }
     .nav-controls {
         text-align: center;
-        .control-icon+.control-icon {
-            margin-left: 20px;
-        }
     }
+    @include game-completed-modal(1);
 }
 
 @mixin tutorial-container-controls($factor) {
@@ -272,37 +287,29 @@ $defaultArrowMargin: 20px;
 
     color: white;
     .hint-actions {
-        margin-bottom: 20px;
         i {
             width: 100%;
             text-align: right;
             display: block;
-            font-size: 37px;
-
-            &+i {
-                margin-top: 10px;
-            }
         }
     }
 
     .text-above {
         text-align: center;
-        font-size: 20px;
         font-family: Ubuntu;
-        margin-bottom: 40px;
-        height: 50px;
     }
 
     .text-below {
         text-align: center;
-        font-size: 12px;
         font-family: Ubuntu;
     }
+    @include tutorial-container-controls(1);
 }
 
 @media only screen and (min-width:500px) {
     @include pulsateKeyframes(1.5);
     .tutorial-container {
+        @include tutorial-container-controls(1.5);
         max-width: 500px;
         margin: 0 auto;
         cursor: pointer;
@@ -312,9 +319,6 @@ $defaultArrowMargin: 20px;
     }
     .game-container {
         @include game-controls(1.5);
-    }
-    .tutorial-container {
-        @include tutorial-container-controls(1.5);
     }
 
 }
