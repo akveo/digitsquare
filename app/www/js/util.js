@@ -60,10 +60,14 @@ define(['angular'], function(angular) {
     function screenSettings($rootScope, $document, $window) {
         var sWidth = $document[0].documentElement.clientWidth || $window.screen.width;
         var mainContainerWidth = sWidth > 768 ? 768 : sWidth;
+        var sHeight = $document[0].documentElement.clientHeight || screen.height;
+        var sizeFactor = sHeight <= 480 ? 0.9 : (sWidth >= 500 ? 1.5 : 1);
 
         return {
             screenWidth: sWidth,
-            mainContainerWidth: mainContainerWidth
+            screenHeight: sHeight,
+            mainContainerWidth: mainContainerWidth,
+            sizeFactor: sizeFactor
         };
     }
 

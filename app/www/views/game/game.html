@@ -10,10 +10,10 @@
                 <div class="moves"><span class="moves-cont">Moves: {{vm.movesCount}}</span></div>
             </div>
             <div class="game-goal-cell t-cell">
-                <div class="game-goal-container" ng-style="{ width: vm.sideSize * 25 * sizeK + 'px' }" ng-class="{ zindexOver: vm.showGoalThroughModal }">
-                    <div class="goal-hint-arrow-outer" ng-if="vm.levelId == '1-1'"><div class="goal-hint-arrow el-icon-arrow-down" ng-style="{ left: (vm.sideSize * 25 * sizeK / 2) + 'px' }"></div></div>
+                <div class="game-goal-container" ng-style="vm.gameGoalContainerStyles()" ng-class="{ zindexOver: vm.showGoalThroughModal }">
+                    <div class="goal-hint-arrow-outer" ng-if="vm.levelId == '1-1'"><div class="goal-hint-arrow el-icon-arrow-down" ng-style="vm.goalHintOuterStyles()"></div></div>
                     <div class="goal-label">Goal:</div>
-                    <div class="table goal-table" ng-style="{ width: vm.sideSize * 25 * sizeK + 'px', height: vm.sideSize * sizeK * 25 + 'px' }" ng-class="{ requireUserFocus: vm.levelId == '1-1' }">
+                    <div class="table goal-table" ng-style="vm.goalTableStyles()" ng-class="{ requireUserFocus: vm.levelId == '1-1' }">
                         <div class="t-row" ng-repeat="row in [] | range:vm.sideSize">
                             <div class="t-cell" ng-repeat="column in [] | range:vm.sideSize">{{vm.levelData.goal[vm.sideSize*row+column] || '&nbsp;'}}</div>
                         </div>
@@ -23,8 +23,8 @@
         </div>
     </div>
     <div class="game-field">
-        <div class="game-matrix" ng-style="{ width: fieldWidth + 'px', height: fieldWidth + 'px' }">
-            <div class="matrix-cell" data-row="{{value.row}}" data-col="{{value.column}}" ng-style="{ width: sidePixels + 'px', height: sidePixels + 'px', 'line-height': sideLine + 'px', 'font-size': cellFont + 'px' }" ng-repeat="(index, value) in vm.fieldState.matrix" swipe-element="vm.whenMoveEnd(value.row, value.column, dir, x, y)" swipe-element-move="vm.whenMoved(value.row, value.column, dir, x, y)" swipe-element-start="vm.whenMoveStart(initialElementBounds, x, y, triggerType)" ng-class="value.animClass">{{value.label}}</div>
+        <div class="game-matrix" ng-style="vm.gameMatrixStyles()">
+            <div class="matrix-cell" data-row="{{value.row}}" data-col="{{value.column}}" ng-style="vm.matrixCellStyles()" ng-repeat="(index, value) in vm.fieldState.matrix" swipe-element="vm.whenMoveEnd(value.row, value.column, dir, x, y)" swipe-element-move="vm.whenMoved(value.row, value.column, dir, x, y)" swipe-element-start="vm.whenMoveStart(initialElementBounds, x, y, triggerType)" ng-class="value.animClass">{{value.label}}</div>
         </div>
     </div>
 <!--     <div class="nav-controls">
