@@ -139,8 +139,8 @@ define(['angular', 'angular-ui-router', 'app/data'], function(angular) {
         }
     }
 
-    GameController.$inject = ['$scope', '$state', '$stateParams', 'levelsData', 'playerData', 'userLevelsData', '$rootScope', '$timeout', 'gameStateObject'];
-    function GameController($scope, $state, $stateParams, levelsData, playerData, userLevelsData, $rootScope, $timeout, gs) { 
+    GameController.$inject = ['$scope', '$state', '$stateParams', 'levelsData', 'playerData', 'userLevelsData', '$rootScope', '$timeout', 'gameStateObject', 'screenSettings', 'styleBuilder'];
+    function GameController($scope, $state, $stateParams, levelsData, playerData, userLevelsData, $rootScope, $timeout, gs, screenSettings, styleBuilder) { 
         var sideSize = gs.fieldState.sideSize;
         if (Math.round(sideSize) !== sideSize) {
             throw Error('Not valid matrix initial state!');
@@ -170,12 +170,6 @@ define(['angular', 'angular-ui-router', 'app/data'], function(angular) {
                         .show();
                 }, 0);
             }
-            $scope.$watch('screenWidth', function(newValue, oldValue) {
-                $scope.fieldWidth = newValue - ($scope.paddingValue - 2) * 2; // Minus padding
-                $scope.sidePixels = $scope.fieldWidth / sideSize;
-                $scope.sideLine = $scope.sidePixels - 4;
-                $scope.cellFont = $scope.sideLine / 3 * 2;
-            });
         }
 
         function updateDbStateObject() {
@@ -274,6 +268,37 @@ define(['angular', 'angular-ui-router', 'app/data'], function(angular) {
             console.log(currentState);
             console.log(currentState.map(function(el) { return el || '-'}).join(''));
         }
+
+        var DEFAULT_CONTROLS_SIZE = 25;
+        function goalContainerWidth() { return DEFAULT_CONTROLS_SIZE * sideSize * screenSettings.sizeFactor; }
+        function getFieldWidth() {
+            var paddingValue = Math.max(20, Math.ceil(screenSettings.mainContainerWidth / 20));
+            var gameContainerWidth = screenSettings.screenWidth > 500 ? 500: screenSettings.screenWidth;
+            return gameContainerWidth - (paddingValue - 2) * 2; // Minus padding
+        }
+        vm.gameGoalContainerStyles = function() {
+            return { width: goalContainerWidth() + 'px' };
+        };
+        vm.goalHintOuterStyles = function() {
+            return { left: goalContainerWidth() / 2 + 'px' };
+        };
+        vm.goalTableStyles = function() {
+            return { width: goalContainerWidth() + 'px', height: goalContainerWidth() + 'px' };
+        };
+        vm.gameMatrixStyles = function() {
+            var fieldWidth = getFieldWidth();
+            return { width: fieldWidth + 'px', height: fieldWidth + 'px' };
+        };
+        vm.matrixCellStyles = function() {
+            var sidePixels = getFieldWidth() / sideSize;
+            var sideLine = (sidePixels - 4); //Minus border
+            return { 
+                width: sidePixels + 'px', 
+                height: sidePixels + 'px', 
+                'line-height': sideLine + 'px',
+                'font-size': sideLine / 3 * 2 + 'px' 
+            };
+        };
 
     }
 

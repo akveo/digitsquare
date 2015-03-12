@@ -22,19 +22,13 @@ define(['angular', 'angular-ui-router', 'angular-touch', 'app/home', 'app/game',
         $urlRouterProvider.otherwise('/home');
     }
 
-    AppRun.$inject = ['$rootScope', '$timeout', 'panelModal', '$document', '$state'];
-    function AppRun($rootScope, $timeout, panelModal, $document, $state) {
+    AppRun.$inject = ['$rootScope', '$timeout', 'panelModal', '$document', '$state', 'screenSettings'];
+    function AppRun($rootScope, $timeout, panelModal, $document, $state, screenSettings) {
         $rootScope.goToPath = function(stateName, search) {
             $state.go(stateName, search, { inherit: false, notify: true });
         };
-        var sWidth = document.documentElement.clientWidth || screen.width;
-        $rootScope.screenWidth = sWidth > 500 ? 500 : sWidth;
-        $rootScope.normalScreenWidth = sWidth > 768 ? 768 : sWidth;
-        $rootScope.sizeK = sWidth >= 500 ? 1.5 : 1;
-        $rootScope.screenHeight = document.documentElement.clientHeight || screen.height;
-        $rootScope.paddingValue = Math.max(20, Math.ceil($rootScope.normalScreenWidth / 20));
-        $rootScope.screenWithoutPadding = sWidth - $rootScope.paddingValue * 2;
-        $rootScope.isPhoneGap = isPhoneGap();
+        $rootScope.paddingValue = Math.max(20, Math.ceil(screenSettings.mainContainerWidth / 20));
+        
         $rootScope.panelModal = function() {
             var modalInstance = panelModal.apply(null, [].slice.call(arguments));
             this.$on('$destroy', function() {
