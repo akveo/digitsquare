@@ -13,6 +13,7 @@ Application is live. You can download it from marketplaces:
 * Neat UI
 * Responsive design
 * Autosave feature
+
 I didn't add bootstrap, because I think it's overwhelming for such small project
 
 #### Technical stuff
