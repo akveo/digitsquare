@@ -36,5 +36,8 @@ I didn't add bootstrap, because I think it's overwhelming for such small project
 
 Please refer to [Apache Cordova documentation](http://cordova.apache.org/docs/en/4.0.0/) for additional info.
 
+## License
+[MIT](http://opensource.org/licenses/MIT)
+
 ## Support
 For any additional information as well as with any suggestions or offers please refer to [Flatlogic homepage](http://flatlogic.com)
