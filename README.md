@@ -35,3 +35,6 @@ I didn't add bootstrap, because I think it's overwhelming for such small project
 4. Either open the project in the xCode or type `cordova run ios`
 
 Please refer to [Apache Cordova documentation](http://cordova.apache.org/docs/en/4.0.0/) for additional info.
+
+## Support
+For any additional information as well as with any suggestions or offers please refer to [Flatlogic homepage](http://flatlogic.com)
