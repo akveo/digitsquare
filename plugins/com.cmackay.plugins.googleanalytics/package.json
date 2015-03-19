@@ -1,0 +1,22 @@
+{
+    "version": "0.1.13",
+    "name": "com.cmackay.plugins.googleanalytics",
+    "cordova_name": "GoogleAnalytics",
+    "description": "Plugin for Google Analytics Native SDKs (Android, iOS)",
+    "license": "Apache 2.0",
+    "repo": "https://github.com/cmackay/google-analytics-plugin.git",
+    "keywords": [
+        "cordova",
+        "analytics"
+    ],
+    "platforms": [
+        "ios",
+        "android"
+    ],
+    "engines": [
+        {
+            "name": "cordova",
+            "version": ">=3.0.0"
+        }
+    ]
+}
