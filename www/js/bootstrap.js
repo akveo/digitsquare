@@ -3,10 +3,14 @@
 requirejs.config({
     baseUrl: 'lib/js',
     paths: {
-        app: '../../js'
+        app: '../../js',
+        cordova: '../../cordova'
     },
     shim: {
-        'angular' : {'exports' : 'angular'},
+        'angular' : {
+            exports : 'angular',
+            deps: isPhoneGap() ? ['cordova'] : [] // To prevent error on desktop version
+        },
         'angular-touch': ['angular'],
         'angular-swipe-element': ['angular'],
         'angular-ui-router': ['angular'],
