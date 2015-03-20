@@ -6,6 +6,8 @@ define(['angular'], function(angular) {
         .factory('exitApp', exitApp)
         .factory('screenSettings', screenSettings)
         .factory('styleBuilder', styleBuilder)
+        .factory('device', deviceFactory)
+        .provider('cordovaEvent', CordovaEventProvider)
         .filter('range', $RangeFilter)
         .directive('addASpaceBetween', AddSpaceBetween);
 
@@ -105,6 +107,28 @@ define(['angular'], function(angular) {
         return function(initialStyle, clearInitial) {
             return new _builder(initialStyle, clearInitial);
         };
+    }
+
+    deviceFactory.$inject = ['$window'];
+    function deviceFactory($window) {
+        return $window.device;
+    }
+
+    function CordovaEventProvider() {
+        var methods = {
+            on: function(eventType, callback) {
+                document.addEventListener(eventType, callback);
+            },
+            off: function(eventType, callback) {
+                document.removeEventListener(eventType, callback);
+            }
+        };
+
+        angular.extend(this, methods);
+
+        this.$get = function() {
+            return methods;
+        }
     }
 
     function $RangeFilter() {

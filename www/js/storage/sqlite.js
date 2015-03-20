@@ -5,11 +5,11 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
         .factory('playerData', PlayerData)
         .provider('sqliteDb', SqliteDbProvider);
 
-    SqliteDbProvider.$inject = ['appConfig'];
-    function SqliteDbProvider(config) {
+    SqliteDbProvider.$inject = ['appConfig', 'cordovaEventProvider'];
+    function SqliteDbProvider(config, cordovaEventProvider) {
         var dbDeferreds = [];
         var db;
-        document.addEventListener('deviceready', checkDatabase);
+        cordovaEventProvider.on('deviceready', checkDatabase);
         function checkDatabase() {
             function _doInit() {
                 db = window.sqlitePlugin.openDatabase({ name: config.db.name });

@@ -5,10 +5,10 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
             .run(MonetizeRun);
 
 
-    MonetizeRun.$inject = ['appConfig', 'util', '$rootScope', '$stateParams', '$window', '$document'];
-    function MonetizeRun(config, u, $rootScope, $stateParams, $window, $document) {
+    MonetizeRun.$inject = ['appConfig', 'util', '$rootScope', '$stateParams', '$window', 'cordovaEvent'];
+    function MonetizeRun(config, u, $rootScope, $stateParams, $window, cordovaEvent) {
         if (config.ads.enabled) {
-            $document.on('deviceready', setupAds);
+            cordovaEvent.on('deviceready', setupAds);
         }
 
         function setupAds() {
@@ -64,21 +64,21 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
                 }
                 function showInterstitialAd() {
                     function interstitialClosedListener() {
-                        document.removeEventListener('onDismissInterstitialAd', interstitialClosedListener);
+                        cordovaEvent.off('onDismissInterstitialAd', interstitialClosedListener);
                         setTimeout(function() {
                             resetInterstitialTimerAllowance();
                             loadInterstitial();
                         }, 1000);
                     }
-                    
-                    $document.on('onDismissInterstitialAd', interstitialClosedListener); 
+
+                    cordovaEvent.on('onDismissInterstitialAd', interstitialClosedListener);
                     admobPlugin.showInterstitialAd();
                     interstitialShowTimerAllowed = false;
                     interstitialReady = false;
                 }
                 loadInterstitial();
 
-                $rootScope.on('pageViewed', function(pageName) {
+                $rootScope.$on('pageViewed', function(pageName) {
                     if (pageName === 'Game') {
                         if (firstTimeShowRequest) {
                             firstTimeShowRequest = false;
@@ -90,7 +90,7 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
                     }
                 });
 
-                $rootScope.on('forceInterstitialAdShow', function() {
+                $rootScope.$on('forceInterstitialAdShow', function() {
                     if (isPhoneGap()) {
                         showInterstitialAd();
                     }

@@ -4,29 +4,31 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
     angular.module('app.analytics', ['app.config', 'app.util'])
             .run($AnalyticsRun);
 
-    $AnalyticsRun.$inject = ['appConfig', 'util', '$document', '$window', '$rootScope'];
-    function $AnalyticsRun(config, u, $document, $window, $rootScope) {
+    $AnalyticsRun.$inject = ['appConfig', 'util', 'cordovaEvent', '$window', '$rootScope', 'device'];
+    function $AnalyticsRun(config, u, cordovaEvent, $window, $rootScope, device) {
         if (config.analytics.enabled) {
-            $document.on('deviceready', initializeAnalytics);
+            cordovaEvent.on('deviceready', initializeAnalytics);
         }
 
         function initializeAnalytics() {
             var analytics = $window.navigator.analytics;
-            if (!analytics)
+            if (!analytics) {
                 return;
+            }
             var trackerId = u.getConfigSettingForPlatform(config.analytics.gaId);
-            
             analytics.setTrackingId(trackerId);
-            analytics.set("&uid", window.device.uuid);
+
+            analytics.set("&uid", device.uuid);
+
             try {
                 analytics.enableAdvertisingIdCollection();
             } catch(e) {
                 // Gotta catch them all
             }
-            $rootScope.on('pageViewed', function(pageName) {
+            $rootScope.$on('pageViewed', function(pageName) {
                 analytics.sendAppView(pageName);
             });
-            $rootScope.on('analyticsEvent', function(e) {
+            $rootScope.$on('analyticsEvent', function(e) {
                 analytics.sendEvent(e.category, e.action, e.label, e.value);
             });
         }
