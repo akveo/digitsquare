@@ -110,7 +110,7 @@ module.exports = function(grunt) {
     grunt.registerTask('buildAssets', ['copyConfig', 'bower:install', 'sass:build']);
 
     grunt.registerTask('src-watch',['buildAssets', 'watch']);
-    grunt.registerTask('build-android', ['buildAssets', 'exec:buildAndroid']);
+    grunt.registerTask('build-android', ['buildAssets', 'exec:buildAndroid', 'exec:signAndroid']);
     grunt.registerTask('build-ios', ['buildAssets', 'exec:buildIos']);
 
 };

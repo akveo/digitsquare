@@ -30,5 +30,12 @@
             "url": "https://github.com/floatinghotpot/google-admob-sdk",
             "subdir": "."
         }
+    },
+    "com.brodysoft.sqlitePlugin": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/brodysoft/Cordova-SQLitePlugin",
+            "subdir": "."
+        }
     }
 }

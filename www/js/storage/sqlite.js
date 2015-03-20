@@ -1,15 +1,15 @@
-define(['app/config', 'app/util'], function() {
+define(['angular', 'app/config', 'app/util'], function(angular) {
     'use strict';
 
     angular.module('app.storage', ['app.config', 'app.util'])
         .factory('playerData', PlayerData)
         .provider('sqliteDb', SqliteDbProvider);
 
-    $SqliteDbProvider.$inject = ['$document', 'appConfig'];
-    function SqliteDbProvider($document, config) {
+    SqliteDbProvider.$inject = ['appConfig'];
+    function SqliteDbProvider(config) {
         var dbDeferreds = [];
         var db;
-        $document.on('deviceready', checkDatabase);
+        document.addEventListener('deviceready', checkDatabase);
         function checkDatabase() {
             function _doInit() {
                 db = window.sqlitePlugin.openDatabase({ name: config.db.name });
@@ -17,7 +17,7 @@ define(['app/config', 'app/util'], function() {
                     tx.executeSql('CREATE TABLE IF NOT EXISTS game_state (id integer primary key, data text)');
                     tx.executeSql('CREATE TABLE IF NOT EXISTS levels_data (id text primary key, data text)');
                 }, function(e) {
-                    console.log("ERROR: " + e.message);
+                    console.error("ERROR: " + e.message);
                 }); 
                 dbDeferreds.forEach(function(def) { def.resolve(db); });
             }
