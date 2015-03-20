@@ -61,7 +61,7 @@ module.exports = function(grunt) {
             signAndroid: {
                 command: 'cp my-release-key.keystore platforms/android/ant-build/;' +
                          'cd platforms/android/ant-build/;' + 
-                         'jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore -storepass 123456 MainActivity-release-unsigned.apk alias_name;' +
+                         'jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore -storepass 123456 -keypass 123456 MainActivity-release-unsigned.apk alias_name;' +
                          'jarsigner -verify -verbose -certs MainActivity-release-unsigned.apk;' +
                          '$ANDROID_HOME/build-tools/android-4.4W/zipalign -f -v 4 MainActivity-release-unsigned.apk MainActivity-release-signed-aligned.apk;' +
                          'cd ../../..'
