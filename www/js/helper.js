@@ -1,62 +1,68 @@
 define(['angular'], function(angular) {
     'use strict';
 
-    var module = angular.module('app.helper', [])
-            .service('panelModal', function($compile, $rootScope) {
+    angular.module('app.helper', [])
+            .service('panelModal', panelModal)
+            .directive('includeReplace', includeReplace);
 
-                return function(tpl, scope, options) {
-                    var element = angular.element('<div class="panel-modal-container"><include-replace src="' + tpl + '"/></div>'),
-                        currentScope = scope || $rootScope.$new();
+    panelModal.$inject = ['$compile', '$rootScope'];
+    function panelModal($compile, $rootScope) {
 
-                    options = options || {};
-                    var optCallback = options.callback;
-                    var cssClass = options.cssClass;
+        return function(tpl, scope, options) {
+            var element = angular.element('<div class="panel-modal-container"><include-replace src="' + tpl + '"/></div>'),
+                currentScope = scope || $rootScope.$new();
 
-                    if (cssClass) {
-                        element.addClass(cssClass);
-                    }
+            options = options || {};
+            var optCallback = options.callback;
+            var cssClass = options.cssClass;
 
-                    function doDestroy() {
-                        element.remove();
-                        currentScope.$destroy();
-                        optCallback && optCallback();
-                    }
+            if (cssClass) {
+                element.addClass(cssClass);
+            }
 
-                    currentScope.closeAndNavigate = function(link, params) {
-                        doDestroy();
-                        currentScope.goToPath(link, params);
-                    };
-                    currentScope.closePanel = function(cb) {
-                        doDestroy();
-                        cb && cb();
-                    };
+            function doDestroy() {
+                element.remove();
+                currentScope.$destroy();
+                optCallback && optCallback();
+            }
 
-                    angular.element(document.body).append(element);
-                    $compile(element)(scope || $rootScope);
+            currentScope.closeAndNavigate = function(link, params) {
+                doDestroy();
+                currentScope.goToPath(link, params);
+            };
+            currentScope.closePanel = function(cb) {
+                doDestroy();
+                cb && cb();
+            };
 
-                    return {
-                        show: function() {
-                            element.css('display', 'block');
-                        },
-                        destroy: function() {
-                            doDestroy();
-                        },
-                        isDestroyed: function() {
-                            return !!element.parentNode;
-                        }
-                    };
-                };
-            })
-            .directive('includeReplace', function($templateCache, $compile, $http) {
-                return {
-                    restrict: 'E',
-                    link: function(scope, element, attrs) {
-                        $http.get(attrs.src, { cache: $templateCache })
-                            .success(function(templateContent) {
-                                element.replaceWith($compile(templateContent)(scope));                
-                            });    
-                    }
-                };
-            });
+            angular.element(document.body).append(element);
+            $compile(element)(scope || $rootScope);
+
+            return {
+                show: function() {
+                    element.css('display', 'block');
+                },
+                destroy: function() {
+                    doDestroy();
+                },
+                isDestroyed: function() {
+                    return !!element.parentNode;
+                }
+            };
+        };
+    }
+
+    includeReplace.$inject = ['$templateCache', '$compile', '$http'];
+    function includeReplace($templateCache, $compile, $http) {
+        return {
+            restrict: 'E',
+            link: function(scope, element, attrs) {
+                $http.get(attrs.src, { cache: $templateCache })
+                    .success(function(templateContent) {
+                        element.replaceWith($compile(templateContent)(scope));
+                    });
+            }
+        };
+    }
 
 });
