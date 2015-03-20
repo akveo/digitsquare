@@ -146,7 +146,7 @@ define(['angular', 'angular-ui-router', 'app/data'], function(angular) {
             throw Error('Not valid matrix initial state!');
         }
 
-        $scope.$emit('pageViewed');
+        $scope.$emit('pageViewed', 'Game');
         $scope.navBack('levels', { initialGroup: gs.chapterId });
 
         var levelFinished = false;

@@ -25,11 +25,11 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
             } catch(e) {
                 // Gotta catch them all
             }
-            $rootScope.$on('pageViewed', function(pageName) {
+            $rootScope.$on('pageViewed', function(event, pageName) {
                 analytics.sendAppView(pageName);
             });
-            $rootScope.$on('analyticsEvent', function(e) {
-                analytics.sendEvent(e.category, e.action, e.label, e.value);
+            $rootScope.$on('analyticsEvent', function(event, arg) {
+                analytics.sendEvent(arg.category, arg.action, arg.label, arg.value);
             });
         }
     }

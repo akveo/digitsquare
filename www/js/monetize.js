@@ -78,7 +78,7 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
                 }
                 loadInterstitial();
 
-                $rootScope.$on('pageViewed', function(pageName) {
+                $rootScope.$on('pageViewed', function(event, pageName) {
                     if (pageName === 'Game') {
                         if (firstTimeShowRequest) {
                             firstTimeShowRequest = false;

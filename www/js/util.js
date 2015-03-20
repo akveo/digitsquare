@@ -111,7 +111,7 @@ define(['angular'], function(angular) {
 
     deviceFactory.$inject = ['$window'];
     function deviceFactory($window) {
-        return $window.device;
+        return $window.device || {};
     }
 
     function CordovaEventProvider() {
