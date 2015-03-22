@@ -18,7 +18,9 @@ if (rootdir) {
         // android
         "platforms/android/assets/www/index.html",
         // ios
-        "platforms/ios/www/index.html"
+        "platforms/ios/www/index.html",
+        // wp8
+        "platforms/wp8/www/index.html"
     ];
 
     filestoreplace.forEach(function(val, index, array) {
