@@ -25,6 +25,12 @@
             }
             .abcd {}
         </style>
+        <script type="text/javascript">
+            /* Windows 8 mobile, IE10 fix. */
+            if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+                document.write('<style type="text/css">@-ms-viewport{width:320px!important}</style>');
+            }
+        </script>
     </head>
     <body>
         <div class="layout" ui-view>
