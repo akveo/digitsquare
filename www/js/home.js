@@ -75,7 +75,7 @@ define(['angular', 'angular-ui-router', 'angular-swipe-element', 'app/util', 'ap
         
         playerData.getGameState().then(function(savedGameState) {
             vm.savedGameState = savedGameState;
-            vm.savedGameLevelId = savedGameState.levelId;
+            vm.savedGameLevelId = savedGameState && savedGameState.levelId;
             vm.savedGameUrl = savedGameState && ('/game/' + savedGameState.levelId);
         });
     }
