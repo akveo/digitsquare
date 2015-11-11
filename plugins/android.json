@@ -14,7 +14,23 @@
                         },
                         {
                             "xml": "<meta-data android:name=\"com.google.android.gms.version\" android:value=\"@integer/google_play_services_version\" />",
-                            "count": 2
+                            "count": 1
+                        },
+                        {
+                            "xml": "<service android:enabled=\"true\" android:exported=\"false\" android:name=\"com.google.android.gms.analytics.AnalyticsService\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<service android:name=\"com.google.android.gms.analytics.CampaignTrackingService\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<receiver android:exported=\"true\" android:name=\"com.google.android.gms.analytics.CampaignTrackingReceiver\"><intent-filter><action android:name=\"com.android.vending.INSTALL_REFERRER\" /></intent-filter></receiver>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<receiver android:enabled=\"true\" android:name=\"com.google.android.gms.analytics.AnalyticsReceiver\"><intent-filter><action android:name=\"com.google.android.gms.analytics.ANALYTICS_DISPATCH\" /></intent-filter></receiver>",
+                            "count": 1
                         },
                         {
                             "xml": "<activity android:configChanges=\"keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize\" android:name=\"com.google.android.gms.ads.AdActivity\" android:theme=\"@android:style/Theme.Translucent\" />",
@@ -45,7 +61,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"AdMob\"><param name=\"android-package\" value=\"com.rjfun.cordova.plugin.AdMob\" /></feature>",
+                            "xml": "<feature name=\"AdMob\"><param name=\"android-package\" value=\"com.rjfun.cordova.admob.AdMobPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
                         {
@@ -64,10 +80,7 @@
         "com.cmackay.plugins.googleanalytics": {
             "PACKAGE_NAME": "com.flatlogic.digitsquare"
         },
-        "com.google.admobsdk": {
-            "PACKAGE_NAME": "com.flatlogic.digitsquare"
-        },
-        "com.rjfun.cordova.plugin.admob": {
+        "cordova-plugin-admobpro": {
             "PACKAGE_NAME": "com.flatlogic.digitsquare"
         },
         "org.apache.cordova.device": {
@@ -75,7 +88,7 @@
         }
     },
     "dependent_plugins": {
-        "com.google.playservices": {
+        "cordova-plugin-extension": {
             "PACKAGE_NAME": "com.flatlogic.digitsquare"
         }
     }

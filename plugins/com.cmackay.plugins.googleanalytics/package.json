@@ -1,22 +1,42 @@
 {
-    "version": "0.1.13",
-    "name": "com.cmackay.plugins.googleanalytics",
-    "cordova_name": "GoogleAnalytics",
-    "description": "Plugin for Google Analytics Native SDKs (Android, iOS)",
-    "license": "Apache 2.0",
-    "repo": "https://github.com/cmackay/google-analytics-plugin.git",
-    "keywords": [
-        "cordova",
-        "analytics"
-    ],
+  "name": "com.cmackay.plugins.googleanalytics",
+  "version": "0.1.21",
+  "description": "Plugin for Google Analytics Native SDKs (Android, iOS)",
+  "cordova": {
+    "id": "com.cmackay.plugins.googleanalytics",
     "platforms": [
-        "ios",
-        "android"
-    ],
-    "engines": [
-        {
-            "name": "cordova",
-            "version": ">=3.0.0"
-        }
+      "ios",
+      "android"
     ]
+  },
+  "scripts": {
+    "docs": "./node_modules/.bin/rimraf README.md && cat prefix.md > README.md && ./node_modules/.bin/jsdoc2md ./www/*.js >> README.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmackay/google-analytics-plugin.git"
+  },
+  "keywords": [
+    "cordova",
+    "analytics",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Craig MacKay",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/cmackay/google-analytics-plugin/issues"
+  },
+  "homepage": "https://github.com/cmackay/google-analytics-plugin#readme",
+  "devDependencies": {
+    "jsdoc-to-markdown": "^1.1.1",
+    "rimraf": "^2.4.3"
+  }
 }

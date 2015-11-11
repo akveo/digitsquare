@@ -1,34 +1,16 @@
 {
-    "com.google.playservices": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/MobileChromeApps/google-play-services",
-            "subdir": "."
-        }
-    },
     "com.cmackay.plugins.googleanalytics": {
         "source": {
             "type": "registry",
             "id": "com.cmackay.plugins.googleanalytics"
-        }
+        },
+        "is_top_level": true,
+        "variables": {}
     },
     "org.apache.cordova.device": {
         "source": {
             "type": "registry",
             "id": "org.apache.cordova.device"
-        }
-    },
-    "com.rjfun.cordova.plugin.admob": {
-        "source": {
-            "type": "registry",
-            "id": "com.rjfun.cordova.plugin.admob"
-        }
-    },
-    "com.google.admobsdk": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/floatinghotpot/google-admob-sdk",
-            "subdir": "."
         }
     },
     "com.brodysoft.sqlitePlugin": {
