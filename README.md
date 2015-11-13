@@ -1,11 +1,16 @@
 # Digit Square puzzle game
-Hybrid mobile application (puzzle game) written using Cordova/Phonegap, AngularJS, RequireJS and other trending tools :)
+Hybrid mobile application (puzzle game) written using Cordova/Phonegap, AngularJS.
 
-Application is live. You can download it from marketplaces:
-* [Apple store](https://itunes.apple.com/us/app/digit-square-puzzle-game/id959622726)
-* [Android market](https://play.google.com/store/apps/details?id=com.flatlogic.digitsquare)
-* Windows 8 - TBD
-* [Desktop version](http://digitsquare.mobi)
+<img src="http://i.imgur.com/kGrVr1R.gif" width="400">
+
+[LIVE DEMO](http://digitsquare.mobi)
+
+## Setup
+1. Install node and bower dependencies: `npm install`
+2. Build configs, styles etc.: `grunt buildAssets`
+3. Add some platform, for example iOS: `cordova platform add ios`
+4. Either open the project in the xCode or type `cordova run ios`
+5. We used cordova 5.4.0, if you have older version try updating it `npm install -g cordova` (may require sudo)
 
 ## Features
 #### Gameplay
@@ -28,16 +33,23 @@ I didn't add bootstrap, because I think it's overwhelming for such small project
 * Nice levels gallery with swipe support
 * Ability to use generated configs
 
-## Setup
-1. Install node and bower dependencies: `npm install`
-2. Build configs, styles etc.: `grunt buildAssets`
-3. Add some platform, for example iOS: `cordova platform add ios`
-4. Either open the project in the xCode or type `cordova run ios`
+##Try digitsquare
+Application is live. You can download it from marketplaces:
+* [Apple store](https://itunes.apple.com/us/app/digit-square-puzzle-game/id959622726)
+* [Android market](https://play.google.com/store/apps/details?id=com.flatlogic.digitsquare)
+* Windows 8 - TBD
+* [Desktop version](http://digitsquare.mobi)
+
 
 Please refer to [Apache Cordova documentation](http://cordova.apache.org/docs/en/4.0.0/) for additional info.
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
 
-## Support
+## From akveo
 For any additional information as well as with any suggestions or offers please refer to [Akveo homepage](http://akveof.com)
+
+Enjoy!
+
+Made with ♥ by [Akveo team](http://akveo.com/).
+
