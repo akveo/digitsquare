@@ -13,7 +13,7 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
 
         function setupAds() {
             var admobid = u.getConfigSettingForPlatform(config.ads.units);
-            var admobPlugin = $window.plugins.AdMob;
+            var admobPlugin = $window.AdMob;
 
             admobPlugin.setOptions( {
                 publisherId: admobid.banner,
@@ -27,7 +27,7 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
 
             if (config.ads.showBanner) {
                 // display a banner at startup
-                admobPlugin.createBannerView();
+                admobPlugin.createBanner();
             }
 
             (function initializeInterstitialAd() {
@@ -37,14 +37,14 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
                 var firstTimeShowRequest = true;
 
                 function createInterstitial(cb) {
-                    admobPlugin.createInterstitialView({ publisherId: admobid.interstitial}, cb, function() {
+                    admobPlugin.prepareInterstitial({ adId: admobid.interstitial}, cb, function() {
                         setTimeout(function() {
                             createInterstitial(cb);
                         }, config.ads.timeouts.interstitialRequestTimeout);
                     });
                 }
                 function loadInterstitialInBackground(successCallback) {
-                    admobPlugin.createInterstitialView({ isTesting: config.ads.isTesting }, successCallback, function() {
+                    admobPlugin.prepareInterstitial({ isTesting: config.ads.isTesting }, successCallback, function() {
                         setTimeout(function() {
                             loadInterstitialInBackground(successCallback);
                         }, config.ads.timeouts.interstitialRequestTimeout);
@@ -72,7 +72,7 @@ define(['angular', 'app/config', 'app/util'], function(angular) {
                     }
 
                     cordovaEvent.on('onDismissInterstitialAd', interstitialClosedListener);
-                    admobPlugin.showInterstitialAd();
+                    admobPlugin.showInterstitial();
                     interstitialShowTimerAllowed = false;
                     interstitialReady = false;
                 }
