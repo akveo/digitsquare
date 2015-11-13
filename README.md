@@ -1,5 +1,5 @@
 # Digit Square puzzle game
-Hybrid mobile application (puzzle game) written using Cordova/Phonegap, AngularJS.
+Hybrid mobile application (puzzle game) developed using Cordova/Phonegap, AngularJS.
 
 <img src="http://i.imgur.com/kGrVr1R.gif" width="400">
 
