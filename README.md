@@ -38,7 +38,7 @@ Application is live. You can download it from marketplaces:
 * [Apple store](https://itunes.apple.com/us/app/digit-square-puzzle-game/id959622726)
 * [Android market](https://play.google.com/store/apps/details?id=com.flatlogic.digitsquare)
 * Windows 8 - TBD
-* [Desktop version](http://digitsquare.mobi)
+* [Desktop version](http://digitsquare.akveo.com/)
 
 
 Please refer to [Apache Cordova documentation](http://cordova.apache.org/docs/en/4.0.0/) for additional info.
