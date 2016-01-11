@@ -3,7 +3,7 @@ Hybrid mobile application (puzzle game) developed using Cordova/Phonegap, Angula
 
 <img src="http://i.imgur.com/kGrVr1R.gif" width="400">
 
-[LIVE DEMO](http://digitsquare.mobi)
+[LIVE DEMO](http://digitsquare.akveo.com/)
 
 ## Setup
 1. Install node and bower dependencies: `npm install`
