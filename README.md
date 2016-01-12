@@ -47,7 +47,7 @@ Please refer to [Apache Cordova documentation](http://cordova.apache.org/docs/en
 [MIT](http://opensource.org/licenses/MIT)
 
 ## From akveo
-For any additional information as well as with any suggestions or offers please refer to [Akveo homepage](http://akveof.com)
+For any additional information as well as with any suggestions or offers please refer to [Akveo homepage](http://akveo.com)
 
 Enjoy!
 
