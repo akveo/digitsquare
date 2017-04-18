@@ -10,16 +10,16 @@ Hybrid mobile application (puzzle game) developed using Cordova/Phonegap, Angula
 2. Build configs, styles etc.: `grunt buildAssets`
 3. Add some platform, for example iOS: `cordova platform add ios`
 4. Either open the project in the xCode or type `cordova run ios`
-5. We used cordova 5.4.0, if you have older version try updating it `npm install -g cordova` (may require sudo)
+5. We used cordova 5.4.0, if you have a later version try to update it `npm install -g cordova` (may require sudo)
 
 ## Features
 #### Gameplay
-* 100 different levels. (If you think the first 20 is too easy, yeah it's true. Go straight to the 4-th and 5-th chapter and let's see how long would it take for you to finish them :) ).
+* 100 different levels. (If you think the first 20 are way too easy, you're right. So go straight to the 4-th and 5-th chapter and let's see how long would it take for you to finish them :) ).
 * Neat UI
 * Responsive design
 * Autosave feature
 
-I didn't add bootstrap, because I think it's overwhelming for such small project
+I didn't add bootstrap, because I think it's overwhelming for such a small project
 
 #### Technical stuff
 * AngularJS
